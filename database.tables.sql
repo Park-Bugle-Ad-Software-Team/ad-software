@@ -97,3 +97,5 @@ CREATE TABLE "MiscRates" (
    "name" VARCHAR(255) NOT NULL,
    "price" DECIMAL NOT NULL
 );
+
+--Hi, Bugle Boys!---
