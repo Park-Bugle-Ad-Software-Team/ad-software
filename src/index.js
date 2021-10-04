@@ -6,9 +6,15 @@ import store from './redux/store';
 
 import App from './components/App/App';
 
+// default theme handlers
+import { ThemeProvider } from '@material-ui/core';
+import theme from '../Theme/theme.js';
+
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </Provider>,
   document.getElementById('react-root'),
 );
