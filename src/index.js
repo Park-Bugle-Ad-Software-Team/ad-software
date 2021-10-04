@@ -8,7 +8,7 @@ import App from './components/App/App';
 
 // default theme handlers
 import { ThemeProvider } from '@material-ui/core';
-import theme from '../Theme/theme.js';
+import theme from './Theme/theme';
 
 ReactDOM.render(
   <Provider store={store}>
