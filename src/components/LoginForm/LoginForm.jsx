@@ -1,3 +1,4 @@
+import { Button, Input, TextField } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {useSelector} from 'react-redux';
@@ -35,29 +36,49 @@ function LoginForm() {
       <div>
         <label htmlFor="username">
           Username:
-          <input
+          <Input
             type="text"
             name="username"
             required
             value={username}
             onChange={(event) => setUsername(event.target.value)}
           />
+          <p> test </p>
+          <TextField
+            label="Username"
+            variant="outlined"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+          >
+          </TextField>
         </label>
       </div>
       <div>
         <label htmlFor="password">
           Password:
-          <input
+          <Input
             type="password"
             name="password"
             required
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
+          
+          <TextField
+            label="Password"
+            variant="outlined"
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          >
+          </TextField>
         </label>
       </div>
       <div>
         <input className="btn" type="submit" name="submit" value="Log In" />
+        <Button className="btn" variant="contained" color="primary" value="Log In">
+          Submit
+        </Button>
       </div>
     </form>
   );
