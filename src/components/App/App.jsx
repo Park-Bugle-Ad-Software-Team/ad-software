@@ -34,6 +34,7 @@ function App() {
     <Router>
 
       {/* components:
+      
         home-page
         advertiser-home-page
           employee-home-page
@@ -42,8 +43,6 @@ function App() {
           print view
           web view
         list-view of ad cards
-
-
 
       */}
 
