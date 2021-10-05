@@ -11,6 +11,8 @@ const router = express.Router();
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from the session (previously queried from the database)
+  console.log('user is ', req.user);
+  
   res.send(req.user);
 });
 
@@ -21,7 +23,7 @@ router.post('/register', (req, res, next) => {
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
 
-  const queryText = `INSERT INTO "Users" (name, password)
+  const queryText = `INSERT INTO "Users" (email, password)
     VALUES ($1, $2) RETURNING id`;
   pool
     .query(queryText, [username, password])

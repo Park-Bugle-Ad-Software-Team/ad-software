@@ -15,6 +15,7 @@ function LoginForm() {
     event.preventDefault();
 
     if (username && password) {
+      console.log('username and password', username, password);
       dispatch({
         type: 'LOGIN',
         payload: {
@@ -45,8 +46,8 @@ function LoginForm() {
             )}
             <div className="input-fields">
               <TextField 
-                id="username-input"
-                label="Username" 
+                id="email-input"
+                label="Email" 
                 variant="outlined" 
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
@@ -66,6 +67,7 @@ function LoginForm() {
                 id="login-button"
                 variant="contained" 
                 color="primary"
+                onClick={login}
               >
                 Log In
               </Button>
