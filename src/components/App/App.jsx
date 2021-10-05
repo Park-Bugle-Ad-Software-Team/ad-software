@@ -80,11 +80,14 @@ function App() {
               <RegisterPage />
             }
           </Route>
-
+          
           <ProtectedRoute
             exact
             path="/users"
           >
+            {user.authLevel !== 'admin' &&
+              <Redirect to="/home" />
+            }
             <UsersPage />
           </ProtectedRoute>
 
@@ -92,6 +95,9 @@ function App() {
             exact
             path="/pricing"
           >
+            {user.authLevel !== 'admin' &&
+              <Redirect to="/home" />
+            }
             <PricingPage />
           </ProtectedRoute>
 
