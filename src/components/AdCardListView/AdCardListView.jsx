@@ -1,4 +1,4 @@
-import ListItemButton from '@mui/material';
+import { ListItemButton } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 
 export default function AdCardListView() {
@@ -13,6 +13,12 @@ export default function AdCardListView() {
         totalCost: 500.00,
     }
 
+    const [isPending, setIsPending] = useState(true);
+
+    const openChat = () => {
+        console.log('Opening Chat');
+    }
+
     return (
         <ListItem disablePadding>
             <ListItemButton>
@@ -24,13 +30,17 @@ export default function AdCardListView() {
                     {contract.page}
                     {contract.colorType}
                     {contract.totalCost}
-                    <ChatIcon />
-                    <Button 
-                        variant="contained"
-                        color="default"
-                    >
-                        Approve
-                    </Button>
+                    <IconButton variant="contained" onClick={() => openChat()}>
+                        <ChatIcon />
+                    </IconButton>
+                    {isPending &&
+                        <Button 
+                            variant="contained"
+                            color="default"
+                        >
+                            Approve
+                        </Button>
+                    }
                 </ListItemText>
             </ListItemButton>
         </ListItem>
