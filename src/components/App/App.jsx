@@ -16,9 +16,8 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import AboutPage from '../AboutPage/AboutPage';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
-import LandingPage from '../LandingPage/LandingPage';
-import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import HomePage from '../HomePage/HomePage';
 
 import './App.css';
 
@@ -33,6 +32,21 @@ function App() {
 
   return (
     <Router>
+
+      {/* components:
+      
+        home-page
+        advertiser-home-page
+          employee-home-page
+          admin-home-page
+        ad-card
+          print view
+          web view
+        list-view of ad cards
+
+      */}
+
+
       <div>
         <Nav />
         <Switch>
@@ -70,20 +84,6 @@ function App() {
 
           <Route
             exact
-            path="/login"
-          >
-            {user.id ?
-              // If the user is already logged in, 
-              // redirect to the /user page
-              <Redirect to="/user" />
-              :
-              // Otherwise, show the login page
-              <LoginPage />
-            }
-          </Route>
-
-          <Route
-            exact
             path="/registration"
           >
             {user.id ?
@@ -96,19 +96,12 @@ function App() {
             }
           </Route>
 
-          <Route
+          <ProtectedRoute
             exact
             path="/home"
           >
-            {user.id ?
-              // If the user is already logged in, 
-              // redirect them to the /user page
-              <Redirect to="/user" />
-              :
-              // Otherwise, show the Landing page
-              <LandingPage />
-            }
-          </Route>
+              <HomePage />
+          </ProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
