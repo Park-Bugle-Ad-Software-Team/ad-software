@@ -18,7 +18,7 @@ CREATE TABLE "Users" (
    "primaryName" VARCHAR(255),
    "primaryTitle" VARCHAR(255),
    "primaryEmail" VARCHAR(255),
-   "primaryDirectPhone" VARCHAR(50),
+   "primaryDirectPhone" VARCHAR(50),git 
    "primaryMobilePhone" VARCHAR(50),
    "secondaryName" VARCHAR(255),
    "secondaryTitle" VARCHAR(255),
@@ -112,4 +112,3 @@ CREATE TABLE "MiscRates" (
    "price" DECIMAL NOT NULL
 );
 
---Hi, Bugle Boys!---
