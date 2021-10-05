@@ -7,7 +7,7 @@ import store from './redux/store';
 import App from './components/App/App';
 
 // default theme handlers
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider } from '@mui/material/styles';
 import theme from './Theme/theme';
 
 ReactDOM.render(

@@ -1,4 +1,4 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { Typography, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 export default function EmployeeHomePage() {
     // test data 
