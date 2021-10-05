@@ -26,7 +26,6 @@ function LoginForm() {
       dispatch({ type: 'LOGIN_INPUT_ERROR' });
     }
   }; // end login
-
   return (    
       <div id="login-form-div">
         <Box 
