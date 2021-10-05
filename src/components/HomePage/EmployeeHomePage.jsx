@@ -1,7 +1,7 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 
 export default function EmployeeHomePage() {
-    // test data 
+    // test data
     let sonia = {
         firstName: 'Sonia',
         lastName: 'Becerra'
@@ -28,7 +28,7 @@ export default function EmployeeHomePage() {
         <>
             <Grid container>
                 <Grid item xs={12}>
-                    <Typography variant="h1">Admin Home Page</Typography>  
+                    <Typography variant="h1">Employee Home Page</Typography>  
                 </Grid>
                 <Grid item xs={8}>
                     User: {sonia.firstName} {sonia.lastName}
