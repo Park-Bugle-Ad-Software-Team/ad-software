@@ -6,7 +6,7 @@ CREATE TABLE "Users" (
    "id" serial PRIMARY KEY,
    "email" VARCHAR(255) NOT NULL,
    "name" VARCHAR(255), -- should be NOT NULL in future
-   "password" VARCHAR(255) NOT NULL,
+   "password" VARCHAR(255) DEFAULT,
    "authLevel" VARCHAR(255) DEFAULT 'advertiser', -- should be NOT NULL in future
    "contactPreference" VARCHAR(255),
    "acceptAchPayment" BOOLEAN,
@@ -25,7 +25,8 @@ CREATE TABLE "Users" (
    "secondaryEmail" VARCHAR(255),
    "secondaryDirectPhone" VARCHAR(50),
    "secondaryMobilePhone" VARCHAR(50),
-   "notes" VARCHAR(512)
+   "notes" VARCHAR(512),
+   "inviteCode" VARCHAR(255),
 );
 
 CREATE TABLE "AdSize" (
@@ -84,13 +85,13 @@ CREATE TABLE "Images" (
    "contract" INT REFERENCES "Contracts"
 );
 
-CREATE TABLE "Invites" (
-   "id" SERIAL PRIMARY KEY,
-   "email" VARCHAR(255) NOT NULL,
-   "inviteCode" VARCHAR(255) NOT NULL,
-   -- "authLevel" VARCHAR(255) NOT NULL,
-   "userId" INT REFERENCES "Users"
-);
+-- CREATE TABLE "Invites" (
+--    "id" SERIAL PRIMARY KEY,
+--    "email" VARCHAR(255) NOT NULL,
+--    "inviteCode" VARCHAR(255) NOT NULL,
+--    -- "authLevel" VARCHAR(255) NOT NULL,
+--    "userId" INT REFERENCES "Users"
+-- );
 
 CREATE TABLE "Chat" (
    "id" SERIAL PRIMARY KEY,

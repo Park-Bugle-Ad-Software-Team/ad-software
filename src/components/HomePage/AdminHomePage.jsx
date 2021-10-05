@@ -56,6 +56,7 @@ export default function AdminHomePage() {
                             labelId="advertiser-select-label"
                             id="advertiser-select"
                             label="Advertiser"
+                            defaultValue=''
                             // onChange
                         >
                             {advertisers.map(advertiser => (
@@ -69,6 +70,7 @@ export default function AdminHomePage() {
                             labelId="month-select-label"
                             id="month-select"
                             label="Month"
+                            defaultValue={1}
                             // onChange
                         >
                             {months.map(month => (
@@ -82,6 +84,7 @@ export default function AdminHomePage() {
                             labelId="year-select-label"
                             id="year-select"
                             label="Year"
+                            defaultValue=''
                             // onChange
                         >
                             {years.map(year => (
