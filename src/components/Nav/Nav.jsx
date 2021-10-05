@@ -16,29 +16,47 @@ function Nav() {
         {/* If no user is logged in, show these links */}
         {user.id === null &&
           // If there's no user, show login/registration links
-          <Link className="navLink" to="/login">
-            Login / Register
-          </Link>
-        }
-
-        {/* If a user is logged in, show these links */}
-        {user.id && (
           <>
-            <Link className="navLink" to="/user">
+            <Link className="navLink" to="/login">
+              Login
+            </Link>
+
+            <Link className="navLink" to="/about">
+              About
+            </Link>
+          </>
+        }
+        
+        {/* If an admin is logged in, show these links */}
+        {(user.id && user.authLevel === "admin") &&
+          <>
+            <Link className="navLink" to="/home">
               Home
             </Link>
 
-            <Link className="navLink" to="/info">
-              Info Page
+            <Link className="navLink" to="/users">
+              Users
+            </Link>
+
+            <Link className="navLink" to="/pricing">
+              Pricing
             </Link>
 
             <LogOutButton className="navLink" />
           </>
-        )}
+        }
 
-        <Link className="navLink" to="/about">
-          About
-        </Link>
+        {/* If anyone other than an admin is logged in, show these links */}
+        {(user.id && user.authLevel !== "admin") &&
+          <>
+            <Link className="navLink" to="/home">
+              Home
+            </Link>
+
+            <LogOutButton className="navLink" />
+          </>
+        }
+
       </div>
     </div>
   );

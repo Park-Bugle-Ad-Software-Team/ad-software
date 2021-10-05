@@ -5,14 +5,27 @@
 CREATE TABLE "Users" (
    "id" serial PRIMARY KEY,
    "email" VARCHAR(255) NOT NULL,
-   "name" VARCHAR(255) NOT NULL,
+   "name" VARCHAR(255), -- should be NOT NULL in future
    "password" VARCHAR(255) NOT NULL,
-   "authLevel" VARCHAR(255) NOT NULL,
+   "authLevel" VARCHAR(255) DEFAULT 'advertiser', -- should be NOT NULL in future
    "contactPreference" VARCHAR(255),
    "acceptAchPayment" BOOLEAN,
    "companyName" VARCHAR(255),
    "doNotDisturb" BOOLEAN,
-   "isActive" BOOLEAN DEFAULT true
+   "isActive" BOOLEAN DEFAULT true,
+   "advertiserUrl" VARCHAR(255),
+   "address" VARCHAR(255),
+   "primaryName" VARCHAR(255),
+   "primaryTitle" VARCHAR(255),
+   "primaryEmail" VARCHAR(255),
+   "primaryDirectPhone" VARCHAR(50),
+   "primaryMobilePhone" VARCHAR(50),
+   "secondaryName" VARCHAR(255),
+   "secondaryTitle" VARCHAR(255),
+   "secondaryEmail" VARCHAR(255),
+   "secondaryDirectPhone" VARCHAR(50),
+   "secondaryMobilePhone" VARCHAR(50),
+   "notes" VARCHAR(512)
 );
  
 CREATE TABLE "AdSize" (
@@ -40,8 +53,8 @@ CREATE TABLE "Contracts" (
    "id" SERIAL PRIMARY KEY,
    "adSizeId" INT REFERENCES "AdSize",
    "adInstructions" VARCHAR(255),
-   "isSponsored" INT REFERENCES "Sponsorship",
-   "notes" VARCHAR(255),
+   "sponsorshipId" INT REFERENCES "Sponsorship",
+   "notes" VARCHAR(512),
    "startMonth" DATE,
    "commissionPercentage" INT,
    "colorId" INT REFERENCES "Color",
@@ -49,13 +62,14 @@ CREATE TABLE "Contracts" (
    "calculatedBill" DECIMAL,
    "actualBill" DECIMAL,
    "page" INT,
-   "holidayGuide" DECIMAL,
-   "isApproved" BOOLEAN
+   "holidayGuide" DECIMAL, -- Stretch, probably just rate schema reference
+   "isApproved" BOOLEAN,
+   "pricingSchemaId" INT REFERENCES "Rates"
 );
  
 CREATE TABLE "Images" (
    "id" SERIAL PRIMARY KEY,
-   "image" VARCHAR(255) NOT NULL,
+   "imageUrl" VARCHAR(1024) NOT NULL,
    "contract" INT REFERENCES "Contracts"
 );
  
@@ -63,7 +77,7 @@ CREATE TABLE "Invites" (
    "id" SERIAL PRIMARY KEY,
    "email" VARCHAR(255) NOT NULL,
    "inviteCode" VARCHAR(255) NOT NULL,
-   "authLevel" VARCHAR(255) NOT NULL,
+   -- "authLevel" VARCHAR(255) NOT NULL,
    "userId" INT REFERENCES "Users"
 );
  
@@ -72,7 +86,7 @@ CREATE TABLE "Chat" (
    "message" VARCHAR(5000) NOT NULL,
    "timeStamp" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
    "userId" INT REFERENCES "Users",
-   "contractId" INT REFERENCES "Contracts"
+   "contractId" INT REFERENCES "Contracts",
 );
  
 CREATE TABLE "Contracts_Users" (
@@ -84,10 +98,10 @@ CREATE TABLE "Contracts_Users" (
 CREATE TABLE "Rates" (
    "id" SERIAL PRIMARY KEY,
    "name" VARCHAR(255) NOT NULL,
-   "lessThanEight" BOOLEAN NOT NULL,
-   "eightToTwelve" BOOLEAN NOT NULL,
-   "twelvetoTwenty" BOOLEAN NOT NULL,
-   "twentyPlus" BOOLEAN NOT NULL,
+   "isLessThanEight" BOOLEAN,
+   "isEightToTwelve" BOOLEAN,
+   "isTwelveToTwenty" BOOLEAN,
+   "isTwentyPlus" BOOLEAN,
    "minDuration" INT NOT NULL,
    "maxDuration" INT NOT NULL
 );
