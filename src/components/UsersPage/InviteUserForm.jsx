@@ -1,37 +1,55 @@
+/*
+This component is going to be used for rendering both the user creation and user edit features
+*/
+
 import { Button, FormControl, TextField, 
             Select, MenuItem, InputLabel,
                 Switch, Grid, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function InviteUserForm() {
+export default function InviteUserForm({ style, user }) {
     const dispatch = useDispatch()
     const [isInviteOpen, setIsInviteOpen] = useState(false);
     const [isAchSwitchChecked, setIsAchSwitchChecked] = useState(true);
     const [isDoNotDisturbChecked, setIsDoNotDisturbChecked] = useState(true);
-    const [checked, setChecked] = useState(false);
-    const [newUser, setNewUser] = useState({
-        name: '',
-        email: '',
-        authLevel: '',
-        contactPreference: '',
-        acceptAchPayment: isAchSwitchChecked,
-        companyName: '',
-        doNotDisturb: isDoNotDisturbChecked,
-        advertiserUrl: '',
-        address: '',
-        primaryName: '',
-        primaryTitle: '',
-        primaryEmail: '',
-        primaryDirectPhone: '',
-        primaryMobilePhone: '',
-        secondaryName: '',
-        secondaryTitle: '',
-        secondaryEmail: '',
-        secondaryDirectPhone: '',
-        secondaryMobilePhone: '',
-        notes: '',
-    });
+    // test data - all fields will normally be blank or false on new user creation
+    const [newUser, setNewUser] = useState({name: ''});
+
+    useEffect(() => {
+        checkUser();
+    }, []);
+
+    const checkUser = () => {
+        if (user) {
+            setNewUser(user);
+        } else {
+            // this is test data - should be set to empty strings for demoing
+            setNewUser({
+                name: 'Garrett',
+                email: 'gharty@live.com',
+                authLevel: 'advertiser',
+                contactPreference: 'email',
+                acceptAchPayment: isAchSwitchChecked,
+                companyName: 'Practice Makes Profit',
+                doNotDisturb: isDoNotDisturbChecked,
+                advertiserUrl: 'www.garrettharty.com',
+                address: '8485 Heights Rd, Golden Valley, MN 55060',
+                primaryName: 'Garrett',
+                primaryTitle: 'Student',
+                primaryEmail: 'gharty@live.com',
+                primaryDirectPhone: '555-555-5555',
+                primaryMobilePhone: '',
+                secondaryName: 'Dan St. Aubin',
+                secondaryTitle: 'Student',
+                secondaryEmail: 'staubind@gmail.com',
+                secondaryDirectPhone: '666-666-6666',
+                secondaryMobilePhone: '',
+                notes: 'something here',
+            });
+        }
+    }
+    
 
     const openInvite = () => {
         setIsInviteOpen(true);
@@ -42,6 +60,14 @@ export default function InviteUserForm() {
         dispatch({
             type: 'CREATE_NEW_USER',
             payload: newUser
+        });
+    }
+
+    const updateUser = () => {
+        console.log(`submitting changes to user someone`, newUser); // update test to format in the user we are editing
+        dispatch({
+            type: 'UPDATE_USER',
+            payload: newUser // update once we have a the user passed via a prop
         });
     }
 
@@ -89,14 +115,14 @@ export default function InviteUserForm() {
                 <>
                     <h1>Advertiser Info Field</h1>
                     <Grid container width="800px">
-                        <Grid item xs={6}>
+                        {/* <Grid item xs={6}>
                             <Typography variant="p">Accepts ACH Payments</Typography>
                             <Switch checked={isAchSwitchChecked} onChange={flipAchSwitch} inputProps={{ 'aria-label': 'controlled' }}/>
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant="p">Do Not Disturb</Typography>
                             <Switch checked={isDoNotDisturbChecked} onChange={flipDoNotDisturbSwitch} inputProps={{ 'aria-label': 'controlled' }}/>
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={6}>
                             <TextField
                                 label="Contact Preference"
@@ -209,10 +235,24 @@ export default function InviteUserForm() {
                                 onChange={(event) => setNewUser({...newUser, secondaryMobilePhone: event.target.value})}
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Notes"
+                                variant="filled"
+                                multiline
+                                rows={4}
+                                value={newUser.notes}
+                                onChange={(event) => setNewUser({...newUser, notes: event.target.value})}
+                            />
+                        </Grid>
                     </Grid>
                 </>
             }
-            <Button variant="contained" color="primary" onClick={submitNewUser}>Submit</Button>
+            {style === "invite" ?
+                <Button variant="contained" color="primary" onClick={submitNewUser}>Submit</Button> :
+                <Button variant="contained" color="primary" onClick={updateUser}>Save Changes</Button>
+            }
+            
         </FormControl>  
     )
 }

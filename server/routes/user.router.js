@@ -20,7 +20,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
-router.post('/register', (req, res) => {
+router.post('/register', rejectUnauthenticated, (req, res) => {
   console.log('req.body is: ', req.body);
   // unpack the object in order
   const properties = `"name", "email", "authLevel", 
@@ -104,11 +104,29 @@ router.post('/register', (req, res) => {
 });
 
 
-router.put('/register', (req, res) => {
+router.put('/edit', rejectUnauthenticated, (req, res) => {
+  // edit happens on two conditions:
+    // 1. Admin edits user's fields
+    // 2. User logs in for the first time - they edit the password field - therefore they use the 
 
+  const sqlQuery = ``
 })
 
-
+router.get('/all', rejectUnauthenticated, (req, res) => {
+  const sqlQuery = `SELECT "email","name","authLevel",
+                "contactPreference","acceptAchPayment","companyName",
+                "doNotDisturb","isActive", "advertiserUrl",
+                "address", "primaryName", "primaryTitle",
+                "primaryEmail","primaryDirectPhone","primaryMobilePhone",
+                "secondaryName", "secondaryTitle","secondaryEmail",
+                "secondaryDirectPhone","secondaryMobilePhone", "notes" 
+              FROM "Users"`;
+  pool.query(sqlQuery).then(dbRes => {
+    res.send(dbRes.rows);
+  }).catch(error => {
+    console.log('Failed to retrieve all users: ', error)
+  })
+})
 
 // Handles login form authenticate/login POST
 // userStrategy.authenticate('local') is middleware that we run on this route
