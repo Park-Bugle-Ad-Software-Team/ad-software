@@ -1,15 +1,36 @@
 import { Button, FormControl, TextField, 
-    Select, MenuItem, InputLabel } from '@mui/material';
+            Select, MenuItem, InputLabel,
+                Switch, Grid, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 
 export default function InviteUserForm() {
     const dispatch = useDispatch()
     const [isInviteOpen, setIsInviteOpen] = useState(false);
+    const [isAchSwitchChecked, setIsAchSwitchChecked] = useState(true);
+    const [isDoNotDisturbChecked, setIsDoNotDisturbChecked] = useState(true);
+    const [checked, setChecked] = useState(false);
     const [newUser, setNewUser] = useState({
         name: '',
         email: '',
         authLevel: '',
+        contactPreference: '',
+        acceptAchPayment: isAchSwitchChecked,
+        companyName: '',
+        doNotDisturb: isDoNotDisturbChecked,
+        advertiserUrl: '',
+        address: '',
+        primaryName: '',
+        primaryTitle: '',
+        primaryEmail: '',
+        primaryDirectPhone: '',
+        primaryMobilePhone: '',
+        secondaryName: '',
+        secondaryTitle: '',
+        secondaryEmail: '',
+        secondaryDirectPhone: '',
+        secondaryMobilePhone: '',
+        notes: '',
     });
 
     const openInvite = () => {
@@ -23,6 +44,15 @@ export default function InviteUserForm() {
             payload: newUser
         });
     }
+
+    const flipAchSwitch = (event) => {
+        setIsAchSwitchChecked(!event.target.isAchSwitchChecked)
+    }
+
+    const flipDoNotDisturbSwitch = (event) => {
+        setIsDoNotDisturbChecked(!event.target.setIsDoNotDisturbChecked);
+    }
+
     return (
         <FormControl>
             <TextField 
@@ -55,6 +85,133 @@ export default function InviteUserForm() {
                     <MenuItem value="finance">Finance</MenuItem>
                 </Select>
             </FormControl>
+            {newUser.authLevel === "advertiser" &&
+                <>
+                    <h1>Advertiser Info Field</h1>
+                    <Grid container width="800px">
+                        <Grid item xs={6}>
+                            <Typography variant="p">Accepts ACH Payments</Typography>
+                            <Switch checked={isAchSwitchChecked} onChange={flipAchSwitch} inputProps={{ 'aria-label': 'controlled' }}/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="p">Do Not Disturb</Typography>
+                            <Switch checked={isDoNotDisturbChecked} onChange={flipDoNotDisturbSwitch} inputProps={{ 'aria-label': 'controlled' }}/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Contact Preference"
+                                variant="filled"
+                                value={newUser.contactPreference}
+                                onChange={(event) => setNewUser({...newUser, contactPreference: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Company Name"
+                                variant="filled"
+                                value={newUser.companyName}
+                                onChange={(event) => setNewUser({...newUser, companyName: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Advertiser URL"
+                                variant="filled"
+                                value={newUser.advertiserUrl}
+                                onChange={(event) => setNewUser({...newUser, advertiserUrl: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Address"
+                                variant="filled"
+                                value={newUser.address}
+                                onChange={(event) => setNewUser({...newUser, address: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Primary Name"
+                                variant="filled"
+                                value={newUser.primaryName}
+                                onChange={(event) => setNewUser({...newUser, primaryName: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Secondary Name"
+                                variant="filled"
+                                value={newUser.secondaryName}
+                                onChange={(event) => setNewUser({...newUser, secondaryName: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Primary Title"
+                                variant="filled"
+                                value={newUser.primaryTitle}
+                                onChange={(event) => setNewUser({...newUser, primaryTitle: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Secondary Title"
+                                variant="filled"
+                                value={newUser.secondaryTitle}
+                                onChange={(event) => setNewUser({...newUser, secondaryTitle: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Primary Email"
+                                variant="filled"
+                                value={newUser.primaryEmail}
+                                onChange={(event) => setNewUser({...newUser, primaryEmail: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Secondary Email"
+                                variant="filled"
+                                value={newUser.secondaryEmail}
+                                onChange={(event) => setNewUser({...newUser, secondaryEmail: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Primary Direct Phone"
+                                variant="filled"
+                                value={newUser.primaryDirectPhone}
+                                onChange={(event) => setNewUser({...newUser, primaryDirectPhone: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Secondary Direct Phone"
+                                variant="filled"
+                                value={newUser.secondaryDirectPhone}
+                                onChange={(event) => setNewUser({...newUser, secondaryDirectPhone: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Primary Mobile Phone"
+                                variant="filled"
+                                value={newUser.primaryMobilePhone}
+                                onChange={(event) => setNewUser({...newUser, primaryMobilePhone: event.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Secondary Email"
+                                variant="filled"
+                                value={newUser.secondaryMobilePhone}
+                                onChange={(event) => setNewUser({...newUser, secondaryMobilePhone: event.target.value})}
+                            />
+                        </Grid>
+                    </Grid>
+                </>
+            }
             <Button variant="contained" color="primary" onClick={submitNewUser}>Submit</Button>
         </FormControl>  
     )
