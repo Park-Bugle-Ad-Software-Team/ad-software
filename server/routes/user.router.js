@@ -1,3 +1,4 @@
+const generateToken = require('../modules/registrationToken');
 const express = require('express');
 const {
   rejectUnauthenticated,
@@ -19,20 +20,30 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
-router.post('/register', (req, res, next) => {
-  const username = req.body.username;
-  const password = encryptLib.encryptPassword(req.body.password);
-
-  const queryText = `INSERT INTO "Users" (email, password)
-    VALUES ($1, $2) RETURNING id`;
+router.post('/register', (req, res) => {
+  console.log('req.body is: ', req.body);
+  const name = req.body.name;
+  const email = req.body.email; 
+  const authLevel = req.body.authLevel;
+  const registrationToken = generateToken(30); // reg token to be sent in the invitation email.
+  // const password = encryptLib.encryptPassword(req.body.password);
+  const queryText = `INSERT INTO "Users" ("name", "email", "authLevel", "inviteCode")
+    VALUES ($1, $2, $3, $4) RETURNING id`;
   pool
-    .query(queryText, [username, password])
+    .query(queryText, [name, email, authLevel, registrationToken])
     .then(() => res.sendStatus(201))
     .catch((err) => {
       console.log('User registration failed: ', err);
       res.sendStatus(500);
     });
 });
+
+
+router.put('/register', (req, res) => {
+
+})
+
+
 
 // Handles login form authenticate/login POST
 // userStrategy.authenticate('local') is middleware that we run on this route
