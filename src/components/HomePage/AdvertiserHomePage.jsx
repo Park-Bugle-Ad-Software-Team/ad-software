@@ -1,9 +1,18 @@
 import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
 
 export default function AdvertiserHomePage() {
-    let advertiser = {
-        name: 'Chroma Zone'
-    };
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({type: 'FETCH_PENDING_CONTRACTS'});
+    }, []);
+
+    // all of our global state from redux store
+    let user = useSelector((store) => store.user);
+    let pendingContracts = useSelector((store) => store.pendingContracts);
+    console.log('pendingContracts are', pendingContracts);
 
     return (
         <>
@@ -12,7 +21,7 @@ export default function AdvertiserHomePage() {
                     <Typography variant="h1">Advertiser Home Page</Typography>  
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="h2">{advertiser.name}</Typography>  
+                    <Typography variant="h2">{user.name}</Typography>  
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h3">Pending Contracts</Typography>  

@@ -12,7 +12,6 @@ const router = express.Router();
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from the session (previously queried from the database)
-  console.log('user is ', req.user);
   
   res.send(req.user);
 });
@@ -23,7 +22,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post('/register', (req, res) => {
   console.log('req.body is: ', req.body);
   const name = req.body.name;
-  const email = req.body.email; 
+  const email = req.body.username; 
   const authLevel = req.body.authLevel;
   const registrationToken = generateToken(30); // reg token to be sent in the invitation email.
   // const password = encryptLib.encryptPassword(req.body.password);

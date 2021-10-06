@@ -18,7 +18,7 @@ CREATE TABLE "Users" (
    "primaryName" VARCHAR(255),
    "primaryTitle" VARCHAR(255),
    "primaryEmail" VARCHAR(255),
-   "primaryDirectPhone" VARCHAR(50),git 
+   "primaryDirectPhone" VARCHAR(50),
    "primaryMobilePhone" VARCHAR(50),
    "secondaryName" VARCHAR(255),
    "secondaryTitle" VARCHAR(255),
