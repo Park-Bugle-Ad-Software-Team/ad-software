@@ -47,7 +47,7 @@ CREATE TABLE "Contracts" (
  
 CREATE TABLE "Color" (
    "id" SERIAL PRIMARY KEY,
-   "type" VARCHAR(255) NOT NULL,
+   "colorType" VARCHAR(255) NOT NULL,
    "price" DECIMAL NOT NULL,
 );
  
@@ -59,7 +59,7 @@ CREATE TABLE "Sponsorship" (
  
 CREATE TABLE "AdSize" (
    "id" SERIAL PRIMARY KEY,
-   "type" VARCHAR(255) NOT NULL,
+   "adType" VARCHAR(255) NOT NULL,
    "columns" INT NOT NULL,
    "inches" INT NOT NULL,
    "months" INT NOT NULL,
