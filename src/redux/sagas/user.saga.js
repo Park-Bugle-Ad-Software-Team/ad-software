@@ -1,6 +1,14 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
+function* createNewUser(action) {
+  try {
+    axios.post('/api/user/register', action.payload)
+  } catch (error) {
+    console.log('User create request failed', error);
+  }
+}
+
 // worker Saga: will be fired on "FETCH_USER" actions
 function* fetchUser() {
   try {
@@ -26,6 +34,7 @@ function* fetchUser() {
 
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
+  yield takeLatest('CREATE_NEW_USER', createNewUser);
 }
 
 export default userSaga;
