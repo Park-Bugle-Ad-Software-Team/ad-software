@@ -6,6 +6,7 @@ const {
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
+let {transporter, mailOptions, emailErrorCatcher} = require ('../constants/email');
 
 const router = express.Router();
 
@@ -16,6 +17,57 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   
   res.send(req.user);
 });
+
+router.get('/all', rejectUnauthenticated, (req, res) => {
+  if (req.user.authLevel === 'admin') {
+    const sqlQuery = `SELECT "email","name","authLevel",
+                        "contactPreference","acceptAchPayment","companyName",
+                        "doNotDisturb","isActive", "advertiserUrl",
+                        "address", "primaryName", "primaryTitle",
+                        "primaryEmail","primaryDirectPhone","primaryMobilePhone",
+                        "secondaryName", "secondaryTitle","secondaryEmail",
+                        "secondaryDirectPhone","secondaryMobilePhone", "notes" 
+                      FROM "Users"`;
+    pool
+      .query(sqlQuery)
+      .then(dbRes => {
+        res.send(dbRes.rows);
+      })
+      .catch(error => {
+        console.log('Failed to retrieve all users: ', error)
+      })
+  } else {
+    res.sendStatus(403)
+  }
+})
+
+router.get('/:id', rejectUnauthenticated, (req, res) => {
+  if (req.user.id === 'admin') {
+    const sqlQuery = `SELECT "email","name","authLevel",
+                        "contactPreference","acceptAchPayment","companyName",
+                        "doNotDisturb","isActive", "advertiserUrl",
+                        "address", "primaryName", "primaryTitle",
+                        "primaryEmail","primaryDirectPhone","primaryMobilePhone",
+                        "secondaryName", "secondaryTitle","secondaryEmail",
+                        "secondaryDirectPhone","secondaryMobilePhone", "notes" 
+                      FROM "Users"
+                      WHERE "id" = $1`;
+    const sqlParams = [req.params.id];
+    pool
+      .query(sqlQuery, sqlParams)
+      .then(dbRes => {
+        res.send(dbRes.rows[0])
+      })
+      .catch(error => {
+        console.log(`Failed to retrieve user ${req.user.id}: `, error)
+        res.sendStatus(500);
+      });
+  } else {
+    res.sendStatus(403);
+  }
+
+
+})
 
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
@@ -100,7 +152,9 @@ router.post('/register', rejectUnauthenticated, (req, res) => {
     .query(queryText, sqlParams)
     .then(() => {
       // send email off here
-      
+      mailOptions.to = req.body.email;
+      mailOptions.text += inviteToken;
+      transporter.sendMail(mailOptions, emailErrorCatcher)
       res.sendStatus(201)
     })
     .catch((err) => {
@@ -110,6 +164,21 @@ router.post('/register', rejectUnauthenticated, (req, res) => {
   } else {
     res.sendStatus(403);
   }
+});
+
+// Handles login form authenticate/login POST
+// userStrategy.authenticate('local') is middleware that we run on this route
+// this middleware will run our POST if successful
+// this middleware will send a 404 if not successful
+router.post('/login', userStrategy.authenticate('local'), (req, res) => {
+  res.sendStatus(200);
+});
+
+// clear all server session information about this user
+router.post('/logout', (req, res) => {
+  // Use passport's built-in method to log out the user
+  req.logout();
+  res.sendStatus(200);
 });
 
 // rejectUnauthenticated left off because the user needs to 
@@ -208,44 +277,6 @@ router.put('/edit/:inviteToken', (req, res) => {
   }
 })
 
-router.get('/all', rejectUnauthenticated, (req, res) => {
-  if (req.user.authLevel === 'admin') {
-    const sqlQuery = `SELECT "email","name","authLevel",
-                        "contactPreference","acceptAchPayment","companyName",
-                        "doNotDisturb","isActive", "advertiserUrl",
-                        "address", "primaryName", "primaryTitle",
-                        "primaryEmail","primaryDirectPhone","primaryMobilePhone",
-                        "secondaryName", "secondaryTitle","secondaryEmail",
-                        "secondaryDirectPhone","secondaryMobilePhone", "notes" 
-                      FROM "Users"`;
-    pool
-      .query(sqlQuery)
-      .then(dbRes => {
-        res.send(dbRes.rows);
-      })
-      .catch(error => {
-        console.log('Failed to retrieve all users: ', error)
-      })
-  } else {
-    res.sendStatus(403)
-  }
-})
-
-// Handles login form authenticate/login POST
-// userStrategy.authenticate('local') is middleware that we run on this route
-// this middleware will run our POST if successful
-// this middleware will send a 404 if not successful
-router.post('/login', userStrategy.authenticate('local'), (req, res) => {
-  res.sendStatus(200);
-});
-
-// clear all server session information about this user
-router.post('/logout', (req, res) => {
-  // Use passport's built-in method to log out the user
-  req.logout();
-  res.sendStatus(200);
-});
-
 router.delete('/:id', (req, res) => {
   const sqlQuery = `DELETE FROM "Users"
                     WHERE "id" = $1`;
@@ -259,34 +290,6 @@ router.delete('/:id', (req, res) => {
       console.log(`Failed to delete user ${req.params.id}`, error)
       res.sendStatus(500);
     });
-})
-
-router.get('/:id', rejectUnauthenticated, (req, res) => {
-  if (req.user.id === 'admin') {
-    const sqlQuery = `SELECT "email","name","authLevel",
-                        "contactPreference","acceptAchPayment","companyName",
-                        "doNotDisturb","isActive", "advertiserUrl",
-                        "address", "primaryName", "primaryTitle",
-                        "primaryEmail","primaryDirectPhone","primaryMobilePhone",
-                        "secondaryName", "secondaryTitle","secondaryEmail",
-                        "secondaryDirectPhone","secondaryMobilePhone", "notes" 
-                      FROM "Users"
-                      WHERE "id" = $1`;
-    const sqlParams = [req.params.id];
-    pool
-      .query(sqlQuery, sqlParams)
-      .then(dbRes => {
-        res.send(dbRes.rows[0])
-      })
-      .catch(error => {
-        console.log(`Failed to retrieve user ${req.user.id}: `, error)
-        res.sendStatus(500);
-      });
-  } else {
-    res.sendStatus(403);
-  }
-
-
 })
 
 module.exports = router;
