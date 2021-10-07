@@ -7,48 +7,92 @@ import { Button, FormControl, TextField,
                 Switch, Grid, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router';
 
 export default function InviteUserForm({ style, user }) {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const history = useHistory();
     const [isInviteOpen, setIsInviteOpen] = useState(false);
     const [isAchSwitchChecked, setIsAchSwitchChecked] = useState(true);
     const [isDoNotDisturbChecked, setIsDoNotDisturbChecked] = useState(true);
     // test data - all fields will normally be blank or false on new user creation
     const [newUser, setNewUser] = useState({name: ''});
+    const editUser = useSelector(store => store.editUser);
+
+    // Grab user ID from URL
+    // /users/edit/:id
+    // /users/edit/3
+    // { id: 3 }
+    const params = useParams();
+    const userId = params.id;
+
 
     useEffect(() => {
-        checkUser();
-    }, []);
+        if (userId === undefined) {
+            return;
+        } 
 
-    const checkUser = () => {
-        if (user) {
-            setNewUser(user);
-        } else {
-            // this is test data - should be set to empty strings for demoing
-            setNewUser({
-                name: 'Garrett',
-                email: 'gharty@live.com',
-                authLevel: 'advertiser',
-                contactPreference: 'email',
-                acceptAchPayment: isAchSwitchChecked,
-                companyName: 'Practice Makes Profit',
-                doNotDisturb: isDoNotDisturbChecked,
-                advertiserUrl: 'www.garrettharty.com',
-                address: '8485 Heights Rd, Golden Valley, MN 55060',
-                primaryName: 'Garrett',
-                primaryTitle: 'Student',
-                primaryEmail: 'gharty@live.com',
-                primaryDirectPhone: '555-555-5555',
-                primaryMobilePhone: '',
-                secondaryName: 'Dan St. Aubin',
-                secondaryTitle: 'Student',
-                secondaryEmail: 'staubind@gmail.com',
-                secondaryDirectPhone: '666-666-6666',
-                secondaryMobilePhone: '',
-                notes: 'something here',
+        axios.get(`/users/${userId}`)
+            .then(res => {
+                dispatch({
+                    type: 'SET_USER_TO_EDIT',
+                    payload: res.data
+                });
             });
-        }
+    }, [userId]);
+
+    function handleChange(event) {
+        event.preventDefault();
+
+        if (editUser.id === undefined) {
+            dispatch({
+                type: 'CREATE_NEW_USER',
+                payload: editUser
+            });
+            history.push('/users');
+        } else {
+            dispatch({
+                type: 'UPDATE_USER',
+                payload: editUser
+            });
+            dispatch({
+                type: 'EDIT_USER_CLEAR'
+            });
+            history.push('/users')
+        };
     }
+
+    // const checkUser = () => {
+    //     if (user) {
+    //         setNewUser(user);
+    //     } else {
+    //         // this is test data - should be set to empty strings for demoing
+    //         setNewUser({
+    //             name: 'Garrett',
+    //             email: 'gharty@live.com',
+    //             authLevel: 'advertiser',
+    //             contactPreference: 'email',
+    //             acceptAchPayment: isAchSwitchChecked,
+    //             companyName: 'Practice Makes Profit',
+    //             doNotDisturb: isDoNotDisturbChecked,
+    //             advertiserUrl: 'www.garrettharty.com',
+    //             address: '8485 Heights Rd, Golden Valley, MN 55060',
+    //             primaryName: 'Garrett',
+    //             primaryTitle: 'Student',
+    //             primaryEmail: 'gharty@live.com',
+    //             primaryDirectPhone: '555-555-5555',
+    //             primaryMobilePhone: '',
+    //             secondaryName: 'Dan St. Aubin',
+    //             secondaryTitle: 'Student',
+    //             secondaryEmail: 'staubind@gmail.com',
+    //             secondaryDirectPhone: '666-666-6666',
+    //             secondaryMobilePhone: '',
+    //             notes: 'something here',
+    //         });
+    //     }
+    // }
     
 
     const openInvite = () => {

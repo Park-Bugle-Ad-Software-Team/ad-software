@@ -31,7 +31,9 @@ export default function UsersPage() {
         <>
             <h1>Users Page</h1>
             <Button variant="contained" color="primary" onClick={openInvite}>Invite new user</Button>
-            <Button variant="contained" color="primary" onClick={editUser}>Edit Existing user</Button>
+            {/* <Button variant="contained" color="primary" onClick={editUser}>Edit Existing user</Button> */}
+            {/* trying to figure out params link */}
+            <Link to={`/users/edit/`}
             {isInviteOpen &&
             <>
                 <InviteUserForm 

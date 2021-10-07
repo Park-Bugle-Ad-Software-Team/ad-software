@@ -21,6 +21,7 @@ import HomePage from '../HomePage/HomePage';
 import About from '../About/About';
 
 import './App.css';
+import InviteUserForm from '../UsersPage/InviteUserForm';
 
 function App() {
   const dispatch = useDispatch();
@@ -89,6 +90,16 @@ function App() {
               <Redirect to="/home" />
             }
             <UsersPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            exact
+            path="/users/edit/:id"
+          >
+            {user.authLevel !== 'admin' &&
+              <Redirect to="/home" />
+            }
+            <InviteUserForm />
           </ProtectedRoute>
 
           <ProtectedRoute
