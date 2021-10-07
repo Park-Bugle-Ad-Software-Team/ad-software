@@ -7,48 +7,60 @@ import { Button, FormControl, TextField,
                 Switch, Grid, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 
 export default function InviteUserForm({ style, user }) {
     const dispatch = useDispatch()
     const [isInviteOpen, setIsInviteOpen] = useState(false);
     const [isAchSwitchChecked, setIsAchSwitchChecked] = useState(true);
     const [isDoNotDisturbChecked, setIsDoNotDisturbChecked] = useState(true);
+    
+    const params = useParams();
+    const userId = params.id;
+
     // test data - all fields will normally be blank or false on new user creation
     const [newUser, setNewUser] = useState({name: ''});
 
     useEffect(() => {
-        checkUser();
-    }, []);
-
-    const checkUser = () => {
-        if (user) {
-            setNewUser(user);
-        } else {
-            // this is test data - should be set to empty strings for demoing
-            setNewUser({
-                name: 'Garrett',
-                email: 'gharty@live.com',
-                authLevel: 'advertiser',
-                contactPreference: '',
-                acceptAchPayment: isAchSwitchChecked,
-                companyName: '',
-                doNotDisturb: isDoNotDisturbChecked,
-                advertiserUrl: '',
-                address: '',
-                primaryName: '',
-                primaryTitle: '',
-                primaryEmail: '',
-                primaryDirectPhone: '',
-                primaryMobilePhone: '',
-                secondaryName: '',
-                secondaryTitle: '',
-                secondaryEmail: '',
-                secondaryDirectPhone: '',
-                secondaryMobilePhone: '',
-                notes: '',
-            });
+        if (userId === undefined) {
+            return;
         }
-    }
+
+        dispatch({
+            type: 'FETCH_USER_TO_EDIT',
+            payload: userId
+        });
+    }, [userId]);
+
+    // const checkUser = () => {
+    //     if (user) {
+    //         setNewUser(user);
+    //     } else {
+    //         // this is test data - should be set to empty strings for demoing
+    //         setNewUser({
+    //             name: 'Garrett',
+    //             email: 'gharty@live.com',
+    //             authLevel: 'advertiser',
+    //             contactPreference: '',
+    //             acceptAchPayment: isAchSwitchChecked,
+    //             companyName: '',
+    //             doNotDisturb: isDoNotDisturbChecked,
+    //             advertiserUrl: '',
+    //             address: '',
+    //             primaryName: '',
+    //             primaryTitle: '',
+    //             primaryEmail: '',
+    //             primaryDirectPhone: '',
+    //             primaryMobilePhone: '',
+    //             secondaryName: '',
+    //             secondaryTitle: '',
+    //             secondaryEmail: '',
+    //             secondaryDirectPhone: '',
+    //             secondaryMobilePhone: '',
+    //             notes: '',
+    //         });
+    //     }
+    // }
     
 
     const openInvite = () => {
@@ -71,13 +83,13 @@ export default function InviteUserForm({ style, user }) {
         });
     }
 
-    const flipAchSwitch = (event) => {
-        setIsAchSwitchChecked(!event.target.isAchSwitchChecked)
-    }
+    // const flipAchSwitch = (event) => {
+    //     setIsAchSwitchChecked(!event.target.isAchSwitchChecked)
+    // }
 
-    const flipDoNotDisturbSwitch = (event) => {
-        setIsDoNotDisturbChecked(!event.target.setIsDoNotDisturbChecked);
-    }
+    // const flipDoNotDisturbSwitch = (event) => {
+    //     setIsDoNotDisturbChecked(!event.target.setIsDoNotDisturbChecked);
+    // }
 
     return (
         <FormControl>

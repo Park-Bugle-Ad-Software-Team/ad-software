@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import errors from './errors.reducer';
 import user from './user.reducer';
 import allUsers from './allUsers.reducer'
+import userToEdit from './userToEditReducer';
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   errors, // contains registrationMessage and loginMessage
   user, // will have an id and username if someone is logged in
   allUsers, // has the list of users requested by an admin
+  userToEdit, // is the single user we are editing at any given time
 });
 
 export default rootReducer;

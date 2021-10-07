@@ -289,4 +289,27 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 
 })
 
+router.get('/edit/:id', (req, res) => {
+  console.log(' in users/edit router, req.params is', req.params);
+  const sqlQuery = `SELECT "id", "email","name","authLevel",
+                        "contactPreference","acceptAchPayment","companyName",
+                        "doNotDisturb","isActive", "advertiserUrl",
+                        "address", "primaryName", "primaryTitle",
+                        "primaryEmail","primaryDirectPhone","primaryMobilePhone",
+                        "secondaryName", "secondaryTitle","secondaryEmail",
+                        "secondaryDirectPhone","secondaryMobilePhone", "notes" 
+                      FROM "Users"
+                      WHERE "id" = $1`;
+    const sqlParams = [req.params.id];
+    pool
+      .query(sqlQuery, sqlParams)
+      .then(dbRes => {
+        res.send(dbRes.rows[0])
+      })
+      .catch(error => {
+        console.log(`Failed to retrieve user ${req.user.id}: `, error)
+        res.sendStatus(500);
+      });
+})
+
 module.exports = router;

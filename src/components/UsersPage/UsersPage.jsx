@@ -68,9 +68,7 @@ export default function UsersPage() {
                             {user.authLevel}
                         </ListItemText>
                         <ListItemText>
-                            <Link to={`/users/edit/${user.id}`}>
-                                Edit
-                            </Link>
+                            Edit
                         </ListItemText>
                     </ListItemButton>
                 ))}
