@@ -4,6 +4,8 @@ const userToEditReducer = (state = {}, action) => {
         return action.payload;
       case 'UNSET_USER_TO_EDIT':
         return {};
+      case 'UPDATE_USER_TO_EDIT':
+        return action.payload;
       default:
         return state;
     }

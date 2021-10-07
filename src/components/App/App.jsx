@@ -94,7 +94,7 @@ function App() {
 
           <ProtectedRoute
             exact
-            path="/users/:id"
+            path="/users/edit/:id"
           >
             {user.authLevel !== 'admin' &&
               <Redirect to="/home" />

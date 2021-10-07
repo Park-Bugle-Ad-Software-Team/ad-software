@@ -35,7 +35,7 @@ export default function UsersPage() {
     }
 
     const goToEditUser = (userId) => {
-        history.push(`/users/${userId}`);
+        history.push(`/users/edit/${userId}`);
     }
 
     return (

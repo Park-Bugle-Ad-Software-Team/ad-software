@@ -41,8 +41,8 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
   }
 })
 
-router.get('/:id', rejectUnauthenticated, (req, res) => {
-  if (req.user.id === 'admin') {
+router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
+  if (req.user.authLevel === 'admin') {
     const sqlQuery = `SELECT "id", "email","name","authLevel",
                         "contactPreference","acceptAchPayment","companyName",
                         "doNotDisturb","isActive", "advertiserUrl",
