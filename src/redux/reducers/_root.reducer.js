@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import errors from './errors.reducer';
 import user from './user.reducer';
+import allUsers from './allUsers.reducer'
+import userToEdit from './userToEditReducer';
 import pendingContracts from './pendingContracts.reducer';
 import activeContracts from './activeContracts.reducer';
 import closedContracts from './closedContracts.reducer';
@@ -14,10 +16,12 @@ import chat from './chat.reducer';
 const rootReducer = combineReducers({
   errors, // contains registrationMessage and loginMessage
   user, // will have an id and username if someone is logged in
+  allUsers, // has the list of users requested by an admin
+  userToEdit, // is the single user we are editing at any given time
   pendingContracts, // contrains a list of contracts that are not approved
   activeContracts, // contrains a list of active contracts
   closedContracts, // contrains a list of closed contracts
-  chat
+  chat,
 });
 
 export default rootReducer;

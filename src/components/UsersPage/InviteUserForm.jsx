@@ -1,40 +1,53 @@
+/*
+This component is going to be used for rendering both the user creation and user edit features
+*/
+
 import { Button, FormControl, TextField, 
             Select, MenuItem, InputLabel,
-                Switch, Grid, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+                Switch, Grid, Typography, 
+                    FormGroup, FormLabel, FormControlLabel, FormHelperText, 
+                        Checkbox } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 
 export default function InviteUserForm() {
     const dispatch = useDispatch()
-    const [isInviteOpen, setIsInviteOpen] = useState(false);
-    const [isAchSwitchChecked, setIsAchSwitchChecked] = useState(true);
-    const [isDoNotDisturbChecked, setIsDoNotDisturbChecked] = useState(true);
-    const [checked, setChecked] = useState(false);
-    const [newUser, setNewUser] = useState({
-        name: '',
-        email: '',
-        authLevel: '',
-        contactPreference: '',
-        acceptAchPayment: isAchSwitchChecked,
-        companyName: '',
-        doNotDisturb: isDoNotDisturbChecked,
-        advertiserUrl: '',
-        address: '',
-        primaryName: '',
-        primaryTitle: '',
-        primaryEmail: '',
-        primaryDirectPhone: '',
-        primaryMobilePhone: '',
-        secondaryName: '',
-        secondaryTitle: '',
-        secondaryEmail: '',
-        secondaryDirectPhone: '',
-        secondaryMobilePhone: '',
-        notes: '',
-    });
+    
+    const params = useParams();
+    const userId = params.id;
 
-    const openInvite = () => {
-        setIsInviteOpen(true);
+    const userToEdit = useSelector(store => store.userToEdit);
+
+    useEffect(() => {
+        if (userId === undefined) {
+            return;
+        }
+        dispatch({
+            type: 'FETCH_USER_TO_EDIT',
+            payload: userId
+        });
+    }, [userId]);
+
+    function handleChange(event, property) {
+        dispatch({ 
+            type: 'UPDATE_USER_TO_EDIT', 
+            payload: {
+                ...userToEdit,
+                [property]: event.target.value
+            } 
+        });
+    }
+
+    const flipAch = (checked) => {
+        console.log('checked', checked);
+        dispatch({ 
+            type: 'UPDATE_USER_TO_EDIT', 
+            payload: {
+                ...userToEdit,
+                acceptAchPayment: !checked
+            } 
+        });
     }
 
     const submitNewUser = () => {
@@ -45,37 +58,44 @@ export default function InviteUserForm() {
         });
     }
 
-    const flipAchSwitch = (event) => {
-        setIsAchSwitchChecked(!event.target.isAchSwitchChecked)
-    }
-
-    const flipDoNotDisturbSwitch = (event) => {
-        setIsDoNotDisturbChecked(!event.target.setIsDoNotDisturbChecked);
+    const updateUser = () => {
+        console.log(`submitting changes to user someone`, newUser); // update test to format in the user we are editing
+        dispatch({
+            type: 'UPDATE_USER',
+            payload: newUser // update once we have a the user passed via a prop
+        });
     }
 
     return (
+        <>
+        <h2>
+            {userId === undefined ?
+                "Create User" :
+                "Edit User"
+            }
+        </h2>
         <FormControl>
             <TextField 
                 id="name-input"
                 label="Name" 
                 variant="outlined" 
-                value={newUser.name}
-                onChange={(event) => setNewUser({...newUser, name: event.target.value})}
+                value={userToEdit.name}
+                onChange={(event) => handleChange(event, "name")}
             />
             <TextField 
                 id="email-input"
                 label="Email" 
                 variant="outlined" 
-                value={newUser.email}
-                onChange={(event) => setNewUser({...newUser, email: event.target.value})}
+                value={userToEdit.email}
+                onChange={(event) => handleChange(event, "email")}
             />
             <FormControl>
                 <InputLabel id="authLevel-select-label">Auth Level</InputLabel>
                 <Select
                     labelId="authLevel-select-label"
                     id="authLevel-select"
-                    defaultValue=""
-                    onChange={(event) => setNewUser({...newUser, authLevel: event.target.value})}
+                    defaultValue=''
+                    onChange={(event) => handleChange(event, "authLevel")}
                 >
                     <MenuItem value="admin">Admin</MenuItem>
                     <MenuItem value="ad rep">Ad Rep</MenuItem>
@@ -85,134 +105,150 @@ export default function InviteUserForm() {
                     <MenuItem value="finance">Finance</MenuItem>
                 </Select>
             </FormControl>
-            {newUser.authLevel === "advertiser" &&
+            {userToEdit.authLevel === "advertiser" &&
                 <>
                     <h1>Advertiser Info Field</h1>
                     <Grid container width="800px">
                         <Grid item xs={6}>
-                            <Typography variant="p">Accepts ACH Payments</Typography>
-                            <Switch checked={isAchSwitchChecked} onChange={flipAchSwitch} inputProps={{ 'aria-label': 'controlled' }}/>
+                        {/* <Switch
+                            checked={userToEdit.acceptAchPayment}
+                            onChange={(checked) => flipAch(checked)}
+                        /> */}
                         </Grid>
-                        <Grid item xs={6}>
+                        {/* <Grid item xs={6}>
                             <Typography variant="p">Do Not Disturb</Typography>
                             <Switch checked={isDoNotDisturbChecked} onChange={flipDoNotDisturbSwitch} inputProps={{ 'aria-label': 'controlled' }}/>
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={6}>
                             <TextField
                                 label="Contact Preference"
                                 variant="filled"
-                                value={newUser.contactPreference}
-                                onChange={(event) => setNewUser({...newUser, contactPreference: event.target.value})}
+                                value={userToEdit.contactPreference}
+                                onChange={(event) => handleChange(event, "contactPreference")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Company Name"
                                 variant="filled"
-                                value={newUser.companyName}
-                                onChange={(event) => setNewUser({...newUser, companyName: event.target.value})}
+                                value={userToEdit.companyName}
+                                onChange={(event) => handleChange(event, "companyName")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Advertiser URL"
                                 variant="filled"
-                                value={newUser.advertiserUrl}
-                                onChange={(event) => setNewUser({...newUser, advertiserUrl: event.target.value})}
+                                value={userToEdit.advertiserUrl}
+                                onChange={(event) => handleChange(event, "advertiserUrl")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Address"
                                 variant="filled"
-                                value={newUser.address}
-                                onChange={(event) => setNewUser({...newUser, address: event.target.value})}
+                                value={userToEdit.address}
+                                onChange={(event) => handleChange(event, "address")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Primary Name"
                                 variant="filled"
-                                value={newUser.primaryName}
-                                onChange={(event) => setNewUser({...newUser, primaryName: event.target.value})}
+                                value={userToEdit.primaryName}
+                                onChange={(event) => handleChange(event, "primaryName")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Secondary Name"
                                 variant="filled"
-                                value={newUser.secondaryName}
-                                onChange={(event) => setNewUser({...newUser, secondaryName: event.target.value})}
+                                value={userToEdit.secondaryName}
+                                onChange={(event) => handleChange(event, "secondaryName")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Primary Title"
                                 variant="filled"
-                                value={newUser.primaryTitle}
-                                onChange={(event) => setNewUser({...newUser, primaryTitle: event.target.value})}
+                                value={userToEdit.primaryTitle}
+                                onChange={(event) => handleChange(event, "primaryTitle")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Secondary Title"
                                 variant="filled"
-                                value={newUser.secondaryTitle}
-                                onChange={(event) => setNewUser({...newUser, secondaryTitle: event.target.value})}
+                                value={userToEdit.secondaryTitle}
+                                onChange={(event) => handleChange(event, "secondaryTitle")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Primary Email"
                                 variant="filled"
-                                value={newUser.primaryEmail}
-                                onChange={(event) => setNewUser({...newUser, primaryEmail: event.target.value})}
+                                value={userToEdit.primaryEmail}
+                                onChange={(event) => handleChange(event, "primaryEmail")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Secondary Email"
                                 variant="filled"
-                                value={newUser.secondaryEmail}
-                                onChange={(event) => setNewUser({...newUser, secondaryEmail: event.target.value})}
+                                value={userToEdit.secondaryEmail}
+                                onChange={(event) => handleChange(event, "secondaryEmail")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Primary Direct Phone"
                                 variant="filled"
-                                value={newUser.primaryDirectPhone}
-                                onChange={(event) => setNewUser({...newUser, primaryDirectPhone: event.target.value})}
+                                value={userToEdit.primaryDirectPhone}
+                                onChange={(event) => handleChange(event, "primaryDirectPhone")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Secondary Direct Phone"
                                 variant="filled"
-                                value={newUser.secondaryDirectPhone}
-                                onChange={(event) => setNewUser({...newUser, secondaryDirectPhone: event.target.value})}
+                                value={userToEdit.secondaryDirectPhone}
+                                onChange={(event) => handleChange(event, "secondaryDirectPhone")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Primary Mobile Phone"
                                 variant="filled"
-                                value={newUser.primaryMobilePhone}
-                                onChange={(event) => setNewUser({...newUser, primaryMobilePhone: event.target.value})}
+                                value={userToEdit.primaryMobilePhone}
+                                onChange={(event) => handleChange(event, "primaryMobilePhone")}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Secondary Email"
                                 variant="filled"
-                                value={newUser.secondaryMobilePhone}
-                                onChange={(event) => setNewUser({...newUser, secondaryMobilePhone: event.target.value})}
+                                value={userToEdit.secondaryMobilePhone}
+                                onChange={(event) => handleChange(event, "secondaryEmail")}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Notes"
+                                variant="filled"
+                                multiline
+                                rows={4}
+                                value={userToEdit.notes}
+                                onChange={(event) => handleChange(event, "notes")}
                             />
                         </Grid>
                     </Grid>
                 </>
             }
-            <Button variant="contained" color="primary" onClick={submitNewUser}>Submit</Button>
+            {userId === undefined ?
+                <Button variant="contained" color="primary" onClick={submitNewUser}>Submit Invite</Button> :
+                <Button variant="contained" color="primary" onClick={updateUser}>Save Changes</Button>
+            }
         </FormControl>  
+        </>
     )
 }

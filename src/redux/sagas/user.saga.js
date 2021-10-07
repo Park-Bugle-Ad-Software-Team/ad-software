@@ -32,9 +32,32 @@ function* fetchUser() {
   }
 }
 
+function* allUsers() {
+  try {
+    const response = yield axios.get('/api/user/all');
+    yield put({type: 'SET_ALL_USERS', payload: response.data})
+  } catch (error) {
+    console.log('Failed to fetch all users: ', error);
+  }
+}
+
+function* fetchUserToEdit(action) {
+  try { 
+    const response = yield axios.get(`/api/user/edit/${action.payload}`);
+    yield put({
+      type: 'SET_USER_TO_EDIT',
+      payload: response.data
+    })
+  } catch (error) {
+    console.log(`Failed to fetch user to edit at id ${action.payload}:`, error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('CREATE_NEW_USER', createNewUser);
+  yield takeLatest('FETCH_ALL_USERS', allUsers);
+  yield takeLatest('FETCH_USER_TO_EDIT', fetchUserToEdit);
 }
 
 export default userSaga;
