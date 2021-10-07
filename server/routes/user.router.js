@@ -31,6 +31,7 @@ router.post('/register', rejectUnauthenticated, (req, res) => {
                         "primaryDirectPhone", "primaryMobilePhone", "secondaryName", 
                         "secondaryTitle", "secondaryEmail", "secondaryDirectPhone", 
                         "secondaryMobilePhone", "notes", "inviteCode"`;
+  const inviteToken = generateToken(30);
   const sqlParams = [
     req.body.name,
     req.body.email,
@@ -52,7 +53,7 @@ router.post('/register', rejectUnauthenticated, (req, res) => {
     req.body.secondaryDirectPhone,
     req.body.secondaryMobilePhone,
     req.body.notes,
-    generateToken(30) // reg token to be sent in the invitation email.
+    inviteToken // reg token to be sent in the invitation email.
   ]
 
   // const propertiesArray = properties.split(', ');
@@ -97,7 +98,11 @@ router.post('/register', rejectUnauthenticated, (req, res) => {
   // console.log('sqlParams is: ', sqlParams);
   pool
     .query(queryText, sqlParams)
-    .then(() => res.sendStatus(201))
+    .then(() => {
+      // send email off here
+      
+      res.sendStatus(201)
+    })
     .catch((err) => {
       console.log('User registration failed: ', err);
       res.sendStatus(500);
@@ -124,23 +129,29 @@ router.put('/edit/:inviteToken', (req, res) => {
     sqlQuery = `SELECT * FROM "Users"
                 WHERE "inviteCode" = $1`;
     sqlParams = [req.params.inviteToken];
-    pool.query(sqlQuery, sqlParams).then(dbRes => {
-      if (dbRes.rowCount) {
-        sqlQuery = `INSERT INTO "Users" ("password")
-                    VALUES $1
-                    WHERE "id" = $2`
-        sqlParams = [encryptLib.encryptPassword(req.body.password), dbRes.rows[0].id]
-        pool.query(sqlQuery, sqlParams).then(dbRes => {
-          res.sendStatus(200);
-        }).catch(error => {
-          console.log(`Failed to update user ${dbRes.rows[0].id}'s password: `, error)
-          res.sendStatus(500);
-        });
-      }
-    }).catch(error => {
-      console.log('Error while checking if inviteToken is valid: ', error);
-      res.sendStatus(500);
-    });
+    pool
+      .query(sqlQuery, sqlParams)
+      .then(dbRes => {
+        if (dbRes.rowCount) {
+          sqlQuery = `INSERT INTO "Users" ("password")
+                      VALUES $1
+                      WHERE "id" = $2`
+          sqlParams = [encryptLib.encryptPassword(req.body.password), dbRes.rows[0].id]
+          pool
+            .query(sqlQuery, sqlParams)
+            .then(dbRes => {
+              res.sendStatus(200);
+            })
+            .catch(error => {
+              console.log(`Failed to update user ${dbRes.rows[0].id}'s password: `, error)
+              res.sendStatus(500);
+            });
+        }
+      })
+      .catch(error => {
+        console.log('Error while checking if inviteToken is valid: ', error);
+        res.sendStatus(500);
+      });
     // if not, deny them
   } else if (req.user.authLevel === 'admin') {
     // should admin be able to update user's passwords, too?
@@ -183,9 +194,12 @@ router.put('/edit/:inviteToken', (req, res) => {
     $9, $10, $11, $12, $13, $14, $15, $16,
     $17, $18, $19, $20)
     WHERE id = $21`;
-    pool.query(queryText, sqlParams).then(dbRes => {
+    pool
+    .query(queryText, sqlParams)
+    .then(dbRes => {
       res.sendStatus(200);
-    }).catch(error => {
+    })
+    .catch(error => {
       console.log(`Failed while updating user ${req.body.id}'s information: `, error);
       res.sendStatus(500);
     });
@@ -196,19 +210,22 @@ router.put('/edit/:inviteToken', (req, res) => {
 
 router.get('/all', rejectUnauthenticated, (req, res) => {
   if (req.user.authLevel === 'admin') {
-  const sqlQuery = `SELECT "email","name","authLevel",
-                      "contactPreference","acceptAchPayment","companyName",
-                      "doNotDisturb","isActive", "advertiserUrl",
-                      "address", "primaryName", "primaryTitle",
-                      "primaryEmail","primaryDirectPhone","primaryMobilePhone",
-                      "secondaryName", "secondaryTitle","secondaryEmail",
-                      "secondaryDirectPhone","secondaryMobilePhone", "notes" 
-                    FROM "Users"`;
-  pool.query(sqlQuery).then(dbRes => {
-    res.send(dbRes.rows);
-  }).catch(error => {
-    console.log('Failed to retrieve all users: ', error)
-  })
+    const sqlQuery = `SELECT "email","name","authLevel",
+                        "contactPreference","acceptAchPayment","companyName",
+                        "doNotDisturb","isActive", "advertiserUrl",
+                        "address", "primaryName", "primaryTitle",
+                        "primaryEmail","primaryDirectPhone","primaryMobilePhone",
+                        "secondaryName", "secondaryTitle","secondaryEmail",
+                        "secondaryDirectPhone","secondaryMobilePhone", "notes" 
+                      FROM "Users"`;
+    pool
+      .query(sqlQuery)
+      .then(dbRes => {
+        res.send(dbRes.rows);
+      })
+      .catch(error => {
+        console.log('Failed to retrieve all users: ', error)
+      })
   } else {
     res.sendStatus(403)
   }
@@ -233,12 +250,15 @@ router.delete('/:id', (req, res) => {
   const sqlQuery = `DELETE FROM "Users"
                     WHERE "id" = $1`;
   const sqlParams = [req.params.id];
-  pool.query(sqlQuery, sqlParams).then(dbRes => {
-    res.sendStatus(200);
-  }).catch(error => {
-    console.log(`Failed to delete user ${req.params.id}`, error)
-    res.sendStatus(500);
-  });
+  pool
+    .query(sqlQuery, sqlParams)
+    .then(dbRes => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(`Failed to delete user ${req.params.id}`, error)
+      res.sendStatus(500);
+    });
 })
 
 router.get('/:id', rejectUnauthenticated, (req, res) => {
@@ -253,12 +273,15 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
                       FROM "Users"
                       WHERE "id" = $1`;
     const sqlParams = [req.params.id];
-    pool.query(sqlQuery, sqlParams).then(dbRes => {
-      res.send(dbRes.rows[0])
-    }).catch(error => {
-      console.log(`Failed to retrieve user ${req.user.id}: `, error)
-      res.sendStatus(500);
-    });
+    pool
+      .query(sqlQuery, sqlParams)
+      .then(dbRes => {
+        res.send(dbRes.rows[0])
+      })
+      .catch(error => {
+        console.log(`Failed to retrieve user ${req.user.id}: `, error)
+        res.sendStatus(500);
+      });
   } else {
     res.sendStatus(403);
   }
