@@ -21,6 +21,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
 router.post('/register', rejectUnauthenticated, (req, res) => {
+  if (req.user.authLevel === 'admin') {
   console.log('req.body is: ', req.body);
   // unpack the object in order
   const properties = `"name", "email", "authLevel", 
@@ -101,10 +102,14 @@ router.post('/register', rejectUnauthenticated, (req, res) => {
       console.log('User registration failed: ', err);
       res.sendStatus(500);
     });
+  } else {
+    res.sendStatus(403);
+  }
 });
 
 
 router.put('/edit', rejectUnauthenticated, (req, res) => {
+  // allow edit only if user is admin or the ad person themselves
   // edit happens on two conditions:
     // 1. Admin edits user's fields
     // 2. User logs in for the first time - they edit the password field - therefore they use the 
@@ -113,19 +118,23 @@ router.put('/edit', rejectUnauthenticated, (req, res) => {
 })
 
 router.get('/all', rejectUnauthenticated, (req, res) => {
+  if (req.user.authLevel === 'admin') {
   const sqlQuery = `SELECT "email","name","authLevel",
-                "contactPreference","acceptAchPayment","companyName",
-                "doNotDisturb","isActive", "advertiserUrl",
-                "address", "primaryName", "primaryTitle",
-                "primaryEmail","primaryDirectPhone","primaryMobilePhone",
-                "secondaryName", "secondaryTitle","secondaryEmail",
-                "secondaryDirectPhone","secondaryMobilePhone", "notes" 
-              FROM "Users"`;
+                      "contactPreference","acceptAchPayment","companyName",
+                      "doNotDisturb","isActive", "advertiserUrl",
+                      "address", "primaryName", "primaryTitle",
+                      "primaryEmail","primaryDirectPhone","primaryMobilePhone",
+                      "secondaryName", "secondaryTitle","secondaryEmail",
+                      "secondaryDirectPhone","secondaryMobilePhone", "notes" 
+                    FROM "Users"`;
   pool.query(sqlQuery).then(dbRes => {
     res.send(dbRes.rows);
   }).catch(error => {
     console.log('Failed to retrieve all users: ', error)
   })
+  } else {
+    res.sendStatus(403)
+  }
 })
 
 // Handles login form authenticate/login POST
@@ -142,5 +151,42 @@ router.post('/logout', (req, res) => {
   req.logout();
   res.sendStatus(200);
 });
+
+router.delete('/:id', (req, res) => {
+  const sqlQuery = `DELETE FROM "Users"
+                    WHERE "id" = $1`;
+  const sqlParams = [req.params.id];
+  pool.query(sqlQuery, sqlParams).then(dbRes => {
+    res.sendStatus(200);
+  }).catch(error => {
+    console.log(`Failed to delete user ${req.params.id}`, error)
+    res.sendStatus(500);
+  });
+})
+
+router.get('/:id', rejectUnauthenticated, (req, res) => {
+  if (req.user.id === 'admin') {
+    const sqlQuery = `SELECT "email","name","authLevel",
+                        "contactPreference","acceptAchPayment","companyName",
+                        "doNotDisturb","isActive", "advertiserUrl",
+                        "address", "primaryName", "primaryTitle",
+                        "primaryEmail","primaryDirectPhone","primaryMobilePhone",
+                        "secondaryName", "secondaryTitle","secondaryEmail",
+                        "secondaryDirectPhone","secondaryMobilePhone", "notes" 
+                      FROM "Users"
+                      WHERE "id" = $1`;
+    const sqlParams = [req.params.id];
+    pool.query(sqlQuery, sqlParams).then(dbRes => {
+      res.send(dbRes.rows[0])
+    }).catch(error => {
+      console.log(`Failed to retrieve user ${req.user.id}: `, error)
+      res.sendStatus(500);
+    });
+  } else {
+    res.sendStatus(403);
+  }
+
+
+})
 
 module.exports = router;
