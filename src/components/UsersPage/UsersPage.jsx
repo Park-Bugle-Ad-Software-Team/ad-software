@@ -42,8 +42,8 @@ export default function UsersPage() {
         <>
             <Typography variant="h2">Users Page</Typography>
             <Button variant="contained" color="primary" onClick={openInvite}>Invite new user</Button>
-            <Button variant="contained" color="primary" onClick={editUser}>Edit Existing user</Button>
-            {isInviteOpen &&
+            {/* <Button variant="contained" color="primary" onClick={editUser}>Edit Existing user</Button> */}
+            {/* {isInviteOpen &&
             <>
                 <InviteUserForm 
                     style="invite"
@@ -57,7 +57,7 @@ export default function UsersPage() {
                     userToEdit="some user"
                 />
             </>
-            }
+            } */}
             <Typography variant="h2">Users List</Typography>
             <List>
                 {allUsers.map(user => (

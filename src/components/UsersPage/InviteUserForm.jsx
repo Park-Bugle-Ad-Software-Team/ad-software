@@ -5,21 +5,24 @@ This component is going to be used for rendering both the user creation and user
 import { Button, FormControl, TextField, 
             Select, MenuItem, InputLabel,
                 Switch, Grid, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 
-export default function InviteUserForm({ style, user }) {
+export default function InviteUserForm() {
     const dispatch = useDispatch()
-    const [isInviteOpen, setIsInviteOpen] = useState(false);
-    const [isAchSwitchChecked, setIsAchSwitchChecked] = useState(true);
-    const [isDoNotDisturbChecked, setIsDoNotDisturbChecked] = useState(true);
+    // const [isInviteOpen, setIsInviteOpen] = useState(false);
+    // const [isAchSwitchChecked, setIsAchSwitchChecked] = useState(true);
+    // const [isDoNotDisturbChecked, setIsDoNotDisturbChecked] = useState(true);
     
     const params = useParams();
     const userId = params.id;
 
     // test data - all fields will normally be blank or false on new user creation
     const [newUser, setNewUser] = useState({name: ''});
+    const userToEdit = useSelector(store => store.userToEdit);
+
+    console.log('user to edit', userToEdit);
 
     useEffect(() => {
         if (userId === undefined) {
@@ -92,6 +95,13 @@ export default function InviteUserForm({ style, user }) {
     // }
 
     return (
+        <>
+        <h2>
+            {userId === undefined ?
+                "Create User" :
+                "Edit User"
+            }
+        </h2>
         <FormControl>
             <TextField 
                 id="name-input"
@@ -104,7 +114,7 @@ export default function InviteUserForm({ style, user }) {
                 id="email-input"
                 label="Email" 
                 variant="outlined" 
-                value={newUser.email}
+                value={userToEdit.email}
                 onChange={(event) => setNewUser({...newUser, email: event.target.value})}
             />
             <FormControl>
@@ -112,7 +122,7 @@ export default function InviteUserForm({ style, user }) {
                 <Select
                     labelId="authLevel-select-label"
                     id="authLevel-select"
-                    defaultValue=""
+                    defaultValue=''
                     onChange={(event) => setNewUser({...newUser, authLevel: event.target.value})}
                 >
                     <MenuItem value="admin">Admin</MenuItem>
@@ -123,7 +133,7 @@ export default function InviteUserForm({ style, user }) {
                     <MenuItem value="finance">Finance</MenuItem>
                 </Select>
             </FormControl>
-            {newUser.authLevel === "advertiser" &&
+            {userToEdit.authLevel === "advertiser" &&
                 <>
                     <h1>Advertiser Info Field</h1>
                     <Grid container width="800px">
@@ -139,7 +149,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Contact Preference"
                                 variant="filled"
-                                value={newUser.contactPreference}
+                                value={userToEdit.contactPreference}
                                 onChange={(event) => setNewUser({...newUser, contactPreference: event.target.value})}
                             />
                         </Grid>
@@ -147,7 +157,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Company Name"
                                 variant="filled"
-                                value={newUser.companyName}
+                                value={userToEdit.companyName}
                                 onChange={(event) => setNewUser({...newUser, companyName: event.target.value})}
                             />
                         </Grid>
@@ -155,7 +165,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Advertiser URL"
                                 variant="filled"
-                                value={newUser.advertiserUrl}
+                                value={userToEdit.advertiserUrl}
                                 onChange={(event) => setNewUser({...newUser, advertiserUrl: event.target.value})}
                             />
                         </Grid>
@@ -163,7 +173,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Address"
                                 variant="filled"
-                                value={newUser.address}
+                                value={userToEdit.address}
                                 onChange={(event) => setNewUser({...newUser, address: event.target.value})}
                             />
                         </Grid>
@@ -171,7 +181,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Primary Name"
                                 variant="filled"
-                                value={newUser.primaryName}
+                                value={userToEdit.primaryName}
                                 onChange={(event) => setNewUser({...newUser, primaryName: event.target.value})}
                             />
                         </Grid>
@@ -179,7 +189,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Secondary Name"
                                 variant="filled"
-                                value={newUser.secondaryName}
+                                value={userToEdit.secondaryName}
                                 onChange={(event) => setNewUser({...newUser, secondaryName: event.target.value})}
                             />
                         </Grid>
@@ -187,7 +197,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Primary Title"
                                 variant="filled"
-                                value={newUser.primaryTitle}
+                                value={userToEdit.primaryTitle}
                                 onChange={(event) => setNewUser({...newUser, primaryTitle: event.target.value})}
                             />
                         </Grid>
@@ -195,7 +205,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Secondary Title"
                                 variant="filled"
-                                value={newUser.secondaryTitle}
+                                value={userToEdit.secondaryTitle}
                                 onChange={(event) => setNewUser({...newUser, secondaryTitle: event.target.value})}
                             />
                         </Grid>
@@ -203,7 +213,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Primary Email"
                                 variant="filled"
-                                value={newUser.primaryEmail}
+                                value={userToEdit.primaryEmail}
                                 onChange={(event) => setNewUser({...newUser, primaryEmail: event.target.value})}
                             />
                         </Grid>
@@ -211,7 +221,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Secondary Email"
                                 variant="filled"
-                                value={newUser.secondaryEmail}
+                                value={userToEdit.secondaryEmail}
                                 onChange={(event) => setNewUser({...newUser, secondaryEmail: event.target.value})}
                             />
                         </Grid>
@@ -219,7 +229,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Primary Direct Phone"
                                 variant="filled"
-                                value={newUser.primaryDirectPhone}
+                                value={userToEdit.primaryDirectPhone}
                                 onChange={(event) => setNewUser({...newUser, primaryDirectPhone: event.target.value})}
                             />
                         </Grid>
@@ -227,7 +237,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Secondary Direct Phone"
                                 variant="filled"
-                                value={newUser.secondaryDirectPhone}
+                                value={userToEdit.secondaryDirectPhone}
                                 onChange={(event) => setNewUser({...newUser, secondaryDirectPhone: event.target.value})}
                             />
                         </Grid>
@@ -235,7 +245,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Primary Mobile Phone"
                                 variant="filled"
-                                value={newUser.primaryMobilePhone}
+                                value={userToEdit.primaryMobilePhone}
                                 onChange={(event) => setNewUser({...newUser, primaryMobilePhone: event.target.value})}
                             />
                         </Grid>
@@ -243,7 +253,7 @@ export default function InviteUserForm({ style, user }) {
                             <TextField
                                 label="Secondary Email"
                                 variant="filled"
-                                value={newUser.secondaryMobilePhone}
+                                value={userToEdit.secondaryMobilePhone}
                                 onChange={(event) => setNewUser({...newUser, secondaryMobilePhone: event.target.value})}
                             />
                         </Grid>
@@ -253,18 +263,19 @@ export default function InviteUserForm({ style, user }) {
                                 variant="filled"
                                 multiline
                                 rows={4}
-                                value={newUser.notes}
+                                value={userToEdit.notes}
                                 onChange={(event) => setNewUser({...newUser, notes: event.target.value})}
                             />
                         </Grid>
                     </Grid>
                 </>
             }
-            {style === "invite" ?
+            {/* {style === "invite" ?
                 <Button variant="contained" color="primary" onClick={submitNewUser}>Submit</Button> :
                 <Button variant="contained" color="primary" onClick={updateUser}>Save Changes</Button>
-            }
+            } */}
             
         </FormControl>  
+        </>
     )
 }
