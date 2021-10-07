@@ -22,6 +22,7 @@ import About from '../About/About';
 
 import './App.css';
 import InviteUserForm from '../UsersPage/InviteUserForm';
+import SetPasswordForm from '../RegisterForm/SetPasswordForm';
 
 function App() {
   const dispatch = useDispatch();
@@ -120,6 +121,13 @@ function App() {
           >
               <HomePage />
           </ProtectedRoute>
+
+          <Route 
+            exact
+            path="/set-password/:inviteToken"
+          >
+            <SetPasswordForm />
+          </Route>
 
           {/* WILL BE USED FOR VIEWING AND EDITING AD CARDS */}
           {/* <ProtectedRoute

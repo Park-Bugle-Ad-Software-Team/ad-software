@@ -55,7 +55,7 @@ function* fetchUserToEdit(action) {
 
 function* updateUser(action) {
   try {
-    console.log('action payload in updateUser Saga', action.payload);
+    console.log('action payload in updateUser Saga', action.payload.id);
     yield axios.put(`/api/user/edit/${action.payload.id}`, action.payload);
   } catch (error) {
     console.log('Failed to update user', error);

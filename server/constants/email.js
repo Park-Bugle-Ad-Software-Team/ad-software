@@ -14,7 +14,7 @@ const mailOptions = {
     from: fromEmail,
     // to: 'staubindj@gmail.com',
     subject: 'Sending Email using Node.js',
-    text: 'localhost:3000/api/user/edit'
+    text: 'localhost:3000/#/api/user/edit/'
     // html: <h1>some html</h1>
 }
 
