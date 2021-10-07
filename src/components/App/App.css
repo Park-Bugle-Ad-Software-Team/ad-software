@@ -114,3 +114,14 @@ input {
   margin: 5px;
   margin-bottom: 10px;
 }
+
+.uTable, .uTr {
+  margin: 15px;
+  padding: 15px;
+  border: 2pt solid maroon;
+}
+
+.uTh, .uTd {
+  text-align: center;
+  padding: 15px;
+}

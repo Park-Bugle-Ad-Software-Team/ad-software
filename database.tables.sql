@@ -18,7 +18,7 @@ CREATE TABLE "Users" (
    "primaryName" VARCHAR(255),
    "primaryTitle" VARCHAR(255),
    "primaryEmail" VARCHAR(255),
-   "primaryDirectPhone" VARCHAR(50),git 
+   "primaryDirectPhone" VARCHAR(50),
    "primaryMobilePhone" VARCHAR(50),
    "secondaryName" VARCHAR(255),
    "secondaryTitle" VARCHAR(255),
@@ -31,7 +31,7 @@ CREATE TABLE "Users" (
 
 CREATE TABLE "AdSize" (
    "id" SERIAL PRIMARY KEY,
-   "type" VARCHAR(255) NOT NULL,
+   "adType" VARCHAR(255) NOT NULL,
    "columns" INT NOT NULL,
    "inches" INT NOT NULL,
    "months" INT NOT NULL,
@@ -41,18 +41,18 @@ CREATE TABLE "AdSize" (
 CREATE TABLE "Sponsorship" (
    "id" SERIAL PRIMARY KEY,
    "isSponsored" BOOLEAN NOT NULL,
-   "price" DECIMAL NOT NULL
+   "sponsorshipPrice" DECIMAL NOT NULL
 );
 
 CREATE TABLE "Color" (
    "id" SERIAL PRIMARY KEY,
-   "type" VARCHAR(255) NOT NULL,
-   "price" DECIMAL NOT NULL
+   "colorType" VARCHAR(255) NOT NULL,
+   "colorPrice" DECIMAL NOT NULL
 );
 
 CREATE TABLE "Rates" (
    "id" SERIAL PRIMARY KEY,
-   "name" VARCHAR(255) NOT NULL,
+   "rateName" VARCHAR(255) NOT NULL,
    "isLessThanEight" BOOLEAN,
    "isEightToTwelve" BOOLEAN,
    "isTwelveToTwenty" BOOLEAN,
@@ -70,7 +70,7 @@ CREATE TABLE "Contracts" (
    "startMonth" DATE,
    "commissionPercentage" INT,
    "colorId" INT REFERENCES "Color",
-   "type" VARCHAR(255),
+   "contractType" VARCHAR(255),
    "calculatedBill" DECIMAL,
    "actualBill" DECIMAL,
    "page" INT,
@@ -82,7 +82,7 @@ CREATE TABLE "Contracts" (
 CREATE TABLE "Images" (
    "id" SERIAL PRIMARY KEY,
    "imageUrl" VARCHAR(1024) NOT NULL,
-   "contract" INT REFERENCES "Contracts"
+   "contractId" INT REFERENCES "Contracts"
 );
 
 -- CREATE TABLE "Invites" (
@@ -109,7 +109,7 @@ CREATE TABLE "Contracts_Users" (
 
 CREATE TABLE "MiscRates" (
    "id" SERIAL PRIMARY KEY,
-   "name" VARCHAR(255) NOT NULL,
-   "price" DECIMAL NOT NULL
+   "miscRateName" VARCHAR(255) NOT NULL,
+   "ratePrice" DECIMAL NOT NULL
 );
 
