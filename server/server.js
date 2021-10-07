@@ -9,6 +9,7 @@ const passport = require('./strategies/user.strategy');
 
 // Route includes
 const userRouter = require('./routes/user.router');
+const chatRouter = require('./routes/chat.router');
 const contractsRouter = require('./routes/contracts.router');
 const s3Uploader = require('react-s3-uploader/s3router');
 
@@ -25,6 +26,7 @@ app.use(passport.session());
 
 /* Routes */
 app.use('/api/user', userRouter);
+app.use('/api/chat', chatRouter);
 app.use('/api/contracts', contractsRouter);
 app.use('/s3', s3Uploader({
   bucket: "pbadsoftware", // required
