@@ -53,11 +53,21 @@ function* fetchUserToEdit(action) {
   }
 }
 
+function* updateUser(action) {
+  try {
+    console.log('action payload in updateUser Saga', action.payload);
+    yield axios.put(`/api/user/edit/${action.payload.id}`, action.payload);
+  } catch (error) {
+    console.log('Failed to update user', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('CREATE_NEW_USER', createNewUser);
   yield takeLatest('FETCH_ALL_USERS', allUsers);
   yield takeLatest('FETCH_USER_TO_EDIT', fetchUserToEdit);
+  yield takeLatest('UPDATE_USER', updateUser);
 }
 
 export default userSaga;
