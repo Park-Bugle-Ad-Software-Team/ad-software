@@ -210,7 +210,7 @@ router.put('/edit/:inviteToken', (req, res) => {
 
 router.get('/all', rejectUnauthenticated, (req, res) => {
   if (req.user.authLevel === 'admin') {
-    const sqlQuery = `SELECT "email","name","authLevel",
+    const sqlQuery = `SELECT "id", "email","name","authLevel",
                         "contactPreference","acceptAchPayment","companyName",
                         "doNotDisturb","isActive", "advertiserUrl",
                         "address", "primaryName", "primaryTitle",

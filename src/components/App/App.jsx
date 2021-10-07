@@ -21,6 +21,7 @@ import HomePage from '../HomePage/HomePage';
 import About from '../About/About';
 
 import './App.css';
+import InviteUserForm from '../UsersPage/InviteUserForm';
 
 function App() {
   const dispatch = useDispatch();
@@ -93,6 +94,16 @@ function App() {
 
           <ProtectedRoute
             exact
+            path="/users/edit/:id"
+          >
+            {user.authLevel !== 'admin' &&
+              <Redirect to="/home" />
+            }
+            <InviteUserForm />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            exact
             path="/pricing"
           >
             {user.authLevel !== 'admin' &&
@@ -100,6 +111,8 @@ function App() {
             }
             <PricingPage />
           </ProtectedRoute>
+
+          
 
           <ProtectedRoute
             exact
