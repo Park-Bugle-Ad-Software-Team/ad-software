@@ -62,12 +62,22 @@ function* updateUser(action) {
   }
 }
 
+function* setUserPassword(action) {
+  try{
+    console.log('action.payload is: ', action.payload.password, action.payload.inviteToken)
+    yield axios.put(`/api/user/set-password/${action.payload.inviteToken}`, {password: action.payload.password})
+  } catch (error) {
+    console.log('Failed to set the user\'s password', error)
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('CREATE_NEW_USER', createNewUser);
   yield takeLatest('FETCH_ALL_USERS', allUsers);
   yield takeLatest('FETCH_USER_TO_EDIT', fetchUserToEdit);
   yield takeLatest('UPDATE_USER', updateUser);
+  yield takeLatest('UPDATE_PASSWORD', setUserPassword)
 }
 
 export default userSaga;

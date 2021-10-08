@@ -190,8 +190,8 @@ router.put('/set-password/:inviteToken', (req, res) => {
     .query(sqlQuery, sqlParams)
     .then(dbRes => {
       if (dbRes.rowCount) {
-        console.log('dbRes.rowCount is: ', typeof dbRes.rows[0].id)
-        console.log('incoming password is: ', req);
+        console.log('dbRes.rowCount is: ', dbRes.rows[0].id)
+        console.log('incoming password is: ', req.body);
 
         sqlQuery = `UPDATE "Users" 
                     SET "password" = $1
@@ -208,7 +208,6 @@ router.put('/set-password/:inviteToken', (req, res) => {
             res.sendStatus(500);
           });
       }
-      res.sendStatus(200)
     })
     .catch(error => {
       console.log('Error while checking if inviteToken is valid: ', error);
