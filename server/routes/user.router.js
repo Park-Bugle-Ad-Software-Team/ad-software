@@ -39,7 +39,23 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
   } else {
     res.sendStatus(403)
   }
-})
+});
+
+//route to get all companies, but eliminating repeat instances of companies
+router.get('/advertisers', rejectUnauthenticated, (req, res) => {
+  const sqlQuery = `SELECT DISTINCT "companyName"
+                    FROM "Users"
+                    WHERE "companyName" IS NOT NULL AND "isActive" = TRUE`;
+  pool
+    .query(sqlQuery)
+    .then(dbRes => {
+      res.send(dbRes.rows)
+    })
+    .catch(error => {
+      console.log('Failed to retrieve advertisers', error);
+      res.sendStatus(500);
+    });
+});
 
 router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   if (req.user.authLevel === 'admin') {
@@ -59,7 +75,7 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
         res.send(dbRes.rows[0])
       })
       .catch(error => {
-        console.log(`Failed to retrieve user ${req.user.id}: `, error)
+        console.log(`Failed to retrieve user ${req.user.id}:`, error)
         res.sendStatus(500);
       });
   } else {

@@ -86,6 +86,33 @@ router.get('/closed', rejectUnauthenticated, (req, res) => {
   });
 });
 
+// GET request that happens upon FETCH_ALL_CONTRACTS
+router.get('/all', rejectUnauthenticated, (req, res) => {
+  const sqlText = `
+  SELECT
+  "Contracts".*,
+  to_json("AdSize".*) as "AdSize",
+  to_json("Color".*) as "Color"
+  FROM "Contracts"
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Sponsorship"
+      ON "Sponsorship"."id" = "Contracts"."sponsorshipId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    WHERE "isApproved" = true;
+  `;
+  pool.query(sqlText)
+  .then((dbRes) => {
+      console.log('dbRes is', dbRes);
+      res.send(dbRes.rows);
+  })
+  .catch((error) => {
+      console.log('get pending contracts error', error);
+      res.sendStatus(500);
+  });
+});
+
 /**
  * POST route template
  */

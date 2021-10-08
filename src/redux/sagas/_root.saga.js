@@ -2,10 +2,9 @@ import { all } from 'redux-saga/effects';
 import loginSaga from './login.saga';
 import registrationSaga from './registration.saga';
 import userSaga from './user.saga';
-import pendingContractsSaga from './pendingContracts.saga';
-import activeContractsSaga from './activeContracts.saga';
-import closedContractsSaga from './closedContracts.saga';
+import contractsSaga from './contracts.saga';
 import chatSaga from './chat.saga';
+import advertisersSaga from './advertisers.saga'
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -19,9 +18,8 @@ export default function* rootSaga() {
     loginSaga(), // login saga is now registered
     registrationSaga(),
     userSaga(),
-    pendingContractsSaga(),
-    activeContractsSaga(),
-    closedContractsSaga(),
+    contractsSaga(),
     chatSaga(),
+    advertisersSaga()
   ]);
 }
