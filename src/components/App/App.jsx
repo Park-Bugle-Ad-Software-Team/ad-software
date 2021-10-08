@@ -23,6 +23,7 @@ import About from '../About/About';
 import './App.css';
 import InviteUserForm from '../UsersPage/InviteUserForm';
 import SetPasswordForm from '../RegisterForm/SetPasswordForm';
+import AdCard from '../AdCard/AdCard';
 
 function App() {
   const dispatch = useDispatch();
@@ -127,6 +128,13 @@ function App() {
             path="/set-password/:inviteToken"
           >
             <SetPasswordForm />
+          </Route>
+
+          <Route 
+            exact
+            path="/adCard"
+          >
+            <AdCard />
           </Route>
 
           {/* WILL BE USED FOR VIEWING AND EDITING AD CARDS */}
