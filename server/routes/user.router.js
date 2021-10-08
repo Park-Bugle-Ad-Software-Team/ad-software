@@ -185,15 +185,19 @@ router.post('/logout', (req, res) => {
 router.put('/set-password/:inviteToken', (req, res) => {
   sqlQuery = `SELECT * FROM "Users"
               WHERE "inviteCode" = $1`;
-  sqlParams = [req.params.inviteToken];    
+  sqlParams = [req.params.inviteToken];
   pool
     .query(sqlQuery, sqlParams)
     .then(dbRes => {
       if (dbRes.rowCount) {
-        sqlQuery = `INSERT INTO "Users" ("password")
-                    VALUES $1
+        console.log('dbRes.rowCount is: ', typeof dbRes.rows[0].id)
+        console.log('incoming password is: ', req);
+
+        sqlQuery = `UPDATE "Users" 
+                    SET "password" = $1
                     WHERE "id" = $2`
         sqlParams = [encryptLib.encryptPassword(req.body.password), dbRes.rows[0].id]
+        console.log('id being passed is: ', dbRes.rows)
         pool
           .query(sqlQuery, sqlParams)
           .then(dbRes => {
@@ -204,6 +208,7 @@ router.put('/set-password/:inviteToken', (req, res) => {
             res.sendStatus(500);
           });
       }
+      res.sendStatus(200)
     })
     .catch(error => {
       console.log('Error while checking if inviteToken is valid: ', error);
