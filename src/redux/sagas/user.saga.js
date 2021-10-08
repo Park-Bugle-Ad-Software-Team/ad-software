@@ -53,11 +53,31 @@ function* fetchUserToEdit(action) {
   }
 }
 
+function* updateUser(action) {
+  try {
+    console.log('action payload in updateUser Saga', action.payload.id);
+    yield axios.put(`/api/user/edit/${action.payload.id}`, action.payload);
+  } catch (error) {
+    console.log('Failed to update user', error);
+  }
+}
+
+function* setUserPassword(action) {
+  try{
+    console.log('action.payload is: ', action.payload.password, action.payload.inviteToken)
+    yield axios.put(`/api/user/set-password/${action.payload.inviteToken}`, {password: action.payload.password})
+  } catch (error) {
+    console.log('Failed to set the user\'s password', error)
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('CREATE_NEW_USER', createNewUser);
   yield takeLatest('FETCH_ALL_USERS', allUsers);
   yield takeLatest('FETCH_USER_TO_EDIT', fetchUserToEdit);
+  yield takeLatest('UPDATE_USER', updateUser);
+  yield takeLatest('UPDATE_PASSWORD', setUserPassword)
 }
 
 export default userSaga;

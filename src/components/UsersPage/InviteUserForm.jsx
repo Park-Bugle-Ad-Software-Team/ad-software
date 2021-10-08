@@ -39,32 +39,44 @@ export default function InviteUserForm() {
         });
     }
 
-    const flipAch = (checked) => {
-        console.log('checked', checked);
+    const flipAch = (event) => {
+        console.log('checked', event.target.checked);
         dispatch({ 
             type: 'UPDATE_USER_TO_EDIT', 
             payload: {
                 ...userToEdit,
-                acceptAchPayment: !checked
+                acceptAchPayment: event.target.checked
             } 
         });
     }
 
-    const submitNewUser = () => {
-        console.log('submitting new user', newUser);
-        dispatch({
-            type: 'CREATE_NEW_USER',
-            payload: newUser
+    const flipDoNotDisturb = (event) => {
+        console.log('checked', event.target.checked);
+        dispatch({ 
+            type: 'UPDATE_USER_TO_EDIT', 
+            payload: {
+                ...userToEdit,
+                doNotDisturb: event.target.checked
+            } 
         });
     }
 
-    const updateUser = () => {
-        console.log(`submitting changes to user someone`, newUser); // update test to format in the user we are editing
-        dispatch({
-            type: 'UPDATE_USER',
-            payload: newUser // update once we have a the user passed via a prop
-        });
+    const submitUser = () => {
+        if (userToEdit.id === undefined) {
+            // submit post new user
+            dispatch({
+                type: 'CREATE_NEW_USER',
+                payload: userToEdit
+            });
+        } else {
+            // put an existing user
+            dispatch({
+                type: 'UPDATE_USER',
+                payload: userToEdit // update once we have a the user passed via a prop
+            });
+        }
     }
+    
 
     return (
         <>
@@ -91,12 +103,14 @@ export default function InviteUserForm() {
             />
             <FormControl>
                 <InputLabel id="authLevel-select-label">Auth Level</InputLabel>
+
                 <Select
                     labelId="authLevel-select-label"
                     id="authLevel-select"
                     defaultValue=''
                     onChange={(event) => handleChange(event, "authLevel")}
-                >
+                > 
+                
                     <MenuItem value="admin">Admin</MenuItem>
                     <MenuItem value="ad rep">Ad Rep</MenuItem>
                     <MenuItem value="advertiser">Advertiser</MenuItem>
@@ -110,15 +124,19 @@ export default function InviteUserForm() {
                     <h1>Advertiser Info Field</h1>
                     <Grid container width="800px">
                         <Grid item xs={6}>
-                        {/* <Switch
-                            checked={userToEdit.acceptAchPayment}
-                            onChange={(checked) => flipAch(checked)}
-                        /> */}
+                            <Typography variant="p">Accepts Ach Payment</Typography>
+                            <Switch
+                                checked={userToEdit.acceptAchPayment}
+                                onChange={(event) => flipAch(event)}
+                            />
                         </Grid>
-                        {/* <Grid item xs={6}>
+                        <Grid item xs={6}>
                             <Typography variant="p">Do Not Disturb</Typography>
-                            <Switch checked={isDoNotDisturbChecked} onChange={flipDoNotDisturbSwitch} inputProps={{ 'aria-label': 'controlled' }}/>
-                        </Grid> */}
+                            <Switch 
+                                checked={userToEdit.doNotDisturb} 
+                                onChange={(event) => flipDoNotDisturb(event)}
+                            />
+                        </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Contact Preference"
@@ -245,8 +263,8 @@ export default function InviteUserForm() {
                 </>
             }
             {userId === undefined ?
-                <Button variant="contained" color="primary" onClick={submitNewUser}>Submit Invite</Button> :
-                <Button variant="contained" color="primary" onClick={updateUser}>Save Changes</Button>
+                <Button variant="contained" color="primary" onClick={submitUser}>Submit Invite</Button> :
+                <Button variant="contained" color="primary" onClick={submitUser}>Save Changes</Button>
             }
         </FormControl>  
         </>

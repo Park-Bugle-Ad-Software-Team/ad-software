@@ -12,9 +12,8 @@ const transporter = nodemailer.createTransport({
 
 const mailOptions = {
     from: fromEmail,
-    // to: 'staubindj@gmail.com',
     subject: 'Sending Email using Node.js',
-    text: 'localhost:3000/api/user/edit'
+    text: 'http://localhost:3000/#/set-password/' // the /set-password needs to stay the same
     // html: <h1>some html</h1>
 }
 
