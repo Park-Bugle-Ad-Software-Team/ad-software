@@ -17,7 +17,7 @@ import UsersPage from '../UsersPage/UsersPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import PricingPage from '../PricingPage/PricingPage';
-import HomePage from '../HomePage/HomePage';
+import HomePage from '../HomePages/HomePage';
 import About from '../About/About';
 
 import './App.css';

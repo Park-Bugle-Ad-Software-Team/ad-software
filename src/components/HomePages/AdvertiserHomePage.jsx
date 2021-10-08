@@ -15,16 +15,12 @@ export default function AdvertiserHomePage() {
     }, []);
 
     // all of our global state from redux store
-    //
-    let user = useSelector((store) => store.user);
-    let pendingContracts = useSelector((store) => store.pendingContracts);
-    // console.log('pending contracts are', pendingContracts);
-    let activeContracts = useSelector((store) => store.activeContracts);
-    // console.log('active contracts are', activeContracts);
-    let closedContracts = useSelector((store) => store.closedContracts);
-    // console.log('closed contracts are', closedContracts);
-    let chat = useSelector((store) => store.chat);
-    console.log('chat is', chat);
+    const store = useSelector((store) => store);
+    const pendingContracts = store.pendingContracts;
+    const activeContracts = store.activeContracts;
+    const closedContracts = store.closedContracts;
+    const user = store.user;
+    const chat = store.chat;
 
     return (
         <>
