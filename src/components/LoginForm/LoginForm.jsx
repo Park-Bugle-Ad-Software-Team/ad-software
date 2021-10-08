@@ -58,6 +58,7 @@ function LoginForm() {
                 id="password-input"
                 label="Password" 
                 variant="outlined" 
+                type="password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
               /> 
