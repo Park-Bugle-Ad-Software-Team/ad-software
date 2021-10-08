@@ -1,18 +1,12 @@
 import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect } from 'react';
-import PendingContracts from '../Contracts/PendingContracts';
+import PendingContractsAdvertiserView from '../Contracts/PendingContractsAdvertiserView';
 import ActiveContracts from '../Contracts/ActiveContracts';
 import ClosedContracts from '../Contracts/ClosedContracts';
 
 export default function AdvertiserHomePage() {
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch({type: 'FETCH_PENDING_CONTRACTS'});
-        dispatch({type: 'FETCH_ACTIVE_CONTRACTS'});
-        dispatch({type: 'FETCH_CLOSED_CONTRACTS'});
-    }, []);
 
     // all of our global state from redux store
     const store = useSelector((store) => store);
@@ -60,7 +54,7 @@ export default function AdvertiserHomePage() {
                         <tbody>
                             {pendingContracts.map((item, i) => (
                                 <tr className="uTr" key={i}>
-                                    <PendingContracts item={item} />
+                                    <PendingContractsAdvertiserView item={item} />
                                 </tr>
                             ))}
                         </tbody>

@@ -6,6 +6,7 @@ import userToEdit from './userToEditReducer';
 import pendingContracts from './pendingContracts.reducer';
 import activeContracts from './activeContracts.reducer';
 import closedContracts from './closedContracts.reducer';
+import allContracts from './allContracts.reducer';
 import chat from './chat.reducer';
 import advertisers from './advertisers.reducer';
 // rootReducer is the primary reducer for our entire project
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   pendingContracts, // contrains a list of contracts that are not approved
   activeContracts, // contrains a list of active contracts
   closedContracts, // contrains a list of closed contracts
+  allContracts, // contains a list of all contracts
   chat, // contains all the chat for the specified contract
   advertisers, // contains a list of all the companyNames taken from the user table
 });

@@ -5,6 +5,7 @@ export default function* contractsSaga() {
     yield takeLatest('FETCH_PENDING_CONTRACTS', fetchPendingContracts);
     yield takeLatest('FETCH_ACTIVE_CONTRACTS', fetchActiveContracts);
     yield takeLatest('FETCH_CLOSED_CONTRACTS', fetchClosedContracts);
+    yield takeLatest('FETCH_ALL_CONTRACTS', fetchAllContracts);
 }
 
 function* fetchPendingContracts() {
@@ -40,5 +41,17 @@ function* fetchClosedContracts() {
     
     } catch (error) {
         console.log('Closed contracts GET request failed', error);
+    }
+}
+
+function* fetchAllContracts() {
+    try {
+        const response = yield axios.get('/api/contracts/all');
+        // console.log('response is', response);
+
+        yield put({ type: 'SET_ALL_CONTRACTS', payload: response.data});
+    
+    } catch (error) {
+        console.log('All contracts GET request failed', error);
     }
 }
