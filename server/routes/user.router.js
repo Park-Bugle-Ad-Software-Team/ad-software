@@ -190,14 +190,10 @@ router.put('/set-password/:inviteToken', (req, res) => {
     .query(sqlQuery, sqlParams)
     .then(dbRes => {
       if (dbRes.rowCount) {
-        console.log('dbRes.rowCount is: ', dbRes.rows[0].id)
-        console.log('incoming password is: ', req.body);
-
         sqlQuery = `UPDATE "Users" 
                     SET "password" = $1
                     WHERE "id" = $2`
         sqlParams = [encryptLib.encryptPassword(req.body.password), dbRes.rows[0].id]
-        console.log('id being passed is: ', dbRes.rows)
         pool
           .query(sqlQuery, sqlParams)
           .then(dbRes => {
