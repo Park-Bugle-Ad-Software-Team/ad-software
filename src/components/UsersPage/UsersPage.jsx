@@ -1,14 +1,13 @@
-import { Button, FormControl, TextField, 
-            Select, MenuItem, InputLabel, 
-                Typography, List, ListItem, 
-                    ListItemButton, ListItemText, Link } from '@mui/material';
-import { useState, useEffect} from 'react';
+import { Button, Typography, List,  
+            ListItemButton, ListItemText, Grid,
+                Table, TableBody, TableCell, TableContainer,
+                    TableRow, TableHead, Container } from '@mui/material';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import InviteUserForm from './InviteUserForm';
-
+import './UsersPage.css';
 
 export default function UsersPage() {
     const dispatch = useDispatch();
@@ -28,23 +27,56 @@ export default function UsersPage() {
 
     return (
         <>
-            <Typography variant="h2">Users Page</Typography>
-            <Button variant="contained" color="primary" onClick={() => goToEditUser()}>Invite new user</Button>
-            <Typography variant="h2">Users List</Typography>
-            <List>
-                {allUsers.map(user => (
-                    <ListItemButton key={user.id} onClick={() => goToEditUser(user.id)}>
-                        <ListItemText>
-                            {user.id}
-                            {user.email}
-                            {user.authLevel}
-                        </ListItemText>
-                        <ListItemText>
-                            Edit
-                        </ListItemText>
-                    </ListItemButton>
-                ))}
-            </List>
+            <Container>
+                <Grid container spacing={2}>
+                    <Grid item xs={10}>
+                        <Typography variant="h2">Users Page</Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Button id="inviteUserBtn" variant="contained" color="primary" onClick={() => goToEditUser()}>Invite new user</Button>
+                    </Grid>
+                    <Grid item xs={3}>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <div id="tableHeader">
+                            <Typography variant="h3">Employee List</Typography>
+                        </div>
+                        <TableContainer>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell align="right">Email</TableCell>
+                                    <TableCell align="right">&nbsp;</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {allUsers.map(user => (
+                                    <TableRow 
+                                        key={user.id} 
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        className="userTableRow"
+                                        onClick={() => goToEditUser(user.id)}
+                                    >
+                                        <TableCell component="th" scope='row'>{user.name}</TableCell>
+                                        <TableCell align="right">{user.email}</TableCell>
+                                        <TableCell align="right">
+                                            <Button 
+                                                variant="contained" 
+                                                color="primary"
+                                                onClick={() => goToEditUser(user.id)}
+                                            >
+                                                Edit
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </TableContainer>
+                    </Grid>
+                    <Grid item xs={3}>
+                    </Grid>
+                </Grid>
+            </Container>
         </>
     )
 }

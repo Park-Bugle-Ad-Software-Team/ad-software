@@ -1,13 +1,16 @@
 import PrintView from "./PrintView";
 import WebView from "./WebView";
-import { Typography, FormControl } from '@mui/material';
+import { Typography, FormControl, Paper, Box, Grid, Select, InputLabel, MenuItem, TextField,
+    Card, CardActions, CardContent, Button
+} from '@mui/material';
+import AdSize from "./AdSize";
 
-const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
+// const Item = styled(Paper)(({ theme }) => ({
+//     ...theme.typography.body2,
+//     padding: theme.spacing(1),
+//     textAlign: 'center',
+//     color: theme.palette.text.secondary,
+// }));
 
 export default function AdCard() {
     // testing data
@@ -29,18 +32,30 @@ export default function AdCard() {
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <Typography variant="h2">{advertiser.name}</Typography>
+                        <Typography variant="h4">{advertiser.name}</Typography>
                     </Grid>
                     <Grid item xs={2}>
                     </Grid>
                     <Grid item xs={3}>
-                        {/* start month picker */}
+                        <label for="start">Start month:</label>
+                        <input type="month" id="start" name="start"
+                            min="2021-09" value="2021-09" />
                     </Grid>
                     <Grid item xs={3}>
-                        {/* start year picker */}
+                        <label for="length">Contract Length</label>
+                        <select name="length">
+                            <option value={1}>1 Month</option>
+                            <option value={2}>2 Months</option>
+                            <option value={4}>4 Months</option>
+                            <option value={8}>8 Months</option>
+                            <option value={12}>12 Months</option>
+                        </select>
                     </Grid>
-                    <Grid item xs={3}>
-                        <FormControl fullWidth>
+
+                    {/* row */}
+
+                    <Grid item xs={6}>
+                        {/* <FormControl fullWidth>
                             <InputLabel>Ad Type</InputLabel>
                             <Select
                                 // value
@@ -50,24 +65,21 @@ export default function AdCard() {
                                 <MenuItem>Print</MenuItem>
                                 <MenuItem>Web</MenuItem>
                             </Select>
-                        </FormControl>
+                        </FormControl> */}
+                        <label>Ad Type</label>
+                        <select>
+                            <option value="print">Print</option>
+                            <option value="web">Web</option>
+                        </select>
                     </Grid>
                     <Grid item xs={3}>
                     </Grid>
                     <Grid item xs={3}>
-                        <FormControl fullWidth>
-                            <InputLabel>Length of Contract</InputLabel>
-                            <Select
-                                // value
-                                label="Ad Type"
-                                // onChange
-                            >
-                                <MenuItem>1 month</MenuItem>
-                                <MenuItem>2 months</MenuItem>
-                            </Select>
-                        </FormControl>
                     </Grid>
-                    <Grid item xs={6}>
+
+                    {/* row */}
+
+                    <Grid item xs={4}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Typography variant="p">
@@ -76,7 +88,7 @@ export default function AdCard() {
                                 {/* drag and drop zone for uploading images */}
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography variant="p">
+                                {/* <Typography variant="p">
                                     Color Type
                                 </Typography>
                                 <FormControl fullWidth>
@@ -90,7 +102,13 @@ export default function AdCard() {
                                         <MenuItem>Spot</MenuItem>
                                         <MenuItem>Full Color</MenuItem>
                                     </Select>
-                                </FormControl>
+                                </FormControl> */}
+                                <label for="color">Color Type</label>
+                                <select name="color">
+                                    <option value="blackAndWhite">Black and White</option>
+                                    <option value="spot">Spot</option>
+                                    <option value="fullColor">Full Color</option>
+                                </select>
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography variant="p">
@@ -112,9 +130,9 @@ export default function AdCard() {
                         </Grid>
                     </Grid>
                     {/* sectioning out a new container for the ad size selection since it will be quite large*/}
-                    <Grid item xs={6}>
+                    <Grid item xs={8}>
                         <Grid container spacing={2}>
-                            {/* new component for ad size selector */}
+                            <AdSize />
                         </Grid>
                     </Grid>
                 </Grid>
