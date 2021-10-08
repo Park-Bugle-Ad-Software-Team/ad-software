@@ -1,4 +1,8 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
+import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid,
+    Container, TableBody, TableHead, TableCell, TableContainer, TableRow
+} from '@mui/material';
+
+import { useSelector } from 'react-redux';
 
 export default function AdminHomePage() {
     // test data 
@@ -23,15 +27,19 @@ export default function AdminHomePage() {
 
     let years = [2020, 2021, 2022, 2023];
 
+    const store = useSelector(store => store);
+    const activeContracts = store.activeContracts;
+    const pendingContracts = store.pendingContracts;
 
     return (
         <>
             <Grid container>
                 <Grid item xs={12}>
-                    <Typography variant="h1">Admin Home Page</Typography>  
+                    <Typography variant="h2">Admin Home Page</Typography>  
                 </Grid>
                 <Grid item xs={8}>
-                    User: {admin.firstName} {admin.lastName}
+                    
+                    <Typography variant="h4">User: {admin.firstName} {admin.lastName}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Button 
@@ -50,7 +58,7 @@ export default function AdminHomePage() {
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 200}}>
                         <InputLabel id="advertiser-select-label">Advertiser</InputLabel>
                         <Select
                             labelId="advertiser-select-label"
@@ -64,13 +72,13 @@ export default function AdminHomePage() {
                             ))}
                         </Select>
                     </FormControl>
-                    <FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 200}}>
                         <InputLabel id="month-select-label">Month</InputLabel>
                         <Select
                             labelId="month-select-label"
                             id="month-select"
                             label="Month"
-                            defaultValue={1}
+                            defaultValue=''
                             // onChange
                         >
                             {months.map(month => (
@@ -78,7 +86,7 @@ export default function AdminHomePage() {
                             ))}
                         </Select>
                     </FormControl>
-                    <FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 200}}>
                         <InputLabel id="year-select-label">Year</InputLabel>
                         <Select
                             labelId="year-select-label"
@@ -93,12 +101,60 @@ export default function AdminHomePage() {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12}>
-                    {/* component for listing out pending contracts */}
+                <Container>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant="h4">Pending Contracts</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <table className="uTable">
+                            <thead>
+                                <tr className="uTr">
+                                    <th className="uTh">Start Month</th>
+                                    <th className="uTh">Contract Length</th>
+                                    <th className="uTh">Type</th>
+                                    <th className="uTh">Size</th>
+                                    <th className="uTh">Page</th>
+                                    <th className="uTh">Color</th>
+                                    <th className="uTh">Total Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {pendingContracts.map((item) => (
+                                    <tr className="uTr" key={item.id}>
+                                        <PendingContracts item={item} />
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table> 
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant="h4">Active Contracts</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <table className="uTable">
+                            <thead>
+                                <tr className="uTr">
+                                    <th className="uTh">Start Month</th>
+                                    <th className="uTh">Contract Length</th>
+                                    <th className="uTh">Type</th>
+                                    <th className="uTh">Size</th>
+                                    <th className="uTh">Page</th>
+                                    <th className="uTh">Color</th>
+                                    <th className="uTh">Total Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {activeContracts.map((item) => (
+                                    <tr className="uTr" key={item.id}>
+                                        <ActiveContracts item={item} />
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    {/* component for listing out approved contracts */}
-                </Grid>
+            </Container>
             </Grid>
         </>
     )

@@ -1,0 +1,15 @@
+#inviteUserBtn {
+    float: right;
+}
+
+#userTableRow:hover {
+    background-color: #a7a7a7;
+}
+
+#tableHeader {
+    text-align: center;
+}
+
+#backBtn {
+    float: right;
+}
