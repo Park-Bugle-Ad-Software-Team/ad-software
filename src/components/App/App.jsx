@@ -17,7 +17,7 @@ import UsersPage from '../UsersPage/UsersPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import PricingPage from '../PricingPage/PricingPage';
-import HomePage from '../HomePage/HomePage';
+import HomePage from '../HomePages/HomePage';
 import About from '../About/About';
 
 import './App.css';
@@ -30,6 +30,10 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
+    dispatch({type: 'FETCH_ALL_CONTRACTS'});
+    dispatch({type: 'FETCH_PENDING_CONTRACTS'});
+    dispatch({type: 'FETCH_ACTIVE_CONTRACTS'});
+    dispatch({type: 'FETCH_CLOSED_CONTRACTS'});
   }, [dispatch]);
 
   return (

@@ -1,30 +1,20 @@
 import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect } from 'react';
-import PendingContracts from '../Contracts/PendingContracts';
+import PendingContractsAdvertiserView from '../Contracts/PendingContractsAdvertiserView';
 import ActiveContracts from '../Contracts/ActiveContracts';
 import ClosedContracts from '../Contracts/ClosedContracts';
 
 export default function AdvertiserHomePage() {
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch({type: 'FETCH_PENDING_CONTRACTS'});
-        dispatch({type: 'FETCH_ACTIVE_CONTRACTS'});
-        dispatch({type: 'FETCH_CLOSED_CONTRACTS'});
-    }, []);
-
     // all of our global state from redux store
-    //
-    let user = useSelector((store) => store.user);
-    let pendingContracts = useSelector((store) => store.pendingContracts);
-    // console.log('pending contracts are', pendingContracts);
-    let activeContracts = useSelector((store) => store.activeContracts);
-    // console.log('active contracts are', activeContracts);
-    let closedContracts = useSelector((store) => store.closedContracts);
-    // console.log('closed contracts are', closedContracts);
-    let chat = useSelector((store) => store.chat);
-    console.log('chat is', chat);
+    const store = useSelector((store) => store);
+    const pendingContracts = store.pendingContracts;
+    const activeContracts = store.activeContracts;
+    const closedContracts = store.closedContracts;
+    const user = store.user;
+    const chat = store.chat;
 
     return (
         <>
@@ -64,7 +54,7 @@ export default function AdvertiserHomePage() {
                         <tbody>
                             {pendingContracts.map((item, i) => (
                                 <tr className="uTr" key={i}>
-                                    <PendingContracts item={item} />
+                                    <PendingContractsAdvertiserView item={item} />
                                 </tr>
                             ))}
                         </tbody>
