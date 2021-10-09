@@ -1,4 +1,4 @@
-const generateToken = require('../modules/registrationToken');
+const generateCode = require('../modules/registrationCode');
 const express = require('express');
 const {
   rejectUnauthenticated,
@@ -88,8 +88,8 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 // is that the password gets encrypted before being inserted
 router.post('/register', rejectUnauthenticated, (req, res) => {
   if (req.user.authLevel === 'admin') {
-    
-    req.body.inviteCode = generateToken(30)
+
+    req.body.inviteCode = generateCode(30)
     properties = strFromObj(req.body, ', ', element => `"${element}"`)
     values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
 
@@ -130,11 +130,11 @@ router.post('/logout', (req, res) => {
 // rejectUnauthenticated left off because the user needs to 
 // be able to update their password without being logged in
 // for updating user passwords
-router.put('/set-password/:inviteToken', (req, res) => {
+router.put('/set-password/:inviteCode', (req, res) => {
   let sqlQuery = `UPDATE "Users" 
                   SET "password" = $1
                   WHERE "inviteCode" = $2`
-  let sqlParams = [encryptLib.encryptPassword(req.body.password), req.params.inviteToken]
+  let sqlParams = [encryptLib.encryptPassword(req.body.password), req.params.inviteCode]
   pool
     .query(sqlQuery, sqlParams)
     .then(dbRes => {
