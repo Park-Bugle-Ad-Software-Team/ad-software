@@ -6,7 +6,7 @@ const {
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
-let {transporter, mailOptions, emailErrorCatcher} = require ('../constants/email');
+let sendEmail = require ('../constants/email');
 
 const router = express.Router();
 
@@ -165,10 +165,7 @@ router.post('/register', rejectUnauthenticated, (req, res) => {
   pool
     .query(queryText, sqlParams)
     .then(() => {
-      // send email off here
-      mailOptions.to = req.body.email;
-      mailOptions.text += inviteToken;
-      transporter.sendMail(mailOptions, emailErrorCatcher)
+      sendEmail(req.body.email, inviteToken)
       res.sendStatus(201)
     })
     .catch((err) => {
