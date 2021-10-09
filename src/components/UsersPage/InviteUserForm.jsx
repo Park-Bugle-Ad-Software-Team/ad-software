@@ -133,7 +133,7 @@ export default function InviteUserForm() {
                     />
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography variant="p">Privelege</Typography>
+                    <Typography variant="p">Privilege</Typography>
                     {userToEdit &&
                         <FormControl sx={{ m: 1, minWidth: 200}}>
                             <Select
@@ -281,7 +281,7 @@ export default function InviteUserForm() {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    {userId === undefined ?
+                    {userId === 'undefined' ?
                         <Button variant="contained" color="primary" onClick={submitUser}>Submit Invite</Button> :
                         <Button variant="contained" color="primary" onClick={submitUser}>Save Changes</Button>
                     }

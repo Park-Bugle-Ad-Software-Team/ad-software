@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "@mui/material";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 
 export default function SetPasswordForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const dispatch = useDispatch();
     const params = useParams();
+    const history = useHistory();
 
     const updateUserPassword = (event) => {
         event.preventDefault();
@@ -20,6 +21,7 @@ export default function SetPasswordForm() {
                 inviteToken: params.inviteToken
               }
             });
+            history.push('/home');
         } else {
             alert('Passwords must match')
         }
