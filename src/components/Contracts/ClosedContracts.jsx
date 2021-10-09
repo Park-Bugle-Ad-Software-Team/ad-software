@@ -2,13 +2,19 @@ import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } f
 
 export default function ClosedContracts( {item} ) {
 
+    // to format the DATE startMonth
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long" }
+        return new Date(dateString).toLocaleDateString(undefined, options)
+    }
+
     function consoleLogItem() {
         console.log(item.id);
     }
 
     return (
         <>
-            <td className="uTd">{item.startMonth}</td>
+            <td className="uTd">{formatDate(item.startMonth)}</td>
             <td className="uTd">{item.AdSize.months}</td>
             <td className="uTd">{item.contractType}</td>
             <td className="uTd">{item.AdSize.adType}</td>

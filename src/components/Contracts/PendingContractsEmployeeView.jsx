@@ -5,6 +5,12 @@ import axios from 'axios';
 export default function PendingContractsEmployeeView( {item} ) {
     const dispatch = useDispatch();
 
+    // to format the DATE startMonth
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long" }
+        return new Date(dateString).toLocaleDateString(undefined, options)
+    }
+
     function viewContract() {
         console.log('in viewContract');
     }
@@ -16,7 +22,7 @@ export default function PendingContractsEmployeeView( {item} ) {
 
     return (
         <>
-            <td className="uTd">{item.startMonth}</td>
+            <td className="uTd">{formatDate(item.startMonth)}</td>
             <td className="uTd">{item.AdSize.months}</td>
             <td className="uTd">{item.contractType}</td>
             <td className="uTd">{item.AdSize.adType}</td>
