@@ -15,8 +15,6 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
     FROM "Contracts"
       JOIN "AdSize"
         ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Sponsorship"
-        ON "Sponsorship"."id" = "Contracts"."sponsorshipId"
       JOIN "Color"
         ON "Color"."id" = "Contracts"."colorId"
     WHERE "isApproved" = false;
@@ -42,8 +40,6 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
     FROM "Contracts"
       JOIN "AdSize"
         ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Sponsorship"
-        ON "Sponsorship"."id" = "Contracts"."sponsorshipId"
       JOIN "Color"
         ON "Color"."id" = "Contracts"."colorId"
       WHERE ("startMonth" <= 'NOW') AND ("isApproved" = true);
@@ -69,8 +65,6 @@ router.get('/closed', rejectUnauthenticated, (req, res) => {
   FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
-    JOIN "Sponsorship"
-      ON "Sponsorship"."id" = "Contracts"."sponsorshipId"
     JOIN "Color"
       ON "Color"."id" = "Contracts"."colorId"
     WHERE "startMonth" <= 'NOW';
@@ -96,8 +90,6 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
   FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
-    --JOIN "Sponsorship"
-    --  ON "Sponsorship"."id" = "Contracts"."sponsorshipId"
     JOIN "Color"
       ON "Color"."id" = "Contracts"."colorId"
     WHERE "isApproved" = true;

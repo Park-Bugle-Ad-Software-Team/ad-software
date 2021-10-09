@@ -4,6 +4,9 @@ import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid,
 
 import { useSelector } from 'react-redux';
 
+import PendingContracts from '../Contracts/PendingContractsEmployeeView';
+import ActiveContracts from '../Contracts/ActiveContracts';
+
 export default function AdminHomePage() {
     // test data 
     let admin = {
@@ -67,8 +70,8 @@ export default function AdminHomePage() {
                             defaultValue=''
                             // onChange
                         >
-                            {advertisers.map(advertiser => (
-                                <MenuItem value={advertiser.name}>{advertiser.name}</MenuItem>
+                            {advertisers.map((advertiser, i) => (
+                                <MenuItem key={i} value={advertiser.name}>{advertiser.name}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
@@ -81,8 +84,8 @@ export default function AdminHomePage() {
                             defaultValue=''
                             // onChange
                         >
-                            {months.map(month => (
-                                <MenuItem value={month}>{month}</MenuItem>
+                            {months.map((month, i) => (
+                                <MenuItem key={i} value={month}>{month}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
@@ -95,8 +98,8 @@ export default function AdminHomePage() {
                             defaultValue=''
                             // onChange
                         >
-                            {years.map(year => (
-                                <MenuItem value={year}>{year}</MenuItem>
+                            {years.map((year, i) => (
+                                <MenuItem key={i} value={year}>{year}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
