@@ -77,7 +77,7 @@ const Uploader = ({uploadComplete}) => {
       style={dropStyles}
       maxSize={1024 * 1024 * 100}
       upload={uploadOptions}
-      accept="audio/*"
+      accept="image/*"
       children={innerElement} 
       
     />
