@@ -8,9 +8,9 @@ export default function* contractsSaga() {
     yield takeLatest('FETCH_ALL_CONTRACTS', fetchAllContracts);
 }
 
-function* fetchPendingContracts() {
+function* fetchPendingContracts(action) {
     try {
-        const response = yield axios.get('/api/contracts/pending');
+        const response = yield axios.get(`/api/contracts/pending`, { params: action.payload });
         // console.log('response is', response);
 
         yield put({ type: 'SET_PENDING_CONTRACTS', payload: response.data});

@@ -8,7 +8,7 @@ export default function HomePage() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch({type: 'FETCH_PENDING_CONTRACTS'});
+        dispatch({type: 'FETCH_PENDING_CONTRACTS', payload: user});
         dispatch({type: 'FETCH_ACTIVE_CONTRACTS'});
         dispatch({type: 'FETCH_CLOSED_CONTRACTS'});
     }, []);
