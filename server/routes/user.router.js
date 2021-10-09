@@ -6,8 +6,8 @@ const {
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
-let sendEmail = require ('../constants/email');
-
+const sendEmail = require('../constants/email');
+const strFromObj = require('../modules/strFromObj')
 const router = express.Router();
 
 // Handles Ajax request for user information if user is authenticated
@@ -88,90 +88,25 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 // is that the password gets encrypted before being inserted
 router.post('/register', rejectUnauthenticated, (req, res) => {
   if (req.user.authLevel === 'admin') {
-  console.log('req.body is: ', req.body);
-  // unpack the object in order
-  const properties = `"name", "email", "authLevel", 
-                        "contactPreference", "acceptAchPayment", "companyName",
-                        "doNotDisturb", "advertiserUrl", "address",
-                        "primaryName", "primaryTitle", "primaryEmail", 
-                        "primaryDirectPhone", "primaryMobilePhone", "secondaryName", 
-                        "secondaryTitle", "secondaryEmail", "secondaryDirectPhone", 
-                        "secondaryMobilePhone", "notes", "inviteCode"`;
-  const inviteToken = generateToken(30);
-  const sqlParams = [
-    req.body.name,
-    req.body.email,
-    req.body.authLevel,
-    req.body.contactPreference,
-    req.body.acceptAchPayment,
-    req.body.companyName,
-    req.body.doNotDisturb,
-    req.body.advertiserUrl,
-    req.body.address,
-    req.body.primaryName,
-    req.body.primaryTitle,
-    req.body.primaryEmail,
-    req.body.primaryDirectPhone,
-    req.body.primeMobilePhone,
-    req.body.secondaryName,
-    req.body.secondaryTitle,
-    req.body.secondaryEmail,
-    req.body.secondaryDirectPhone,
-    req.body.secondaryMobilePhone,
-    req.body.notes,
-    inviteToken // reg token to be sent in the invitation email.
-  ]
-
-  // const propertiesArray = properties.split(', ');
-  // let sqlParams = []
-  // let i = 1;
-  // injectionPlaceHolders = '';
-  // for (let property of properties.split(', ')) {
-  //   console.log('property', req.body[property]);
     
-  //   sqlParams.push(req.body[property]);
-  //   if (i >= properties.split(', ').length) {
-  //     injectionPlaceHolders += `$${i + 1}`
-  //   } else {
-  //     injectionPlaceHolders += `$${i}, `
-  //   }
-  //   i++;
-  // }
-  // for (let i = 0; i < propertiesArray.length; i++) {
-  //   // sqlParams.push(req.body[propertiesArray[i]]);
-  //   if (i < propertiesArray.length) {
-  //     injectionPlaceHolders += `$${i + 1}, `
-  //   } else {
-  //     injectionPlaceHolders += `$${i + 1}`
-  //   }
-  // }
+    req.body.inviteCode = generateToken(30)
+    properties = strFromObj(req.body, ', ', element => `"${element}"`)
+    values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
 
-  // const password = encryptLib.encryptPassword(req.body.password);
-  // let injectionPlaceHolders = ``;
-  // for (let i = 1; i < properties.split(', ').length + 1; i++) {
-  //   if (i === 21) {
-  //     injection += `$${i}`
-  //   } else {
-  //     injection += `$${i}, `
-  //   }
-  // }
-  const queryText = `INSERT INTO "Users" (${properties})
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 
-                    $9, $10, $11, $12, $13, $14, $15, $16,
-                    $17, $18, $19, $20, $21) RETURNING id`;
-
-  // console.log('query text is: ', queryText);
-  // console.log('sqlParams is: ', sqlParams);
-  pool
-    .query(queryText, sqlParams)
-    .then(() => {
-      sendEmail(req.body.email, inviteToken)
-      res.sendStatus(201)
-    })
-    .catch((err) => {
-      console.log('User registration failed: ', err);
-      res.sendStatus(500);
-    });
+    const queryText = `INSERT INTO "Users" (${properties})
+                       VALUES (${values}) 
+                       RETURNING id`;
+    const sqlParams = Object.values(req.body);
+    pool
+      .query(queryText, sqlParams)
+      .then(() => {
+        sendEmail(req.body.email, req.body.inviteCode)
+        res.sendStatus(201)
+      })
+      .catch((err) => {
+        console.log('User registration failed: ', err);
+        res.sendStatus(500);
+      });
   } else {
     res.sendStatus(403);
   }
@@ -196,30 +131,17 @@ router.post('/logout', (req, res) => {
 // be able to update their password without being logged in
 // for updating user passwords
 router.put('/set-password/:inviteToken', (req, res) => {
-  sqlQuery = `SELECT * FROM "Users"
-              WHERE "inviteCode" = $1`;
-  sqlParams = [req.params.inviteToken];
+  let sqlQuery = `UPDATE "Users" 
+                  SET "password" = $1
+                  WHERE "inviteCode" = $2`
+  let sqlParams = [encryptLib.encryptPassword(req.body.password), req.params.inviteToken]
   pool
     .query(sqlQuery, sqlParams)
     .then(dbRes => {
-      if (dbRes.rowCount) {
-        sqlQuery = `UPDATE "Users" 
-                    SET "password" = $1
-                    WHERE "id" = $2`
-        sqlParams = [encryptLib.encryptPassword(req.body.password), dbRes.rows[0].id]
-        pool
-          .query(sqlQuery, sqlParams)
-          .then(dbRes => {
-            res.sendStatus(200);
-          })
-          .catch(error => {
-            console.log(`Failed to update user ${dbRes.rows[0].id}'s password: `, error)
-            res.sendStatus(500);
-          });
-      }
+      res.sendStatus(200);
     })
     .catch(error => {
-      console.log('Error while checking if inviteToken is valid: ', error);
+      console.log(`Failed to update user's password: `, error)
       res.sendStatus(500);
     });
 });
