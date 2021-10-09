@@ -1,6 +1,7 @@
 import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import formatDate from './formatDate';
 
 export default function PendingContractsEmployeeView( {item} ) {
     const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export default function PendingContractsEmployeeView( {item} ) {
 
     return (
         <>
-            <td className="uTd">{item.startMonth}</td>
+            <td className="uTd">{formatDate(item.startMonth)}</td>
             <td className="uTd">{item.AdSize.months}</td>
             <td className="uTd">{item.contractType}</td>
             <td className="uTd">{item.AdSize.adType}</td>
