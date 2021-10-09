@@ -2,12 +2,15 @@ import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } f
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import formatDate from './formatDate';
+import { useHistory } from 'react-router';
 
 export default function PendingContractsEmployeeView( {item} ) {
     const dispatch = useDispatch();
+    const history = useHistory();
 
-    function viewContract() {
+    const viewContract = (contractId) => {
         console.log('in viewContract');
+        history.push(`/contracts/edit/${contractId}`);
     }
 
     function openChat() {
@@ -24,7 +27,7 @@ export default function PendingContractsEmployeeView( {item} ) {
             <td className="uTd">{item.page}</td>
             <td className="uTd">{item.Color.colorType}</td>
             <td className="uTd">${item.actualBill}</td>
-            <td className="uTd"><Button onClick={viewContract}>View</Button></td>
+            <td className="uTd"><Button onClick={() => viewContract(item.id)}>View</Button></td>
             <td className="uTd"><Button onClick={openChat}>Chat</Button></td>
         </>
     );

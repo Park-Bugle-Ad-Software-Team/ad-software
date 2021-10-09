@@ -4,31 +4,77 @@ import { Typography, FormControl, Paper, Box, Grid, Select, InputLabel, MenuItem
     Card, CardActions, CardContent, Button
 } from '@mui/material';
 import AdSize from "./AdSize";
-
-// const Item = styled(Paper)(({ theme }) => ({
-//     ...theme.typography.body2,
-//     padding: theme.spacing(1),
-//     textAlign: 'center',
-//     color: theme.palette.text.secondary,
-// }));
+import { useDispatch } from "react-redux";
+import { useHistory, useParams } from "react-router";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export default function AdCard() {
     // testing data
     let advertiser = {name: 'Chroma Zone'};
 
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const params = useParams();
+
+    const contractId = params.id;
+    const contractToEdit = useSelector(store => store.contractToEdit);
+
+    useEffect(() => {
+        if (contractId === 'undefined') {
+            return;
+        }
+        console.log(params.id);
+        dispatch({
+            type: 'FETCH_CONTRACT_TO_EDIT',
+            payload: contractId
+        })
+    }, [contractId])
+
+    const handleChange = (event, property) => {
+        console.log('property we are updating is', property);
+        console.log('value we are updating to is', event.target.value);
+        dispatch({
+            type: 'UPDATE_CONTRACT_TO_EDIT',
+            payload: {
+                ...contractToEdit,
+                [property]: event.target.value
+            }
+        });
+    }
+
+    const submitContract = () => {
+        console.log('submitting contract changes');
+        // if (contractToEdit.id === undefined) {
+        //     // submit post new contract
+        //     dispatch({
+        //         type: 'CREATE_NEW_CONTRACT',
+        //         payload: contractToEdit
+        //     });
+        // } else {
+        //     // put an existing user
+        //     dispatch({
+        //         type: 'UPDATE_CONTRACT',
+        //         payload: contractToEdit // update once we have a the user passed via a prop
+        //     });
+        // }
+        // clearContractFields();
+        // history.push('/home');
+    }
+
+
+    const clearContractFields = () => {
+        dispatch({
+            type: 'UNSET_CONTRACT_TO_EDIT'
+        });
+    };
+
+    const returnToHome = () => {
+        history.goBack();
+    }
+
     return(
         <>
-            {/* 
-                select month/year combo
-                select advertiser
-                select length of contract
-                select ad type: print or web
-                // conditionally render based on type of ad:
-                    // WebView.jsx
-                    // PrintView.jsx
-                save button
-                approve button
-            */}
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
@@ -67,7 +113,7 @@ export default function AdCard() {
                             </Select>
                         </FormControl> */}
                         <label>Ad Type</label>
-                        <select>
+                        <select onChange={(event) => handleChange(event, "contractType")}>
                             <option value="print">Print</option>
                             <option value="web">Web</option>
                         </select>
@@ -88,23 +134,8 @@ export default function AdCard() {
                                 {/* drag and drop zone for uploading images */}
                             </Grid>
                             <Grid item xs={12}>
-                                {/* <Typography variant="p">
-                                    Color Type
-                                </Typography>
-                                <FormControl fullWidth>
-                                    <InputLabel>Select</InputLabel>
-                                    <Select
-                                        // value
-                                        label="Color Type"
-                                        // onChange
-                                    >
-                                        <MenuItem>Black and White</MenuItem>
-                                        <MenuItem>Spot</MenuItem>
-                                        <MenuItem>Full Color</MenuItem>
-                                    </Select>
-                                </FormControl> */}
                                 <label for="color">Color Type</label>
-                                <select name="color">
+                                <select name="color" onChange={(event) => handleChange(event, "colorType")}> {/* will need to setup a new handlechange for this one as the "property" is going to be a json object. */}
                                     <option value="blackAndWhite">Black and White</option>
                                     <option value="spot">Spot</option>
                                     <option value="fullColor">Full Color</option>

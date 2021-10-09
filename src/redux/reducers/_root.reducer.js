@@ -9,6 +9,7 @@ import closedContracts from './closedContracts.reducer';
 import allContracts from './allContracts.reducer';
 import chat from './chat.reducer';
 import advertisers from './advertisers.reducer';
+import contractToEdit from './contractToEdit.reducer';
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   allContracts, // contains a list of all contracts
   chat, // contains all the chat for the specified contract
   advertisers, // contains a list of all the companyNames taken from the user table
+  contractToEdit,
 });
 
 export default rootReducer;

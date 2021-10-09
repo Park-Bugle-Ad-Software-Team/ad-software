@@ -21,7 +21,6 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
   `;
   pool.query(sqlText)
   .then((dbRes) => {
-      console.log('dbRes is', dbRes);
       res.send(dbRes.rows);
   })
   .catch((error) => {
@@ -46,7 +45,6 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
   `;
   pool.query(sqlText)
   .then((dbRes) => {
-      console.log('dbRes is', dbRes);
       res.send(dbRes.rows);
   })
   .catch((error) => {
@@ -71,7 +69,6 @@ router.get('/closed', rejectUnauthenticated, (req, res) => {
   `;
   pool.query(sqlText)
   .then((dbRes) => {
-      console.log('dbRes is', dbRes);
       res.send(dbRes.rows);
   })
   .catch((error) => {
@@ -96,7 +93,6 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
   `;
   pool.query(sqlText)
   .then((dbRes) => {
-      console.log('dbRes is', dbRes);
       res.send(dbRes.rows);
   })
   .catch((error) => {
@@ -104,6 +100,45 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
   });
 });
+
+router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
+  // for ad card display/edits of a particular contract, we need:
+    // Users table - advertiser's name
+    // Contract table - start month
+    // Contract table - (from the start month field) start year
+    // contract table - print/web
+    // adsize table - (months) length
+    // images table - images
+    // colors table - colors
+    // adSize type - adSize
+    // sponsorship program status
+    // contract table - notes
+    // contract table - (actualBill) actual price
+    
+
+  const sqlText = `
+    SELECT
+    "Contracts".*,
+    to_json("AdSize".*) as "AdSize",
+    to_json("Color".*) as "Color",
+    to_json("Chat".*) as "Chat",
+
+    FROM "Contracts"
+      JOIN "AdSize"
+        ON "AdSize"."id" = "Contracts"."adSizeId"
+      JOIN "Color"
+        ON "Color"."id" = "Contracts"."colorId"
+      WHERE "isApproved" = true AND;
+    `;
+  pool
+    .query(sqlText)
+    .then(dbRes => {
+      res.send(dbRes.rows[0]);
+    })
+    .catch(error => {
+      console.log(`Failed to GET ${req.params.id}'s information for editing: `, error)
+    })
+})
 
 /**
  * POST route template

@@ -77,8 +77,15 @@ export default function InviteUserForm() {
                 payload: userToEdit // update once we have a the user passed via a prop
             });
         }
+        clearUserFields();
         history.push('/users');
     }
+
+    const clearUserFields = () => {
+        dispatch({
+            type: 'UNSET_USER_TO_EDIT'
+        });
+    };
 
     // auth level select handler
     const handleClose = () => {
