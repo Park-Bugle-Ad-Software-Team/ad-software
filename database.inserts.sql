@@ -58,7 +58,7 @@ VALUES
    -- admin user
    ('admin@gmail.com',
    'Admin', -- should be NOT NULL in future
-   'password', -------------------------------------------------------------- TBD in a few
+   'Replace with a salted/hashed password', -------------------------------------------------------------- TBD in a few
    'admin', -- should be NOT NULL in future
    'contactPreference',
    false,
@@ -81,7 +81,7 @@ VALUES
    NULL),
    ('chromazone@gmail.com',
    'Chroma Zone', -- should be NOT NULL in future
-   'password', -------------------------------------------------------------- TBD in a few
+   'Replace with a salted/hashed password', -------------------------------------------------------------- TBD in a few
    'advertiser', -- should be NOT NULL in future
    'phone',
    true,
@@ -104,7 +104,7 @@ VALUES
    'inviteCode'),
    ('sonia@gmail.com',
       NULL, -- should be NOT NULL in future
-   'password', -------------------------------------------------------------- TBD in a few
+   'Replace with a salted/hashed password', -------------------------------------------------------------- TBD in a few
    'ad rep', -- should be NOT NULL in future
    'email',
    false,

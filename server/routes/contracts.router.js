@@ -96,8 +96,8 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
   FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
-    JOIN "Sponsorship"
-      ON "Sponsorship"."id" = "Contracts"."sponsorshipId"
+    --JOIN "Sponsorship"
+    --  ON "Sponsorship"."id" = "Contracts"."sponsorshipId"
     JOIN "Color"
       ON "Color"."id" = "Contracts"."colorId"
     WHERE "isApproved" = true;
