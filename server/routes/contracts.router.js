@@ -116,22 +116,25 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     // contract table - (actualBill) actual price
     
 
+
+    // removing chat from this pull for testing
   const sqlText = `
     SELECT
     "Contracts".*,
     to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color",
-    to_json("Chat".*) as "Chat",
+    to_json("Color".*) as "Color"
+    --to_json("Chat".*) as "Chat"
 
     FROM "Contracts"
       JOIN "AdSize"
         ON "AdSize"."id" = "Contracts"."adSizeId"
       JOIN "Color"
         ON "Color"."id" = "Contracts"."colorId"
-      WHERE "isApproved" = true AND;
+      
+      WHERE "Contracts"."id" = $1;
     `;
   pool
-    .query(sqlText)
+    .query(sqlText, [req.params.id])
     .then(dbRes => {
       res.send(dbRes.rows[0]);
     })
