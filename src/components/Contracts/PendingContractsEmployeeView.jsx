@@ -1,9 +1,11 @@
 import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { useHistory } from 'react-router';
 
 export default function PendingContractsEmployeeView( {item} ) {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     // to format the DATE startMonth
     const formatDate = (dateString) => {
@@ -11,8 +13,9 @@ export default function PendingContractsEmployeeView( {item} ) {
         return new Date(dateString).toLocaleDateString(undefined, options)
     }
 
-    function viewContract() {
+    const viewContract = (contractId) => {
         console.log('in viewContract');
+        history.push(`/contracts/edit/${contractId}`);
     }
 
     function openChat() {
@@ -29,7 +32,7 @@ export default function PendingContractsEmployeeView( {item} ) {
             <td className="uTd">{item.page}</td>
             <td className="uTd">{item.Color.colorType}</td>
             <td className="uTd">${item.actualBill}</td>
-            <td className="uTd"><Button onClick={viewContract}>View</Button></td>
+            <td className="uTd"><Button onClick={() => viewContract(item.id)}>View</Button></td>
             <td className="uTd"><Button onClick={openChat}>Chat</Button></td>
         </>
     );

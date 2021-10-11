@@ -1,34 +1,111 @@
 import PrintView from "./PrintView";
 import WebView from "./WebView";
-import { Typography, FormControl, Paper, Box, Grid, Select, InputLabel, MenuItem, TextField,
-    Card, CardActions, CardContent, Button
+import { Typography, FormControl, FormLabel, FormControlLabel, Paper, Box, Grid, Select, InputLabel, MenuItem, TextField,
+    Card, CardActions, CardContent, Button, Radio, RadioGroup
 } from '@mui/material';
 import AdSize from "./AdSize";
-
-// const Item = styled(Paper)(({ theme }) => ({
-//     ...theme.typography.body2,
-//     padding: theme.spacing(1),
-//     textAlign: 'center',
-//     color: theme.palette.text.secondary,
-// }));
+import { useDispatch } from "react-redux";
+import { useHistory, useParams } from "react-router";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export default function AdCard() {
     // testing data
     let advertiser = {name: 'Chroma Zone'};
 
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const params = useParams();
+
+    const contractId = params.id;
+    const store = useSelector(store => store);
+    const contractToEdit = store.contractToEdit;
+    const user = store.user;
+    const adSize = contractToEdit.AdSize;
+    const color = contractToEdit.Color;
+
+    useEffect(() => {
+        if (contractId === 'undefined') {
+            return;
+        }
+        console.log(params.id);
+        dispatch({
+            type: 'FETCH_CONTRACT_TO_EDIT',
+            payload: contractId
+        })
+    }, [contractId])
+
+    const handleChange = (event, property) => {
+        console.log('property we are updating is', property);
+        console.log('value we are updating to is', event.target.value);
+        if (property === "colorId") {
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: Number(event.target.value)
+                }
+            })
+        } else if (property === "startMonth") {
+            console.log('value is ', (event.target.value));
+            // this only works sometimes. will need some help to figure it out properly
+            let newDate = new Date(event.target.value);
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: newDate.setMonth(newDate.getMonth() + 2)
+                }
+            });
+        } else {
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: event.target.value
+                }
+            });
+        }
+    }
+
+    const submitContract = () => {
+        console.log('saving contract changes');
+        if (contractToEdit.id === undefined) {
+            // submit post new contract
+            dispatch({
+                type: 'CREATE_NEW_CONTRACT',
+                payload: contractToEdit
+            });
+        } else {
+            // put an existing contract
+            dispatch({
+                type: 'UPDATE_CONTRACT',
+                payload: contractToEdit // update once we have a the user passed via a prop
+            });
+        }
+        clearContractFields();
+        history.push('/home');
+    }
+
+
+    const clearContractFields = () => {
+        dispatch({
+            type: 'UNSET_CONTRACT_TO_EDIT'
+        });
+    };
+
+    const returnToHome = () => {
+        history.goBack();
+    }
+
+    // this formats our month and year from contractToEdit.startMonth for use in the month picker component
+    let startDate = new Date(contractToEdit.startMonth);
+    let yyyy = startDate.getFullYear();
+    let mm = String(startDate.getMonth() + 1).padStart(2, '0');
+    console.log('test', (yyyy + '-' + mm));
+
     return(
         <>
-            {/* 
-                select month/year combo
-                select advertiser
-                select length of contract
-                select ad type: print or web
-                // conditionally render based on type of ad:
-                    // WebView.jsx
-                    // PrintView.jsx
-                save button
-                approve button
-            */}
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
@@ -37,40 +114,58 @@ export default function AdCard() {
                     <Grid item xs={2}>
                     </Grid>
                     <Grid item xs={3}>
-                        <label for="start">Start month:</label>
+                        <FormLabel>Start Month:</FormLabel>
                         <input type="month" id="start" name="start"
-                            min="2021-09" value="2021-09" />
+                            min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
                     </Grid>
                     <Grid item xs={3}>
-                        <label for="length">Contract Length</label>
-                        <select name="length">
-                            <option value={1}>1 Month</option>
-                            <option value={2}>2 Months</option>
-                            <option value={4}>4 Months</option>
-                            <option value={8}>8 Months</option>
-                            <option value={12}>12 Months</option>
-                        </select>
+                        <FormControl>
+                            <FormLabel>Contract Length</FormLabel>
+                            <Select
+                                value={2}
+                                // onChange={cons}
+                            >
+                                <MenuItem value={1}>1 Month</MenuItem>
+                                <MenuItem value={2}>2 Months</MenuItem>
+                                <MenuItem value={3}>3 Months</MenuItem>
+                                <MenuItem value={4}>4 Months</MenuItem>
+                                <MenuItem value={5}>5 Months</MenuItem>
+                                <MenuItem value={6}>6 Months</MenuItem>
+                                <MenuItem value={7}>7 Months</MenuItem>
+                                <MenuItem value={8}>8 Months</MenuItem>
+                                <MenuItem value={9}>9 Months</MenuItem>
+                                <MenuItem value={10}>10 Months</MenuItem>
+                                <MenuItem value={11}>11 Months</MenuItem>
+                                <MenuItem value={12}>12 Months</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
 
                     {/* row */}
 
                     <Grid item xs={6}>
-                        {/* <FormControl fullWidth>
-                            <InputLabel>Ad Type</InputLabel>
+                        <FormControl component="fieldset">
+                            <FormLabel>Ad Type</FormLabel>
                             <Select
-                                // value
-                                label="Ad Type"
-                                // onChange
+                                value={contractToEdit.contractType || ''}
+                                onChange={(event) => handleChange(event, "contractType")}
                             >
-                                <MenuItem>Print</MenuItem>
-                                <MenuItem>Web</MenuItem>
+                                <MenuItem value="Print">Print</MenuItem>
+                                <MenuItem value="Web">Web</MenuItem>
                             </Select>
-                        </FormControl> */}
-                        <label>Ad Type</label>
-                        <select>
-                            <option value="print">Print</option>
-                            <option value="web">Web</option>
-                        </select>
+                        </FormControl>
+                        {contractToEdit.contractType === "Print" &&
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Page Number</FormLabel>
+                                <TextField
+                                    variant="outlined"
+                                    type="number"
+                                    sx={{width: '70px'}}
+                                    value={contractToEdit.page}
+                                    onChange={(event) => handleChange(event, "page")}
+                                />
+                            </FormControl>
+                        }
                     </Grid>
                     <Grid item xs={3}>
                     </Grid>
@@ -88,44 +183,49 @@ export default function AdCard() {
                                 {/* drag and drop zone for uploading images */}
                             </Grid>
                             <Grid item xs={12}>
-                                {/* <Typography variant="p">
-                                    Color Type
-                                </Typography>
-                                <FormControl fullWidth>
-                                    <InputLabel>Select</InputLabel>
+                                <FormControl>
+                                    <FormLabel>Color Type</FormLabel>
                                     <Select
-                                        // value
-                                        label="Color Type"
-                                        // onChange
+                                        value={contractToEdit.colorId || ''}
+                                        onChange={(event) => handleChange(event, "colorId")}
                                     >
-                                        <MenuItem>Black and White</MenuItem>
-                                        <MenuItem>Spot</MenuItem>
-                                        <MenuItem>Full Color</MenuItem>
+                                        <MenuItem value={1}>Black and White</MenuItem>
+                                        <MenuItem value={2}>Spot</MenuItem>
+                                        <MenuItem value={3}>Full Color</MenuItem>
                                     </Select>
-                                </FormControl> */}
-                                <label for="color">Color Type</label>
-                                <select name="color">
-                                    <option value="blackAndWhite">Black and White</option>
-                                    <option value="spot">Spot</option>
-                                    <option value="fullColor">Full Color</option>
-                                </select>
+                                </FormControl>
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography variant="p">
-                                    Sponsorship
-                                </Typography>
-                                {/* switch for selecting yes or no. maybe just a checkbox or radial buttons */}
+                                <FormControl>
+                                    <FormLabel>Notes</FormLabel>
+                                    <TextField
+                                        multiline
+                                        rows={6}
+                                        variant="filled"
+                                        value={contractToEdit.notes || ''}
+                                        onChange={(event) => handleChange(event, "notes")}
+                                    />
+                                </FormControl>
                             </Grid>
+                            {user.authLevel === ("admin" || "ad rep") &&
+                                <Grid item xs={12}>
+                                    <FormControl>
+                                        <FormLabel>Commission Percentage</FormLabel>
+                                        <TextField
+                                            variant="outlined"
+                                            type="number"
+                                            sx={{width: '70px'}}
+                                            value={contractToEdit.commissionPercentage}
+                                            onChange={(event) => handleChange(event, "commissionPercentage")}
+                                        />
+                                    </FormControl>
+                                </Grid>
+                            }
                             <Grid item xs={12}>
-                                <Typography variant="p">
-                                    Notes
-                                </Typography>
-                                <TextField
-                                    label="Notes"
-                                    multiline
-                                    rows={6}
-                                    variant="filled"
-                                />
+                                <Typography>Calculated Bill</Typography>
+                                <Typography>${contractToEdit.calculatedBill}.00</Typography>
+                                <Typography>Final Bill</Typography>
+                                <Typography>${contractToEdit.actualBill}.00</Typography>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -134,6 +234,9 @@ export default function AdCard() {
                         <Grid container spacing={2}>
                             <AdSize />
                         </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button variant="contained" color="primary" onClick={submitContract}>Save</Button>
                     </Grid>
                 </Grid>
             </Box>

@@ -130,12 +130,12 @@ function App() {
             <SetPasswordForm />
           </Route>
 
-          <Route 
+          <ProtectedRoute 
             exact
-            path="/adCard"
+            path="/contracts/edit/:id"
           >
             <AdCard />
-          </Route>
+          </ProtectedRoute>
 
           {/* WILL BE USED FOR VIEWING AND EDITING AD CARDS */}
           {/* <ProtectedRoute
