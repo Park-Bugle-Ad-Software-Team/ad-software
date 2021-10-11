@@ -8,12 +8,12 @@ import ClosedContracts from '../Contracts/ClosedContracts';
 export default function AdvertiserHomePage() {
     const dispatch = useDispatch();
 
-    // all of our global state from redux store
+    // global state from redux store
     const store = useSelector((store) => store);
+    const user = store.user;
     const pendingContracts = store.pendingContracts;
     const activeContracts = store.activeContracts;
     const closedContracts = store.closedContracts;
-    const user = store.user;
     const chat = store.chat;
 
     return (
