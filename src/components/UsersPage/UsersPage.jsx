@@ -38,9 +38,9 @@ export default function UsersPage() {
                     <Grid item xs={3}>
                     </Grid>
                     <Grid item xs={6}>
-                        <div id="tableHeader">
+
                             <Typography variant="h3">Employee List</Typography>
-                        </div>
+                        
                         <TableContainer>
                             <TableHead>
                                 <TableRow>

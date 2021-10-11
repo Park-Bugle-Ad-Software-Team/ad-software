@@ -44,6 +44,17 @@ export default function AdCard() {
                     [property]: Number(event.target.value)
                 }
             })
+        } else if (property === "startMonth") {
+            console.log('value is ', (event.target.value));
+            // this only works sometimes. will need some help to figure it out properly
+            let newDate = new Date(event.target.value);
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: newDate.setMonth(newDate.getMonth() + 2)
+                }
+            });
         } else {
             dispatch({
                 type: 'UPDATE_CONTRACT_TO_EDIT',
@@ -85,6 +96,12 @@ export default function AdCard() {
         history.goBack();
     }
 
+    // this formats our month and year from contractToEdit.startMonth for use in the month picker component
+    let startDate = new Date(contractToEdit.startMonth);
+    let yyyy = startDate.getFullYear();
+    let mm = String(startDate.getMonth() + 1).padStart(2, '0');
+    console.log('test', (yyyy + '-' + mm));
+
     return(
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -95,43 +112,58 @@ export default function AdCard() {
                     <Grid item xs={2}>
                     </Grid>
                     <Grid item xs={3}>
-                        <label for="start">Start month:</label>
+                        <FormLabel>Start Month:</FormLabel>
                         <input type="month" id="start" name="start"
-                            min="2021-09" value="2021-09" />
+                            min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
                     </Grid>
                     <Grid item xs={3}>
-                        <label for="length">Contract Length</label>
-                        <select name="length">
-                            <option value={1}>1 Month</option>
-                            <option value={2}>2 Months</option>
-                            <option value={4}>4 Months</option>
-                            <option value={8}>8 Months</option>
-                            <option value={12}>12 Months</option>
-                        </select>
+                        <FormControl>
+                            <FormLabel>Contract Length</FormLabel>
+                            <Select
+                                value={2}
+                                // onChange={cons}
+                            >
+                                <MenuItem value={1}>1 Month</MenuItem>
+                                <MenuItem value={2}>2 Months</MenuItem>
+                                <MenuItem value={3}>3 Months</MenuItem>
+                                <MenuItem value={4}>4 Months</MenuItem>
+                                <MenuItem value={5}>5 Months</MenuItem>
+                                <MenuItem value={6}>6 Months</MenuItem>
+                                <MenuItem value={7}>7 Months</MenuItem>
+                                <MenuItem value={8}>8 Months</MenuItem>
+                                <MenuItem value={9}>9 Months</MenuItem>
+                                <MenuItem value={10}>10 Months</MenuItem>
+                                <MenuItem value={11}>11 Months</MenuItem>
+                                <MenuItem value={12}>12 Months</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
 
                     {/* row */}
 
                     <Grid item xs={6}>
                         <FormControl component="fieldset">
-                            <FormLabel component="legend">Ad Type</FormLabel>
-                            <RadioGroup
-                                aria-label="colorType"
-                                value={contractToEdit.contractType}
+                            <FormLabel>Ad Type</FormLabel>
+                            <Select
+                                value={contractToEdit.contractType || ''}
                                 onChange={(event) => handleChange(event, "contractType")}
-                                name="contract-type-radio-button-group"
                             >
-                                <FormControlLabel value="Print" control={<Radio />} label="Print" />
-                                <FormControlLabel value="Web" control={<Radio />} label="Web" />
-                            </RadioGroup>
+                                <MenuItem value="Print">Print</MenuItem>
+                                <MenuItem value="Web">Web</MenuItem>
+                            </Select>
                         </FormControl>
-                        {/* <Select
-                            value={contractToEdit.contractType}
-                            onChange={(event) => handleChange(event, "contractType")}
-                        >
-                            <MenuItem value={"Print"}>Print</MenuItem>
-                            <MenuItem value={"Web"}>Web</MenuItem>
-                        </Select> */}
+                        {contractToEdit.contractType === "Print" &&
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Page Number</FormLabel>
+                                <TextField
+                                    variant="outlined"
+                                    type="number"
+                                    sx={{width: '70px'}}
+                                    value={contractToEdit.page}
+                                    onChange={(event) => handleChange(event, "page")}
+                                />
+                            </FormControl>
+                        }
                     </Grid>
                     <Grid item xs={3}>
                     </Grid>
@@ -149,37 +181,29 @@ export default function AdCard() {
                                 {/* drag and drop zone for uploading images */}
                             </Grid>
                             <Grid item xs={12}>
-                                {/* <label for="color">Color Type</label>
-                                <select name="color" onChange={(event) => handleChange(event, "colorId")}> 
-                                    <option value={contractToEdit.Color.id}>{contractToEdit.Color.colorType}</option>
-                                    <option value={1}>Black and White</option>
-                                    <option value={2}>Spot</option>
-                                    <option value={3}>Full Color</option>
-                                </select> */}
-                                <FormControl component="fieldset">
-                                    <FormLabel component="legend">Color Type</FormLabel>
-                                    <RadioGroup
-                                        aria-label="colorType"
-                                        value={contractToEdit.colorId}
+                                <FormControl>
+                                    <FormLabel>Color Type</FormLabel>
+                                    <Select
+                                        value={contractToEdit.colorId || ''}
                                         onChange={(event) => handleChange(event, "colorId")}
-                                        name="color-radio-button-group"
                                     >
-                                        <FormControlLabel value={1} control={<Radio />} label="Black and White" />
-                                        <FormControlLabel value={2} control={<Radio />} label="Spot" />
-                                        <FormControlLabel value={3} control={<Radio />} label="Full Color" />
-                                    </RadioGroup>
+                                        <MenuItem value={1}>Black and White</MenuItem>
+                                        <MenuItem value={2}>Spot</MenuItem>
+                                        <MenuItem value={3}>Full Color</MenuItem>
+                                    </Select>
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography variant="p">
+                                <FormControl>
+                                <FormLabel >
                                     Notes
-                                </Typography>
+                                </FormLabel>
                                 <TextField
-                                    label="Notes"
                                     multiline
                                     rows={6}
                                     variant="filled"
                                 />
+                                </FormControl>
                             </Grid>
                         </Grid>
                     </Grid>

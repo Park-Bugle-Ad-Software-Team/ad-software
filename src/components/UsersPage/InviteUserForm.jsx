@@ -126,7 +126,7 @@ export default function InviteUserForm() {
                     <TextField 
                         id="name-input"
                         variant="outlined" 
-                        value={userToEdit.name}
+                        value={userToEdit.name || ''}
                         onChange={(event) => handleChange(event, "name")}
                     />
                 </Grid>
@@ -135,7 +135,7 @@ export default function InviteUserForm() {
                     <TextField 
                         id="email-input" 
                         variant="outlined" 
-                        value={userToEdit.email}
+                        value={userToEdit.email || ''}
                         onChange={(event) => handleChange(event, "email")}
                     />
                 </Grid>
@@ -147,10 +147,9 @@ export default function InviteUserForm() {
                                 open={open}
                                 onClose={handleClose}
                                 onOpen={handleOpen}
-                                value={userToEdit.authLevel}
+                                value={userToEdit.authLevel || ''}
                                 onChange={(event) => handleChange(event, "authLevel")}
                             >
-                                <MenuItem value={userToEdit.authLevel}>{userToEdit.authLevel}</MenuItem>
                                 <MenuItem value="admin">Admin</MenuItem>
                                 <MenuItem value="ad rep">Ad Rep</MenuItem>
                                 <MenuItem value="advertiser">Advertiser</MenuItem>
@@ -168,7 +167,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Contact Preference"
                         variant="outlined"
-                        value={userToEdit.contactPreference}
+                        value={userToEdit.contactPreference || ''}
                         onChange={(event) => handleChange(event, "contactPreference")}
                     />
                 </Grid>
@@ -176,7 +175,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Company Name"
                         variant="outlined"
-                        value={userToEdit.companyName}
+                        value={userToEdit.companyName || ''}
                         onChange={(event) => handleChange(event, "companyName")}
                     />
                 </Grid>
@@ -184,7 +183,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Advertiser URL"
                         variant="outlined"
-                        value={userToEdit.advertiserUrl}
+                        value={userToEdit.advertiserUrl || ''}
                         onChange={(event) => handleChange(event, "advertiserUrl")}
                     />
                 </Grid>
@@ -192,7 +191,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Address"
                         variant="outlined"
-                        value={userToEdit.address}
+                        value={userToEdit.address || ''}
                         onChange={(event) => handleChange(event, "address")}
                     />
                 </Grid>
@@ -200,7 +199,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Primary Name"
                         variant="outlined"
-                        value={userToEdit.primaryName}
+                        value={userToEdit.primaryName || ''}
                         onChange={(event) => handleChange(event, "primaryName")}
                     />
                 </Grid>
@@ -208,7 +207,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Secondary Name"
                         variant="outlined"
-                        value={userToEdit.secondaryName}
+                        value={userToEdit.secondaryName || ''}
                         onChange={(event) => handleChange(event, "secondaryName")}
                     />
                 </Grid>
@@ -216,7 +215,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Primary Title"
                         variant="outlined"
-                        value={userToEdit.primaryTitle}
+                        value={userToEdit.primaryTitle || ''}
                         onChange={(event) => handleChange(event, "primaryTitle")}
                     />
                 </Grid>
@@ -224,7 +223,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Secondary Title"
                         variant="outlined"
-                        value={userToEdit.secondaryTitle}
+                        value={userToEdit.secondaryTitle || ''}
                         onChange={(event) => handleChange(event, "secondaryTitle")}
                     />
                 </Grid>
@@ -232,7 +231,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Primary Email"
                         variant="outlined"
-                        value={userToEdit.primaryEmail}
+                        value={userToEdit.primaryEmail || ''}
                         onChange={(event) => handleChange(event, "primaryEmail")}
                     />
                 </Grid>
@@ -240,7 +239,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Secondary Email"
                         variant="outlined"
-                        value={userToEdit.secondaryEmail}
+                        value={userToEdit.secondaryEmail || ''}
                         onChange={(event) => handleChange(event, "secondaryEmail")}
                     />
                 </Grid>
@@ -248,7 +247,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Primary Direct Phone"
                         variant="outlined"
-                        value={userToEdit.primaryDirectPhone}
+                        value={userToEdit.primaryDirectPhone || ''}
                         onChange={(event) => handleChange(event, "primaryDirectPhone")}
                     />
                 </Grid>
@@ -256,7 +255,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Secondary Direct Phone"
                         variant="outlined"
-                        value={userToEdit.secondaryDirectPhone}
+                        value={userToEdit.secondaryDirectPhone || ''}
                         onChange={(event) => handleChange(event, "secondaryDirectPhone")}
                     />
                 </Grid>
@@ -264,7 +263,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Primary Mobile Phone"
                         variant="outlined"
-                        value={userToEdit.primaryMobilePhone}
+                        value={userToEdit.primaryMobilePhone || ''}
                         onChange={(event) => handleChange(event, "primaryMobilePhone")}
                     />
                 </Grid>
@@ -272,7 +271,7 @@ export default function InviteUserForm() {
                     <TextField
                         label="Secondary Mobile Phone"
                         variant="outlined"
-                        value={userToEdit.secondaryMobilePhone}
+                        value={userToEdit.secondaryMobilePhone || ''}
                         onChange={(event) => handleChange(event, "secondaryMobilePhone")}
                     />
                 </Grid>
@@ -283,7 +282,7 @@ export default function InviteUserForm() {
                         multiline
                         fullWidth
                         rows={4}
-                        value={userToEdit.notes}
+                        value={userToEdit.notes || ''}
                         onChange={(event) => handleChange(event, "notes")}
                     />
                 </Grid>
