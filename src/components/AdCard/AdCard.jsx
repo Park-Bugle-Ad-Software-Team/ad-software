@@ -35,6 +35,12 @@ export default function AdCard() {
         })
     }, [contractId])
 
+    useEffect(() => {
+        dispatch({
+            type: 'FETCH_RATES'
+        });
+    }, [])
+
     const handleChange = (event, property) => {
         console.log('property we are updating is', property);
         console.log('value we are updating to is', event.target.value);
@@ -122,8 +128,8 @@ export default function AdCard() {
                         <FormControl>
                             <FormLabel>Contract Length</FormLabel>
                             <Select
-                                value={2}
-                                // onChange={cons}
+                                value={contractToEdit.months || ''}
+                                onChange={(event) => handleChange(event, "months")}
                             >
                                 <MenuItem value={1}>1 Month</MenuItem>
                                 <MenuItem value={2}>2 Months</MenuItem>

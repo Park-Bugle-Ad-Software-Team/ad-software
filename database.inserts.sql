@@ -129,21 +129,28 @@ VALUES
 CREATE TABLE "AdSize" (
    "id" SERIAL PRIMARY KEY,
    "adType" VARCHAR(255) NOT NULL,
+   "desc" VARCHAR(255) NOT NULL,
    "columns" INT NOT NULL,
-   "inches" INT NOT NULL,
-   "months" INT NOT NULL,
+   "inches" FLOAT NOT NULL,
    "image" VARCHAR(255) NOT NULL
 );
 
 INSERT INTO "AdSize" 
 ("adType", 
+"desc",
 "columns", 
 "inches", 
-"months", 
 "image")  
 VALUES 
-('Full Page', 5, 5, 12, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
-('Quarter Page', 5, 5, 12, 'https://image.flaticon.com/icons/png/512/126/126249.png');
+('FULL PAGE', '5 columns x 15.66"', 5, 15.66, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+('1/2 PAGE VERTICAL', '3 columns x 12.5"', 3, 12.5, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+('1/2 PAGE HORIZONTAL', '5 columns x 7.5"', 5, 7.5, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+('1/4 PAGE', 'Vertical: 2 columns x 10" Horizontal: 3 columns x 6.5"', 2, 10, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+('1/8 PAGE', 'Vertical: 2 columns x 5" Horizontal: 3 columns x 3.5"', 5, 5, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+('1 COLUMN x 8" or 2 COLUMN x 4"', '', 1, 8, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+('BUSINESS CARD', '2 columns x 2"', 2, 2, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+('FEATURE SPONSOR AD', 'Includes banner ad, 2 columns x 5" display ad, and web tile ad', 0, 0, 'https://image.flaticon.com/icons/png/512/126/126249.png')
+;
 
 -- INSERT INTO "Sponsorship"
 --    ("isSponsored", "sponsorshipPrice")
@@ -215,7 +222,8 @@ CREATE TABLE "Contracts" (
    "page" INT,
    -- "holidayGuide" DECIMAL, (stretch)
    "isApproved" BOOLEAN,
-   "pricingSchemaId" INT REFERENCES "Rates"
+   "pricingSchemaId" INT REFERENCES "Rates",
+   "months" INT NOT NULL
 );
 
 INSERT INTO "Contracts" (
@@ -232,15 +240,16 @@ INSERT INTO "Contracts" (
    "page",
    -- "holidayGuide", (stretch)
    "isApproved",
-   "pricingSchemaId"
+   "pricingSchemaId",
+   "months"
 )
 VALUES
-   (1, '8 month contract', '2021-10-01', 20, 1, 'Print', 270, 270, 2, true, 2),
-   (2, '4 month contract', '2021-09-01', 25, 1, 'Print', 250, 270, 3, true, 1),
-   (2, '8 month contract', '2021-11-01', 15, 2, 'Web', 200, 270, 1, true, 3),
-   (1, '2 month contract', '2021-10-01', 20, 1, 'Print', 230, 270, 2, false, 2),
-   (1, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, 3, true, 1),
-   (2, '12 month contract', '2021-10-01', 25, 3, 'Print', 275, 270, 1, false, 2);
+   (1, '8 month contract', '2021-10-01', 20, 1, 'Print', 270, 270, 2, true, 2, 3),
+   (2, '4 month contract', '2021-09-01', 25, 1, 'Print', 250, 270, 3, true, 1, 6),
+   (2, '8 month contract', '2021-11-01', 15, 2, 'Web', 200, 270, 1, true, 3, 9),
+   (1, '2 month contract', '2021-10-01', 20, 1, 'Print', 230, 270, 2, false, 2, 10),
+   (1, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, 3, true, 1, 2),
+   (2, '12 month contract', '2021-10-01', 25, 3, 'Print', 275, 270, 1, false, 2, 1);
 
 CREATE TABLE "Images" (
    "id" SERIAL PRIMARY KEY,

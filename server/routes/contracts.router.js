@@ -175,22 +175,7 @@ router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
 });
 
 router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
-  // for ad card display/edits of a particular contract, we need:
-    // Users table - advertiser's name
-    // Contract table - start month
-    // Contract table - (from the start month field) start year
-    // contract table - print/web
-    // adsize table - (months) length
-    // images table - images
-    // colors table - colors
-    // adSize type - adSize
-    // sponsorship program status
-    // contract table - notes
-    // contract table - (actualBill) actual price
-    
-
-
-    // removing chat from this pull for testing
+  // removing chat from this pull for testing
   const sqlText = `
     SELECT
     "Contracts".*,
@@ -216,12 +201,40 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     })
 })
 
-router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
+router.put('/edit/:id', (req, res) => {
   const sqlText = `
-  /* sql text here. Dan go crazy with it */
+  UPDATE "Contracts"
+  SET 
+    "adSizeId" = $2,
+    "notes" = $3,
+    "startMonth" = $4,
+    "commissionPercentage" = $5,
+    "colorId" = $6,
+    "contractType" = $7,
+    "calculatedBill" = $8,
+    "actualBill" = $9,
+    "page" = $10,
+    "isApproved" = $11,
+    "pricingSchemaId" = $12,
+    "months" = $13
+  WHERE "id" = $1
   `;
 
-  const sqlParams = [];
+  const sqlParams = [
+    req.body.id,
+    req.body.adSizeId,
+    req.body.notes,
+    req.body.startMonth,
+    req.body.commissionPercentage,
+    req.body.colorId,
+    req.body.contractType,
+    req.body.calculatedBill,
+    req.body.actualBill,
+    req.body.page,
+    req.body.isApproved,
+    req.body.pricingSchemaId,
+    req.body.months
+  ];
 
   pool.query(sqlText, sqlParams)
     .then(dbRes => {
@@ -232,11 +245,71 @@ router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
     });
 })
 
+router.get('/rates', rejectUnauthenticated, (req, res) => {
+  let sqlText = `
+  SELECT * FROM "Rates"
+  ORDER BY "rateName" DESC
+  `;
+
+  pool.query(sqlText)
+    .then(dbRes => {
+      res.send(dbRes.rows);
+    })
+    .catch(error => {
+      console.error('Failed to select Rates from db', error);
+    })
+})
+
+router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
+  let sqlText = `
+  SELECT * FROM "AdSize"
+  ORDER BY "id" ASC
+  `;
+
+  pool.query(sqlText)
+    .then(dbRes => {
+      res.send(dbRes.rows);
+    })
+    .catch(error => {
+      console.error('Failed to select Rates from db', error);
+    })
+})
+
 /**
  * POST route template
  */
-router.post('/', (req, res) => {
-  // POST route code here
+ router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
+  properties = strFromObj(req.body, ', ', element => `"${element}"`)
+  values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
+
+  const queryText = `INSERT INTO "Contracts" (${properties})
+                      VALUES (${values}) 
+                      RETURNING id`;
+  const sqlParams = Object.values(req.body);
+  pool
+    .query(queryText, sqlParams)
+    .then((dbRes) => {
+      console.log('dbRes is: ', dbRes.rows[0].id);
+      res.sendStatus(201)
+      // also need to insert:
+        const innerQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")
+                          VALUES ($1, $2)`;
+        // users_contracts - which use
+        const innerQueryParams = [dbRes.rows[0].id, req.params.advertiserId]
+        // will we receive any other info...?
+        pool
+          .query(innerQuery, innerQueryParams)
+          .then(innerDbResponse => {
+            res.sendStatus(200);
+          })
+          .catch(error => {
+            console.log('Failed to POST to contracts_user while posting new contract: ', error);
+          })
+    })
+    .catch((err) => {
+      console.log('User registration failed: ', err);
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;
