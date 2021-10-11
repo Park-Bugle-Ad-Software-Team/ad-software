@@ -9,8 +9,8 @@ export default function HomePage() {
 
     useEffect(() => {
         dispatch({type: 'FETCH_PENDING_CONTRACTS', payload: user});
-        dispatch({type: 'FETCH_ACTIVE_CONTRACTS'});
-        dispatch({type: 'FETCH_CLOSED_CONTRACTS'});
+        dispatch({type: 'FETCH_ACTIVE_CONTRACTS', payload: user});
+        dispatch({type: 'FETCH_CLOSED_CONTRACTS', payload: user});
     }, []);
 
     // global state from redux

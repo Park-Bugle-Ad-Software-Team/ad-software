@@ -11,7 +11,6 @@ function* fetchPendingContracts(action) {
     if (action.payload.authLevel === 'advertiser') {
         try {
             const response = yield axios.get('/api/contracts/pending/advertiser', {params: action.payload});
-            // console.log('response is', response);
     
             yield put({ type: 'SET_PENDING_CONTRACTS', payload: response.data});
         
@@ -21,7 +20,6 @@ function* fetchPendingContracts(action) {
     } else {
         try {
             const response = yield axios.get('/api/contracts/pending');
-            // console.log('response is', response);
 
             yield put({ type: 'SET_PENDING_CONTRACTS', payload: response.data});
         
@@ -31,26 +29,46 @@ function* fetchPendingContracts(action) {
     }
 }
 
-function* fetchActiveContracts() {
-    try {
-        const response = yield axios.get('/api/contracts/active');
-        // console.log('response is', response);
-
-        yield put({ type: 'SET_ACTIVE_CONTRACTS', payload: response.data});
+function* fetchActiveContracts(action) {
+    if (action.payload.authLevel === 'advertiser') {
+        try {
+            const response = yield axios.get('/api/contracts/active/advertiser', {params: action.payload});
     
-    } catch (error) {
-        console.log('Active contracts GET request failed', error);
+            yield put({ type: 'SET_ACTIVE_CONTRACTS', payload: response.data});
+        
+        } catch (error) {
+            console.log('Active contracts GET request failed', error);
+        }
+    } else {
+        try {
+            const response = yield axios.get('/api/contracts/active');
+
+            yield put({ type: 'SET_ACTIVE_CONTRACTS', payload: response.data});
+        
+        } catch (error) {
+            console.log('Active contracts GET request failed', error);
+        }
     }
 }
 
-function* fetchClosedContracts() {
-    try {
-        const response = yield axios.get('/api/contracts/closed');
-        // console.log('response is', response);
-
-        yield put({ type: 'SET_CLOSED_CONTRACTS', payload: response.data});
+function* fetchClosedContracts(action) {
+    if (action.payload.authLevel === 'advertiser') {
+        try {
+            const response = yield axios.get('/api/contracts/closed/advertiser', {params: action.payload});
     
-    } catch (error) {
-        console.log('Closed contracts GET request failed', error);
+            yield put({ type: 'SET_CLOSED_CONTRACTS', payload: response.data});
+        
+        } catch (error) {
+            console.log('Closed contracts GET request failed', error);
+        }
+    } else {
+        try {
+            const response = yield axios.get('/api/contracts/closed');
+
+            yield put({ type: 'SET_CLOSED_CONTRACTS', payload: response.data});
+        
+        } catch (error) {
+            console.log('Closed contracts GET request failed', error);
+        }
     }
 }
