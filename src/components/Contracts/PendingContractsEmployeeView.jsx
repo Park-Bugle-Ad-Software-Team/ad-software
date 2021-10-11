@@ -1,12 +1,17 @@
 import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import formatDate from './formatDate';
 import { useHistory } from 'react-router';
 
 export default function PendingContractsEmployeeView( {item} ) {
     const dispatch = useDispatch();
     const history = useHistory();
+
+    // to format the DATE startMonth
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long" }
+        return new Date(dateString).toLocaleDateString(undefined, options)
+    }
 
     const viewContract = (contractId) => {
         console.log('in viewContract');

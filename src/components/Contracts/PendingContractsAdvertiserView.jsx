@@ -6,6 +6,12 @@ import formatDate from './formatDate';
 export default function PendingContracts( {item} ) {
     const dispatch = useDispatch();
 
+    // to format the DATE startMonth
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long" }
+        return new Date(dateString).toLocaleDateString(undefined, options)
+    }
+
     function viewContract() {
         console.log('in viewContract');
     }

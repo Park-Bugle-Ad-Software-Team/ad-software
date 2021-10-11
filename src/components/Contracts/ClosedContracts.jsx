@@ -3,6 +3,12 @@ import formatDate from './formatDate';
 
 export default function ClosedContracts( {item} ) {
 
+    // to format the DATE startMonth
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long" }
+        return new Date(dateString).toLocaleDateString(undefined, options)
+    }
+
     function consoleLogItem() {
         console.log(item.id);
     }

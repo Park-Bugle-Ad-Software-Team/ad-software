@@ -2,7 +2,8 @@ import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid, In
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import PendingContractsEmployeeView from '../Contracts/PendingContractsEmployeeView';
-import AllContracts from '../Contracts/AllContracts';
+import ActiveContracts from '../Contracts/ActiveContracts';
+import ClosedContracts from '../Contracts/ClosedContracts';
 
 export default function EmployeeHomePage() {
     const dispatch = useDispatch();
@@ -12,19 +13,16 @@ export default function EmployeeHomePage() {
     }, []);
 
     // local state
-    let [filterContract, setFilterContract] = useState({
-        advertiser: '', startMonth: '', endMonth: '', contractStatus: ''
-    });
+    let [filteredContract, setFilteredContract] = useState({ advertiser: '', month: '' });
 
-    // global state from redux
-    const store = useSelector((store) => store)
+    // global state from redux store
+    const store = useSelector((store) => store);
     const user = store.user;
     const advertisers = store.advertisers;
     const pendingContracts = store.pendingContracts;
-    const allContracts = store.allContracts;
-
-    // constants for search drop down criteria
-    const statuses = ['Active', 'Closed'];
+    const activeContracts = store.activeContracts;
+    const closedContracts = store.closedContracts;
+    const chat = store.chat;
 
     function fetchFilteredContracts() {
         dispatch({type: 'FETCH_FILTERED_CONTRACTS'});
@@ -62,8 +60,8 @@ export default function EmployeeHomePage() {
                             labelId="advertiser-select-label"
                             id="advertiser-select"
                             label="Advertiser"
-                            value={filterContract.advertiser}
-                            onChange={(event) => setFilterContract({...filterContract, advertiser: event.target.value})}
+                            value={filteredContract.advertiser}
+                            onChange={(event) => setFilteredContract({...filteredContract, advertiser: event.target.value})}
                         >
                             {advertisers.map((advertiser, i) => (
                                 <MenuItem key={i} value={advertiser.companyName}>
@@ -73,38 +71,14 @@ export default function EmployeeHomePage() {
                         </Select>
                     </FormControl>
                     <FormControl>
-                        <InputLabel id="start-month-select-label">Start Month</InputLabel>
+                        <InputLabel id="month-select-label">Month</InputLabel>
                         <Input
-                            id="start-month-select"
-                            label="Start Month"
-                            value={filterContract.startMonth}
+                            id="month-select"
+                            label="Month"
+                            value={filteredContract.month}
                             type="month"
-                            onChange={(event) => setFilterContract({...filterContract, startMonth: event.target.value})}
+                            onChange={(event) => setFilteredContract({...filteredContract, month: event.target.value})}
                         />
-                    </FormControl>
-                    <FormControl>
-                        <InputLabel id="end-month-select-label">End Month</InputLabel>
-                        <Input
-                            id="end-month-select"
-                            label="End Month"
-                            value={filterContract.endMonth}
-                            type="month"
-                            onChange={(event) => setFilterContract({...filterContract, endMonth: event.target.value})}
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <InputLabel id="contract-status-select-label">Status</InputLabel>
-                        <Select
-                            labelId="contract-status-select-label"
-                            id="contract-status-select"
-                            label="Status"
-                            value={filterContract.contractStatus}
-                            onChange={(event) => setFilterContract({...filterContract, contractStatus: event.target.value})}
-                        >
-                            {statuses.map((status, i) => (
-                                <MenuItem key={i} value={status}>{status}</MenuItem>
-                            ))}
-                        </Select>
                     </FormControl>
                     <Button 
                         variant="contained" 
@@ -144,10 +118,10 @@ export default function EmployeeHomePage() {
                     </table> 
                 </Grid>
 
-                {/* All Contracts component */}
+                {/* Active Contracts component */} 
                 <Grid item xs={12}>
                     <center>
-                        <Typography variant="h3">All Contracts</Typography>  
+                        <Typography variant="h3">Active Contracts</Typography>  
                     </center>
                 </Grid>
                 <Grid item xs={12}>
@@ -164,9 +138,38 @@ export default function EmployeeHomePage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {allContracts.map((item, i) => (
+                            {activeContracts.map((item, i) => (
                                 <tr className="uTr" key={i}>
-                                    <AllContracts item={item} />
+                                    <ActiveContracts item={item} />
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </Grid>
+
+                {/* Closed Contracts component */}
+                <Grid item xs={12}>
+                    <center>
+                        <Typography variant="h3">Closed Contracts</Typography>  
+                    </center>
+                </Grid>
+                <Grid item xs={12}>
+                    <table className="uTable">
+                        <thead>
+                            <tr className="uTr">
+                                <th className="uTh">Start Month</th>
+                                <th className="uTh">Contract Length</th>
+                                <th className="uTh">Type</th>
+                                <th className="uTh">Size</th>
+                                <th className="uTh">Page</th>
+                                <th className="uTh">Color</th>
+                                <th className="uTh">Total Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {closedContracts.map((item, i) => (
+                                <tr className="uTr" key={i}>
+                                    <ClosedContracts item={item} />
                                 </tr>
                             ))}
                         </tbody>

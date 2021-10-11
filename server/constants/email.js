@@ -1,17 +1,16 @@
 const nodemailer = require('nodemailer');
 
-const fromEmail = 'marklarson567@gmail.com'
 // setting up nodemailer
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: fromEmail,
-    pass: 'VgtNhu567'
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASSWORD
   }
 });
 
 const mailOptions = {
-    from: fromEmail,
+    from: process.env.EMAIL,
     subject: 'Sending Email using Node.js',
     text: 'http://localhost:3000/#/set-password/' // the /set-password needs to stay the same
     // html: <h1>some html</h1>
@@ -25,8 +24,10 @@ const emailErrorCatcher = function(error, info) {
     }
 }
 
-module.exports = {
-    transporter,
-    mailOptions,
-    emailErrorCatcher
+function sendEmail(recipient, inviteToken) {
+  mailOptions.to = recipient;
+  mailOptions.text += inviteToken
+  transporter.sendMail(mailOptions, emailErrorCatcher)
 }
+
+module.exports = sendEmail;
