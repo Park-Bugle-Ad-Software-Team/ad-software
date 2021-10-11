@@ -29,7 +29,25 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  // POST route code here
+    const sqlText = `
+        INSERT INTO "Chat"
+            ("message", "userId", "contractId")
+        VALUES
+            ($1, $2, $3)
+    `;
+    const sqlParams = [
+        req.body.messageToSend,
+        req.body.userId,
+        req.body.contractId
+    ];
+    pool.query(sqlText, sqlParams)
+    .then((results) => {
+        res.sendStatus(201);
+    })
+    .catch((error) => {
+        console.log('post chat error', error);
+        res.sendStatus(500);
+    });
 });
 
 module.exports = router;

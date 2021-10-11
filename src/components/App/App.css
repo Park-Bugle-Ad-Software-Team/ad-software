@@ -129,3 +129,7 @@ input {
 .myChat {
   color: maroon;
 }
+
+.chatBar {
+  width: 300px;
+}

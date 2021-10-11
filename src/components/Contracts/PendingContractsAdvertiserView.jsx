@@ -1,4 +1,4 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid, Drawer, Box, ListItemText } from '@mui/material';
+import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid, Drawer, Box, ListItemText, TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import axios from 'axios';
@@ -17,6 +17,7 @@ export default function PendingContracts( {item} ) {
 
     // local state to handle opening of drawer
     let [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    let [messageToSend, setMessageToSend] = useState('');
 
     // global state from redux
     const store = useSelector((store) => store);
@@ -28,9 +29,25 @@ export default function PendingContracts( {item} ) {
     }
 
     function openChat() {
-        // console.log('in openChat');
-        dispatch({type: 'FETCH_CHAT', payload: item.id});
+        let contractId = item.id;
+        dispatch({type: 'FETCH_CHAT', payload: contractId});
         setIsDrawerOpen(true);
+    }
+
+    function sendMessage(event) {
+        event.preventDefault();
+        let contractId = item.id;
+        let userId = user.id
+
+        // dispatch({ type: 'ADD_CHAT', payload: {messageToSend, userId, contractId} });
+
+        axios.post('/api/chat', {
+            messageToSend, userId, contractId
+        })
+        .then(() => {
+            dispatch({ type: 'FETCH_CHAT', payload: contractId })
+        });
+        setMessageToSend('');
     }
 
     function advertiserApprove() {
@@ -63,17 +80,27 @@ export default function PendingContracts( {item} ) {
 
                     <Grid container>
                         {chat.map((item, i) => (
-                            <Grid item xs={12}>
+                            <Grid key={i} item xs={12}>
                                 {user.id === item.userId ?
-                                    <ListItemText align="right" primary={item.message}></ListItemText> :
+                                    <ListItemText className="myChat" align="right" primary={item.message}></ListItemText> :
                                     <ListItemText align="left" secondary={item.message}></ListItemText> 
                                 }
                             </Grid>
                         ))}
                     </Grid>
-
+                    <br/>
                     <center>
-                        <Button className="btn" onClick={() => setIsDrawerOpen(false)}>Close</Button>
+                        <form onSubmit={sendMessage}>
+                            <TextField className="chatBar"
+                                id="outlined-multiline-flexible"
+                                label="Message"
+                                value={messageToSend}
+                                onChange={(event) => setMessageToSend(event.target.value)}
+                            />
+                        </form>
+                        <div>
+                            <Button onClick={() => setIsDrawerOpen(false)}>Close</Button>
+                        </div>
                     </center>
                 </Box>
             </Drawer>
