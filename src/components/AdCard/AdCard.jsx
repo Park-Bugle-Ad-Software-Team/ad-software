@@ -18,7 +18,9 @@ export default function AdCard() {
     const params = useParams();
 
     const contractId = params.id;
-    const contractToEdit = useSelector(store => store.contractToEdit);
+    const store = useSelector(store => store);
+    const contractToEdit = store.contractToEdit;
+    const user = store.user;
     const adSize = contractToEdit.AdSize;
     const color = contractToEdit.Color;
 
@@ -195,15 +197,35 @@ export default function AdCard() {
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControl>
-                                <FormLabel >
-                                    Notes
-                                </FormLabel>
-                                <TextField
-                                    multiline
-                                    rows={6}
-                                    variant="filled"
-                                />
+                                    <FormLabel>Notes</FormLabel>
+                                    <TextField
+                                        multiline
+                                        rows={6}
+                                        variant="filled"
+                                        value={contractToEdit.notes || ''}
+                                        onChange={(event) => handleChange(event, "notes")}
+                                    />
                                 </FormControl>
+                            </Grid>
+                            {user.authLevel === ("admin" || "ad rep") &&
+                                <Grid item xs={12}>
+                                    <FormControl>
+                                        <FormLabel>Commission Percentage</FormLabel>
+                                        <TextField
+                                            variant="outlined"
+                                            type="number"
+                                            sx={{width: '70px'}}
+                                            value={contractToEdit.commissionPercentage}
+                                            onChange={(event) => handleChange(event, "commissionPercentage")}
+                                        />
+                                    </FormControl>
+                                </Grid>
+                            }
+                            <Grid item xs={12}>
+                                <Typography>Calculated Bill</Typography>
+                                <Typography>${contractToEdit.calculatedBill}.00</Typography>
+                                <Typography>Final Bill</Typography>
+                                <Typography>${contractToEdit.actualBill}.00</Typography>
                             </Grid>
                         </Grid>
                     </Grid>

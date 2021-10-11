@@ -143,6 +143,22 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     })
 })
 
+router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
+  const sqlText = `
+  /* sql text here. Dan go crazy with it */
+  `;
+
+  const sqlParams = [];
+
+  pool.query(sqlText, sqlParams)
+    .then(dbRes => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.error(`Failed to update contract at id: ${req.body.id}`, error);
+    });
+})
+
 /**
  * POST route template
  */

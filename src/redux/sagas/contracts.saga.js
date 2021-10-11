@@ -7,6 +7,7 @@ export default function* contractsSaga() {
     yield takeLatest('FETCH_CLOSED_CONTRACTS', fetchClosedContracts);
     yield takeLatest('FETCH_ALL_CONTRACTS', fetchAllContracts);
     yield takeLatest('FETCH_CONTRACT_TO_EDIT', fetchContractToEdit);
+    yield takeLatest('UPDATE_CONTRACT', updateContract);
 }
 
 function* fetchContractToEdit(action) {
@@ -66,5 +67,13 @@ function* fetchAllContracts() {
     
     } catch (error) {
         console.log('All contracts GET request failed', error);
+    }
+}
+
+function* updateContract(action) {
+    try {
+        yield axios.put(`/api/contracts/edit/${action.payload.id}`, action.payload);
+    } catch (error) {
+        console.error('Error in contract put request', error);
     }
 }
