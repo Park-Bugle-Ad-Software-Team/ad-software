@@ -5,14 +5,21 @@ const {
 const pool = require('../modules/pool');
 const router = express.Router();
 
-router.get('/:id', rejectUnauthenticated, (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
+    const contractId = req.query[0];
+    // console.log('payload is', payload);
     const sqlText = `
-        SELECT * FROM "Chat"
-        WHERE "Chat"."contractId" = ${req.params.id}
+        SELECT
+        "Chat".*,
+        to_json("Users".*) as "Users"
+        FROM "Chat"
+        JOIN "Users"
+            ON "Users"."id" = "Chat"."userId"
+        WHERE "Chat"."contractId" = ${contractId}
     `;
     pool.query(sqlText)
     .then((dbRes) => {
-        console.log('dbRes is', dbRes);
+        // console.log('dbRes is', dbRes.rows);
         res.send(dbRes.rows);
     })
     .catch((error) => {

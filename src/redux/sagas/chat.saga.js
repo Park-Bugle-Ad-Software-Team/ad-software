@@ -6,10 +6,9 @@ export default function* chatSaga() {
 }
 
 function* fetchChat(action) {
-    let contractId = action.payload
-
+    const contractId = action.payload;
     try {
-        const response = yield axios.get(`/api/chat/${contractId}`, { params: {contractId}});
+        const response = yield axios.get('/api/chat/', { params: contractId });
         // console.log('response is', response);
 
         yield put({ type: 'SET_CHAT', payload: response.data});

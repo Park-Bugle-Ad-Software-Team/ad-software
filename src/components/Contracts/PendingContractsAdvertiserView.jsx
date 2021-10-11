@@ -1,16 +1,27 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid, Drawer, Box, ListItemText } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import axios from 'axios';
-import formatDate from './formatDate';
 
 export default function PendingContracts( {item} ) {
     const dispatch = useDispatch();
+
+    // to style the drawer nicely
+    // const classes = useStyles();
 
     // to format the DATE startMonth
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long" }
         return new Date(dateString).toLocaleDateString(undefined, options)
     }
+
+    // local state to handle opening of drawer
+    let [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    // global state from redux
+    const store = useSelector((store) => store);
+    const chat = store.chat;
+    const user = store.user;
 
     function viewContract() {
         console.log('in viewContract');
@@ -19,6 +30,7 @@ export default function PendingContracts( {item} ) {
     function openChat() {
         // console.log('in openChat');
         dispatch({type: 'FETCH_CHAT', payload: item.id});
+        setIsDrawerOpen(true);
     }
 
     function advertiserApprove() {
@@ -37,6 +49,34 @@ export default function PendingContracts( {item} ) {
             <td className="uTd"><Button onClick={viewContract}>View</Button></td>
             <td className="uTd"><Button onClick={openChat}>Chat</Button></td>
             <td className="uTd"><Button onClick={advertiserApprove}>Approve</Button></td>
+            <Drawer
+                variant="temporary"
+                anchor="right"
+                open={isDrawerOpen}
+            >
+                <Box
+                    sx={{ width: 300, padding: 5 }}
+                >
+                    <center>
+                        <h1>Chat</h1>
+                    </center>
+
+                    <Grid container>
+                        {chat.map((item, i) => (
+                            <Grid item xs={12}>
+                                {user.id === item.userId ?
+                                    <ListItemText align="right" primary={item.message}></ListItemText> :
+                                    <ListItemText align="left" secondary={item.message}></ListItemText> 
+                                }
+                            </Grid>
+                        ))}
+                    </Grid>
+
+                    <center>
+                        <Button className="btn" onClick={() => setIsDrawerOpen(false)}>Close</Button>
+                    </center>
+                </Box>
+            </Drawer>
         </>
     );
 }
