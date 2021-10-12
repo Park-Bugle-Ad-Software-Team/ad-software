@@ -329,41 +329,37 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.delete('/:id', rejectUnauthenticated, (req, res) => {
-  const sqlQuery = `DELETE FROM "Contracts"
-                    WHERE "id" = $1`;
-  const sqlParams = [req.params.id]
-  pool
-    .query(sqlQuery, sqlParams)
-    .then(dbRes => {
-      const imagesQuery = `DELETE FROM "Images"
-                           WHERE "contractId" = $1`;
-      const imagesParams = [req.params.id];;
-      pool
-        .query(imagesQuery, imagesParams)
-        .then(dbResponse => {
-          const contractsUsersQuery = `DELETE FROM "Contracts_Users"
-                                       WHERE "contractId" = $1`;
-          const contractsUsersParams = [req.params.id]
-          pool
-            .query(contractsUsersQuery, contractsUsersParams)
-            .then(innerResponse => {
-              res.sendStatus(200);
-            })
-            .catch(error => {
-              console.log('Failed to delete from Contracts_Users: ', error)
-              res.sendStatus(500);
-            })
-        })
-        .catch(error => {
-          console.log('Failed to delete from images: ', error)
-          res.sendStatus(500);
-        })
-    })
-    .catch(error => {
-      console.log('Failed to delete contract.')
+router.delete('/:id', rejectUnauthenticated, async (req, res) => {
+  const client = await pool.connect();
+  try {
+      await client.query('BEGIN');
+      // delete the info from the Images table
+      const imagesDeleteResults = await client.query(`
+              DELETE FROM "Images"
+              WHERE "contractId" = $1
+          `, [req.params.id]
+      );
+      // then delete info from the Contracts_Users table
+      const contractsUsersDeleteResults = await client.query(`
+              DELETE FROM "Contracts_Users"
+              WHERE "contractId" = $1
+          `, [req.params.id]
+      );
+      // then delete info from the Contracts table
+      const contractsDeleteResults = await client.query(`
+              DELETE FROM "Contracts"
+              WHERE "id" = $1
+          `, [req.params.id]
+      );
+      await client.query('COMMIT');
+      res.sendStatus(200);
+  } catch (error) {
+      await client.query('ROLLBACK');
+      console.log('Error DELETE /api/contracts', error);
       res.sendStatus(500);
-    })
-})
+  } finally {
+      client.release();
+  }
+});
 
 module.exports = router;
