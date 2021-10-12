@@ -4,6 +4,7 @@ const {
 } = require('../modules/authentication-middleware');
 const pool = require('../modules/pool');
 const router = express.Router();
+const strFromObj = require('../modules/strFromObj')
 
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an employee or admin
@@ -279,8 +280,11 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
  * POST route template
  */
  router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
+  const imageUrl  = req.body.imageUrl;
+  delete req.body.userId;
+  delete req.body.imageUrl
 
-  // will need to be updated with AWS image link
+ 
 
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
@@ -292,20 +296,31 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
   pool
     .query(queryText, sqlParams)
     .then((dbRes) => {
-      res.sendStatus(201)
+      // res.sendStatus(201)
       // also need to insert:
-        const innerQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")
+        const contractsUsersQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")
                           VALUES ($1, $2)`;
         // users_contracts - which use
-        const innerQueryParams = [dbRes.rows[0].id, req.params.advertiserId]
-        // will we receive any other info...?
+        const contractsUsersParams = [dbRes.rows[0].id, req.params.advertiserId]
         pool
-          .query(innerQuery, innerQueryParams)
+          .query(contractsUsersQuery, contractsUsersParams)
           .then(innerDbResponse => {
-            res.sendStatus(200);
+            const imagesQuery = `INSERT INTO "Images" ("contractId", "imageUrl")
+                                 VALUES ($1, $2)`;
+            const imagesParams = [dbRes.rows[0].id, 'imageUrl'];
+            pool
+              .query(imagesQuery, imagesParams)
+              .then(() => {
+                res.sendStatus(200)
+              })
+              .catch(error => {
+                console.log('Failed to POST to "Images" while posting a new contract: ', error)
+                res.sendStatus(500);
+              })
           })
           .catch(error => {
             console.log('Failed to POST to contracts_user while posting new contract: ', error);
+            res.sendStatus(500);
           })
     })
     .catch((err) => {
@@ -313,5 +328,42 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
+  const sqlQuery = `DELETE FROM "Contracts"
+                    WHERE "id" = $1`;
+  const sqlParams = [req.params.id]
+  pool
+    .query(sqlQuery, sqlParams)
+    .then(dbRes => {
+      const imagesQuery = `DELETE FROM "Images"
+                           WHERE "contractId" = $1`;
+      const imagesParams = [req.params.id];;
+      pool
+        .query(imagesQuery, imagesParams)
+        .then(dbResponse => {
+          const contractsUsersQuery = `DELETE FROM "Contracts_Users"
+                                       WHERE "contractId" = $1`;
+          const contractsUsersParams = [req.params.id]
+          pool
+            .query(contractsUsersQuery, contractsUsersParams)
+            .then(innerResponse => {
+              res.sendStatus(200);
+            })
+            .catch(error => {
+              console.log('Failed to delete from Contracts_Users: ', error)
+              res.sendStatus(500);
+            })
+        })
+        .catch(error => {
+          console.log('Failed to delete from images: ', error)
+          res.sendStatus(500);
+        })
+    })
+    .catch(error => {
+      console.log('Failed to delete contract.')
+      res.sendStatus(500);
+    })
+})
 
 module.exports = router;

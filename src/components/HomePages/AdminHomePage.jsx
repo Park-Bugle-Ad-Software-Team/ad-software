@@ -2,7 +2,11 @@ import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid,
     Container, TableBody, TableHead, TableCell, TableContainer, TableRow
 } from '@mui/material';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+
 
 import PendingContracts from '../Contracts/PendingContractsEmployeeView';
 import ActiveContracts from '../Contracts/ActiveContracts';
@@ -33,6 +37,16 @@ export default function AdminHomePage() {
     const store = useSelector(store => store);
     const activeContracts = store.activeContracts;
     const pendingContracts = store.pendingContracts;
+    const history = useHistory();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({type: 'FETCH_ADVERTISERS'});
+    }, [])
+
+    const goToAdCard = (contractId) => {
+        history.push(`/contracts/edit/${contractId}`);
+    }
 
     return (
         <>
@@ -55,7 +69,7 @@ export default function AdminHomePage() {
                     <Button 
                         variant="contained"
                         color="primary"
-                        // onClick
+                        onClick={() => goToAdCard()}
                     >
                         Create New Ad Contract
                     </Button>

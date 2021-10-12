@@ -10,6 +10,15 @@ export default function* contractsSaga() {
     yield takeLatest('UPDATE_CONTRACT', updateContract);
     yield takeLatest('FETCH_RATES', fetchRates);
     yield takeLatest('FETCH_AD_SIZES', fetchAdSizes);
+    yield takeLatest('CREATE_NEW_CONTRACT', createNewContract);
+}
+
+function* createNewContract(action) {
+    try {
+        yield axios.post(`/api/contracts/${action.payload.userId}`, action.payload);
+    } catch (error) {
+        console.log('Failed to create new contract', error);
+    }
 }
 
 function* fetchAdSizes() {

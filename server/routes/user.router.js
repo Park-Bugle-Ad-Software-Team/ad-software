@@ -43,9 +43,13 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
 
 //route to get all companies, but eliminating repeat instances of companies
 router.get('/advertisers', rejectUnauthenticated, (req, res) => {
-  const sqlQuery = `SELECT DISTINCT "companyName"
+  const sqlQuery = `SELECT 
+                      "id",
+                      "companyName"
                     FROM "Users"
-                    WHERE "companyName" IS NOT NULL AND "isActive" = TRUE`;
+                    WHERE "companyName" IS NOT NULL AND "isActive" = TRUE
+                    ORDER BY "companyName" ASC
+                    `;
   pool
     .query(sqlQuery)
     .then(dbRes => {
@@ -193,8 +197,9 @@ router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
   }
 });
 
-router.delete('/:id', (req, res) => {
-  const sqlQuery = `DELETE FROM "Users"
+router.put('delete/:id', (req, res) => {
+  const sqlQuery = `UPDATE "Users"
+                    SET "isActive" = FALSE
                     WHERE "id" = $1`;
   const sqlParams = [req.params.id];
   pool
