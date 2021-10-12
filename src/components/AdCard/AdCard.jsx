@@ -7,7 +7,7 @@ import AdSize from "./AdSize";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ImageUploader from '../ImageUploader/ImageUploader';
 
 export default function AdCard() {
@@ -111,6 +111,13 @@ export default function AdCard() {
     let mm = String(startDate.getMonth() + 1).padStart(2, '0');
     console.log('test', (yyyy + '-' + mm));
 
+    const [newImage, setNewImage] = useState({})
+
+    const uploadComplete = (fileUrl) => {
+        console.log('fileUrl upload complete', fileUrl);
+          setNewImage({src: fileUrl})
+      }
+
     return(
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -187,7 +194,9 @@ export default function AdCard() {
                                 <Typography variant="p">
                                     Image Upload
                                 </Typography>
-                                <ImageUploader />
+                                <ImageUploader 
+                                    uploadComplete={uploadComplete}
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControl>

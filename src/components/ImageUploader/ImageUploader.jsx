@@ -36,7 +36,7 @@ const Uploader = ({uploadComplete}) => {
     const uploadOptions = {
     server: 'http://localhost:5000'
     }
-    const s3Url = 'https://pbadsoftware.s3.amazonaws.com'
+    const s3Url = 'https://snippetsbucket.s3.amazonaws.com';
     
     
     

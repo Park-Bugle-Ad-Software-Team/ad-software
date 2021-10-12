@@ -140,7 +140,7 @@ export default function AdSize() {
     return (
         <>
             <h1>Select Size</h1>
-            {(rates !== 'undefined' && adSizes !== 'undefined') &&
+
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={{ xs: 1, md: 0 }} columns={{ xs: 3, sm: 6, md: 16}}>
                     {adSizes.map((size, index) => (
@@ -156,7 +156,9 @@ export default function AdSize() {
                                             <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
                                                 {size.desc}
                                             </Typography>
-                                            {checkSize(size)}
+                                            {rates.length !== 0 &&
+                                                checkSize(size)
+                                            }
                                         </div>     
                                     </CardContent>
                                 </CardActionArea>
@@ -165,7 +167,7 @@ export default function AdSize() {
                     ))}
                 </Grid>
             </Box>
-            }
+            
         </>
     )
 }

@@ -29,7 +29,7 @@ app.use('/api/user', userRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/contracts', contractsRouter);
 app.use('/s3', s3Uploader({
-  bucket: "pbadsoftware", // required
+  bucket: "snippetsbucket", // required
   region: 'us-east-2',      // optional
   headers: {'Access-Control-Allow-Origin': '*'}, // optional
   ACL: 'private',   
