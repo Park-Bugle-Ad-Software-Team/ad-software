@@ -57,41 +57,41 @@ export default function AdminHomePage() {
                         Create New Ad Contract
                     </Button>
                 </Grid>
-            <Grid item xs={12}>
-                <FormControl>
-                    <InputLabel id="advertiser-select-label">Advertiser</InputLabel>
-                    <Select
-                        labelId="advertiser-select-label"
-                        id="advertiser-select"
-                        label="Advertiser"
-                        value={filteredContract.advertiser}
-                        onChange={(event) => setFilteredContract({...filteredContract, advertiser: event.target.value})}
+                <Grid item xs={12}>
+                    <FormControl>
+                        <InputLabel id="advertiser-select-label">Advertiser</InputLabel>
+                        <Select
+                            labelId="advertiser-select-label"
+                            id="advertiser-select"
+                            label="Advertiser"
+                            value={filteredContract.advertiser}
+                            onChange={(event) => setFilteredContract({...filteredContract, advertiser: event.target.value})}
+                        >
+                            {advertisers.map((advertiser, i) => (
+                                <MenuItem key={i} value={advertiser.companyName}>
+                                    {advertiser.companyName}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel id="month-select-label">Month</InputLabel>
+                        <Input
+                            id="month-select"
+                            label="Month"
+                            value={filteredContract.month}
+                            type="month"
+                            onChange={(event) => setFilteredContract({...filteredContract, month: event.target.value})}
+                        />
+                    </FormControl>
+                    <Button 
+                        variant="contained" 
+                        color="primary"
+                        onClick={fetchFilteredContracts}
                     >
-                        {advertisers.map((advertiser, i) => (
-                            <MenuItem key={i} value={advertiser.companyName}>
-                                {advertiser.companyName}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <FormControl>
-                    <InputLabel id="month-select-label">Month</InputLabel>
-                    <Input
-                        id="month-select"
-                        label="Month"
-                        value={filteredContract.month}
-                        type="month"
-                        onChange={(event) => setFilteredContract({...filteredContract, month: event.target.value})}
-                    />
-                </FormControl>
-                <Button 
-                    variant="contained" 
-                    color="primary"
-                    onClick={fetchFilteredContracts}
-                >
-                    Search
-                </Button>
-            </Grid>
+                        Search
+                    </Button>
+                </Grid>
 
             {/* Pending Contracts component */}
             <Grid item xs={12}>
@@ -180,6 +180,7 @@ export default function AdminHomePage() {
                 </table> 
             </Grid>
         </Grid>
+        </>
     )
 }
 
