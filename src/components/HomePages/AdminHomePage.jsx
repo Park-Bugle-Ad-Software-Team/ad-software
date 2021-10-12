@@ -1,165 +1,177 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid,
-    Container, TableBody, TableHead, TableCell, TableContainer, TableRow
-} from '@mui/material';
-
-import { useSelector } from 'react-redux';
-
-import PendingContracts from '../Contracts/PendingContractsEmployeeView';
-import ActiveContracts from '../Contracts/ActiveContracts';
+import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid, Input } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import Contracts from '../Contracts/Contracts';
 
 export default function AdminHomePage() {
-    // test data 
-    let admin = {
-        firstName: 'Josh',
-        lastName: 'Becerra'
-    };
+    const dispatch = useDispatch();
 
-    let advertisers = [
-        {
-            name: 'Chroma Zone'
-        },
-        {
-            name: 'Ace Hardware'
-        },
-        {
-            name: 'Park Bugle'
-        }
-    ];
+    useEffect(() => {
+        dispatch({type: 'FETCH_ADVERTISERS'});
+    }, []);
 
-    let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    // local state
+    let [filteredContract, setFilteredContract] = useState({ advertiser: '', month: '' });
 
-    let years = [2020, 2021, 2022, 2023];
-
-    const store = useSelector(store => store);
-    const activeContracts = store.activeContracts;
+    // global state from redux store
+    const store = useSelector((store) => store);
+    const user = store.user;
+    const advertisers = store.advertisers;
     const pendingContracts = store.pendingContracts;
+    const activeContracts = store.activeContracts;
+    const closedContracts = store.closedContracts;
+
+    function fetchFilteredContracts() {
+        dispatch({type: 'FETCH_FILTERED_CONTRACTS'});
+    }
 
     return (
-        <>
-            <Grid container>
-                <Grid item xs={12}>
-                    <Typography variant="h2">Admin Home Page</Typography>  
-                </Grid>
-                <Grid item xs={8}>
-                    
-                    <Typography variant="h4">User: {admin.firstName} {admin.lastName}</Typography>
-                </Grid>
-                <Grid item xs={4}>
-                    <Button 
-                        variant="contained" 
-                        color="primary"
-                        // onClick
-                    >
-                        Export
-                    </Button>
-                    <Button 
-                        variant="contained"
-                        color="primary"
-                        // onClick
-                    >
-                        Create New Ad Contract
-                    </Button>
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl sx={{ m: 1, minWidth: 200}}>
-                        <InputLabel id="advertiser-select-label">Advertiser</InputLabel>
-                        <Select
-                            labelId="advertiser-select-label"
-                            id="advertiser-select"
-                            label="Advertiser"
-                            defaultValue=''
-                            // onChange
-                        >
-                            {advertisers.map((advertiser, i) => (
-                                <MenuItem key={i} value={advertiser.name}>{advertiser.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl sx={{ m: 1, minWidth: 200}}>
-                        <InputLabel id="month-select-label">Month</InputLabel>
-                        <Select
-                            labelId="month-select-label"
-                            id="month-select"
-                            label="Month"
-                            defaultValue=''
-                            // onChange
-                        >
-                            {months.map((month, i) => (
-                                <MenuItem key={i} value={month}>{month}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl sx={{ m: 1, minWidth: 200}}>
-                        <InputLabel id="year-select-label">Year</InputLabel>
-                        <Select
-                            labelId="year-select-label"
-                            id="year-select"
-                            label="Year"
-                            defaultValue=''
-                            // onChange
-                        >
-                            {years.map((year, i) => (
-                                <MenuItem key={i} value={year}>{year}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Container>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Typography variant="h4">Pending Contracts</Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <table className="uTable">
-                            <thead>
-                                <tr className="uTr">
-                                    <th className="uTh">Start Month</th>
-                                    <th className="uTh">Contract Length</th>
-                                    <th className="uTh">Type</th>
-                                    <th className="uTh">Size</th>
-                                    <th className="uTh">Page</th>
-                                    <th className="uTh">Color</th>
-                                    <th className="uTh">Total Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {pendingContracts.map((item) => (
-                                    <tr className="uTr" key={item.id}>
-                                        <PendingContracts item={item} />
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table> 
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography variant="h4">Active Contracts</Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <table className="uTable">
-                            <thead>
-                                <tr className="uTr">
-                                    <th className="uTh">Start Month</th>
-                                    <th className="uTh">Contract Length</th>
-                                    <th className="uTh">Type</th>
-                                    <th className="uTh">Size</th>
-                                    <th className="uTh">Page</th>
-                                    <th className="uTh">Color</th>
-                                    <th className="uTh">Total Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {activeContracts.map((item) => (
-                                    <tr className="uTr" key={item.id}>
-                                        <ActiveContracts item={item} />
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </Grid>
-                </Grid>
-            </Container>
+        <Grid container>
+            <Grid item xs={12}>
+                <Typography variant="h1">Admin Home Page</Typography>  
             </Grid>
-        </>
+            <Grid item xs={8}>
+                User: {user.name}
+            </Grid>
+            <Grid item xs={4}>
+                <Button 
+                    variant="contained" 
+                    color="primary"
+                    onClick={() => console.log('in Export button')}
+                >
+                    Export
+                </Button>
+                <Button 
+                    variant="contained"
+                    color="primary"
+                    onClick={() => console.log('in Create New Ad Contract button')}
+                >
+                    Create New Ad Contract
+                </Button>
+            </Grid>
+            <Grid item xs={12}>
+                <FormControl>
+                    <InputLabel id="advertiser-select-label">Advertiser</InputLabel>
+                    <Select
+                        labelId="advertiser-select-label"
+                        id="advertiser-select"
+                        label="Advertiser"
+                        value={filteredContract.advertiser}
+                        onChange={(event) => setFilteredContract({...filteredContract, advertiser: event.target.value})}
+                    >
+                        {advertisers.map((advertiser, i) => (
+                            <MenuItem key={i} value={advertiser.companyName}>
+                                {advertiser.companyName}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <FormControl>
+                    <InputLabel id="month-select-label">Month</InputLabel>
+                    <Input
+                        id="month-select"
+                        label="Month"
+                        value={filteredContract.month}
+                        type="month"
+                        onChange={(event) => setFilteredContract({...filteredContract, month: event.target.value})}
+                    />
+                </FormControl>
+                <Button 
+                    variant="contained" 
+                    color="primary"
+                    onClick={fetchFilteredContracts}
+                >
+                    Search
+                </Button>
+            </Grid>
+
+            {/* Pending Contracts component */}
+            <Grid item xs={12}>
+                <center>
+                    <Typography variant="h3">Pending Contracts</Typography>  
+                </center>
+            </Grid>
+            <Grid item xs={12}>
+                <table className="uTable">
+                    <thead>
+                        <tr className="uTr">
+                            <th className="uTh">Start Month</th>
+                            <th className="uTh">Contract Length</th>
+                            <th className="uTh">Type</th>
+                            <th className="uTh">Size</th>
+                            <th className="uTh">Page</th>
+                            <th className="uTh">Color</th>
+                            <th className="uTh">Total Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {pendingContracts.map((item, i) => (
+                            <tr className="uTr" key={i}>
+                                <Contracts item={item} />
+                            </tr>
+                        ))}
+                    </tbody>
+                </table> 
+            </Grid>
+
+            {/* Active Contracts component */} 
+            <Grid item xs={12}>
+                <center>
+                    <Typography variant="h3">Active Contracts</Typography>  
+                </center>
+            </Grid>
+            <Grid item xs={12}>
+                <table className="uTable">
+                    <thead>
+                        <tr className="uTr">
+                            <th className="uTh">Start Month</th>
+                            <th className="uTh">Contract Length</th>
+                            <th className="uTh">Type</th>
+                            <th className="uTh">Size</th>
+                            <th className="uTh">Page</th>
+                            <th className="uTh">Color</th>
+                            <th className="uTh">Total Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {activeContracts.map((item, i) => (
+                            <tr className="uTr" key={i}>
+                                <Contracts item={item} />
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </Grid>
+
+            {/* Closed Contracts component */}
+            <Grid item xs={12}>
+                <center>
+                    <Typography variant="h3">Closed Contracts</Typography>  
+                </center>
+            </Grid>
+            <Grid item xs={12}>
+                <table className="uTable">
+                    <thead>
+                        <tr className="uTr">
+                            <th className="uTh">Start Month</th>
+                            <th className="uTh">Contract Length</th>
+                            <th className="uTh">Type</th>
+                            <th className="uTh">Size</th>
+                            <th className="uTh">Page</th>
+                            <th className="uTh">Color</th>
+                            <th className="uTh">Total Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {closedContracts.map((item, i) => (
+                            <tr className="uTr" key={i}>
+                                <Contracts item={item} />
+                            </tr>
+                        ))}
+                    </tbody>
+                </table> 
+            </Grid>
+        </Grid>
     )
 }
 

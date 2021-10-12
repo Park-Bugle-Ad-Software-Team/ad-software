@@ -1,8 +1,12 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid, Drawer, Box, ListItemText, TextField } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function ActiveContracts( {item} ) {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     // to format the DATE startMonth
     const formatDate = (dateString) => {
@@ -10,13 +14,42 @@ export default function ActiveContracts( {item} ) {
         return new Date(dateString).toLocaleDateString(undefined, options)
     }
 
-    function consoleLogItem() {
-        console.log('in consoleLogItem');
+    // local state
+    let [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    let [messageToSend, setMessageToSend] = useState('');
+
+    // global state from redux
+    const store = useSelector((store) => store);
+    const chat = store.chat;
+    const user = store.user;
+
+    // properties to pass for contract viewing and sending messages via chat
+    const contractId = item.id;
+    const userId = user.id;
+
+    const viewContract = (contractId) => {
+        console.log('in viewContract');
+        history.push(`/contracts/edit/${contractId}`);
     }
 
     function openChat() {
-        // console.log('in openChat');
-        dispatch({type: 'FETCH_CHAT', payload: item.id});
+        dispatch({type: 'FETCH_CHAT', payload: contractId});
+        setIsDrawerOpen(true);
+    }
+
+    function sendMessage(event) {
+        event.preventDefault();
+
+        axios.post('/api/chat', {
+            messageToSend, userId, contractId
+        })
+        .then(() => {
+            // reload chat after message sends to appear real-time
+            dispatch({ type: 'FETCH_CHAT', payload: contractId })
+        });
+
+        // clear the chat input field after message sends
+        setMessageToSend('');
     }
 
     return (
@@ -28,7 +61,7 @@ export default function ActiveContracts( {item} ) {
             <td className="uTd">{item.page}</td>
             <td className="uTd">{item.Color.colorType}</td>
             <td className="uTd">${item.actualBill}</td>
-            <td className="uTd"><Button onClick={consoleLogItem}>View</Button></td>
+            <td className="uTd"><Button onClick={viewContract}>View</Button></td>
             <td className="uTd"><Button onClick={openChat}>Chat</Button></td>
         </>
     );

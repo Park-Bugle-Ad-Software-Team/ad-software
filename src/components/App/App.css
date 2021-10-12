@@ -125,3 +125,11 @@ input {
   text-align: center;
   padding: 15px;
 }
+
+.myChat {
+  color: maroon;
+}
+
+.chatBar {
+  width: 300px;
+}

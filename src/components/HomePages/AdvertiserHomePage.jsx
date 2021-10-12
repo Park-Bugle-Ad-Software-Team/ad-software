@@ -1,20 +1,16 @@
 import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect } from 'react';
-import PendingContractsAdvertiserView from '../Contracts/PendingContractsAdvertiserView';
-import ActiveContracts from '../Contracts/ActiveContracts';
-import ClosedContracts from '../Contracts/ClosedContracts';
+import { useSelector } from 'react-redux';
+import React from 'react';
+import Contracts from '../Contracts/Contracts';
 
 export default function AdvertiserHomePage() {
-    const dispatch = useDispatch();
 
-    // global state from redux store
+    // global state from redux
     const store = useSelector((store) => store);
     const user = store.user;
     const pendingContracts = store.pendingContracts;
     const activeContracts = store.activeContracts;
     const closedContracts = store.closedContracts;
-    const chat = store.chat;
 
     return (
         <>
@@ -54,7 +50,7 @@ export default function AdvertiserHomePage() {
                         <tbody>
                             {pendingContracts.map((item, i) => (
                                 <tr className="uTr" key={i}>
-                                    <PendingContractsAdvertiserView item={item} />
+                                    <Contracts item={item} />
                                 </tr>
                             ))}
                         </tbody>
@@ -83,7 +79,7 @@ export default function AdvertiserHomePage() {
                         <tbody>
                             {activeContracts.map((item, i) => (
                                 <tr className="uTr" key={i}>
-                                    <ActiveContracts item={item} />
+                                    <Contracts item={item} />
                                 </tr>
                             ))}
                         </tbody>
@@ -112,7 +108,7 @@ export default function AdvertiserHomePage() {
                         <tbody>
                             {closedContracts.map((item, i) => (
                                 <tr className="uTr" key={i}>
-                                    <ClosedContracts item={item} />
+                                    <Contracts item={item} />
                                 </tr>
                             ))}
                         </tbody>
