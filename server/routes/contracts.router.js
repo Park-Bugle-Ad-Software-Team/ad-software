@@ -279,6 +279,9 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
  * POST route template
  */
  router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
+
+  // will need to be updated with AWS image link
+
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
 
@@ -289,7 +292,6 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
   pool
     .query(queryText, sqlParams)
     .then((dbRes) => {
-      console.log('dbRes is: ', dbRes.rows[0].id);
       res.sendStatus(201)
       // also need to insert:
         const innerQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")

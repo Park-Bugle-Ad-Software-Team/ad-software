@@ -111,7 +111,7 @@ export default function AdSize() {
                     </Typography> 
                 </>
             )
-        } else {
+        } else if ((size.columns * size.inches) < 8 && (size.columns * size.inches) >= 1) {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
@@ -125,14 +125,22 @@ export default function AdSize() {
                     </Typography> 
                 </>
             )
-        } 
+        } else {
+            return (
+                <>
+                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                        12 month rate = $275/month
+                    </Typography> 
+                </>
+            )
+        }
     }
     
 
     return (
         <>
             <h1>Select Size</h1>
-            {(rates !== null && adSizes !== null) &&
+            {(rates !== 'undefined' && adSizes !== 'undefined') &&
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={{ xs: 1, md: 0 }} columns={{ xs: 3, sm: 6, md: 16}}>
                     {adSizes.map((size, index) => (

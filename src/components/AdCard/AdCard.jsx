@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import ImageUploader from '../ImageUploader/ImageUploader';
 
 export default function AdCard() {
     // testing data
@@ -186,7 +187,7 @@ export default function AdCard() {
                                 <Typography variant="p">
                                     Image Upload
                                 </Typography>
-                                {/* drag and drop zone for uploading images */}
+                                <ImageUploader />
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControl>
