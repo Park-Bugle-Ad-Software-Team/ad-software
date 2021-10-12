@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { useState } from 'react';
 import axios from 'axios';
 
-export default function PendingContracts( {item} ) {
+export default function Contracts( {item} ) {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -27,7 +27,7 @@ export default function PendingContracts( {item} ) {
     const contractId = item.id;
     const userId = user.id;
 
-    function viewContract() {
+    const viewContract = (contractId) => {
         history.push(`/contracts/edit/${contractId}`);
     }
 
@@ -51,11 +51,6 @@ export default function PendingContracts( {item} ) {
         setMessageToSend('');
     }
 
-    // stretch goal (will likely put this button inside the adCard)
-    // function advertiserApprove() {
-    //     console.log('in advertiserApprove');
-    // }
-
     return (
         <>
             <td className="uTd">{formatDate(item.startMonth)}</td>
@@ -67,7 +62,6 @@ export default function PendingContracts( {item} ) {
             <td className="uTd">${item.actualBill}</td>
             <td className="uTd"><Button onClick={viewContract}>View</Button></td>
             <td className="uTd"><Button onClick={openChat}>Chat</Button></td>
-            {/* <td className="uTd"><Button onClick={advertiserApprove}>Approve</Button></td> */}
             <Drawer
                 variant="temporary"
                 anchor="right"
