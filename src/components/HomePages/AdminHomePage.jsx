@@ -1,10 +1,15 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid, Input } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect, useState } from 'react';
+import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid,
+    Container, TableBody, TableHead, TableCell, TableContainer, TableRow, Input
+} from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Contracts from '../Contracts/Contracts';
 
 export default function AdminHomePage() {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     useEffect(() => {
         dispatch({type: 'FETCH_ADVERTISERS'});
@@ -18,37 +23,40 @@ export default function AdminHomePage() {
     const user = store.user;
     const advertisers = store.advertisers;
     const pendingContracts = store.pendingContracts;
-    const activeContracts = store.activeContracts;
-    const closedContracts = store.closedContracts;
-
+  
     function fetchFilteredContracts() {
         dispatch({type: 'FETCH_FILTERED_CONTRACTS'});
     }
 
+    const goToAdCard = (contractId) => {
+        history.push(`/contracts/edit/${contractId}`);
+    }
+
     return (
-        <Grid container>
-            <Grid item xs={12}>
-                <Typography variant="h1">Admin Home Page</Typography>  
-            </Grid>
-            <Grid item xs={8}>
-                User: {user.name}
-            </Grid>
-            <Grid item xs={4}>
-                <Button 
-                    variant="contained" 
-                    color="primary"
-                    onClick={() => console.log('in Export button')}
-                >
-                    Export
-                </Button>
-                <Button 
-                    variant="contained"
-                    color="primary"
-                    onClick={() => console.log('in Create New Ad Contract button')}
-                >
-                    Create New Ad Contract
-                </Button>
-            </Grid>
+        <>
+            <Grid container>
+                <Grid item xs={12}>
+                    <Typography variant="h2">Admin Home Page</Typography>  
+                </Grid>
+                <Grid item xs={8}>
+                    <Typography variant="h4">User: {user.name}</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                    <Button 
+                        variant="contained" 
+                        color="primary"
+                        // onClick
+                    >
+                        Export
+                    </Button>
+                    <Button 
+                        variant="contained"
+                        color="primary"
+                        onClick={() => goToAdCard()}
+                    >
+                        Create New Ad Contract
+                    </Button>
+                </Grid>
             <Grid item xs={12}>
                 <FormControl>
                     <InputLabel id="advertiser-select-label">Advertiser</InputLabel>

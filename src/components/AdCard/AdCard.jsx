@@ -7,7 +7,8 @@ import AdSize from "./AdSize";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ImageUploader from '../ImageUploader/ImageUploader';
 
 export default function AdCard() {
     // testing data
@@ -21,6 +22,7 @@ export default function AdCard() {
     const store = useSelector(store => store);
     const contractToEdit = store.contractToEdit;
     const user = store.user;
+    const advertisers = store.advertisers;
     const adSize = contractToEdit.AdSize;
     const color = contractToEdit.Color;
 
@@ -34,6 +36,12 @@ export default function AdCard() {
             payload: contractId
         })
     }, [contractId])
+
+    useEffect(() => {
+        dispatch({
+            type: 'FETCH_RATES'
+        });
+    }, [])
 
     const handleChange = (event, property) => {
         console.log('property we are updating is', property);
@@ -50,11 +58,12 @@ export default function AdCard() {
             console.log('value is ', (event.target.value));
             // this only works sometimes. will need some help to figure it out properly
             let newDate = new Date(event.target.value);
+
             dispatch({
                 type: 'UPDATE_CONTRACT_TO_EDIT',
                 payload: {
                     ...contractToEdit,
-                    [property]: newDate.setMonth(newDate.getMonth() + 2)
+                    [property]: newDate
                 }
             });
         } else {
@@ -99,18 +108,45 @@ export default function AdCard() {
     }
 
     // this formats our month and year from contractToEdit.startMonth for use in the month picker component
+
+
     let startDate = new Date(contractToEdit.startMonth);
     let yyyy = startDate.getFullYear();
     let mm = String(startDate.getMonth() + 1).padStart(2, '0');
     console.log('test', (yyyy + '-' + mm));
 
+        
+    
+    
+
+    const [newImage, setNewImage] = useState({})
+
+    const uploadComplete = (fileUrl) => {
+        console.log('fileUrl upload complete', fileUrl);
+          setNewImage({src: fileUrl})
+      }
+
     return(
         <>
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                        <Typography variant="h4">{advertiser.name}</Typography>
-                    </Grid>
+                    {contractId !== 'undefined' ?
+                        <Grid item xs={4}>
+                            <Typography variant="h4">{advertiser.name}</Typography>
+                        </Grid> :
+                        <Grid item xs={4}>
+                            <Typography variant="h4">Select Advertiser</Typography>
+                            <Select
+                                value={''}
+                                onChange={(event) => handleChange(event, "userId")}
+                            >
+                                {/* map through advertisers */}
+                                {advertisers.map((advertiser,i) => (
+                                    <MenuItem key={i} value={advertiser.id}>{advertiser.companyName}</MenuItem>
+                                ))}
+                            </Select>
+                        </Grid>
+                    }
                     <Grid item xs={2}>
                     </Grid>
                     <Grid item xs={3}>
@@ -122,8 +158,8 @@ export default function AdCard() {
                         <FormControl>
                             <FormLabel>Contract Length</FormLabel>
                             <Select
-                                value={2}
-                                // onChange={cons}
+                                value={contractToEdit.months || ''}
+                                onChange={(event) => handleChange(event, "months")}
                             >
                                 <MenuItem value={1}>1 Month</MenuItem>
                                 <MenuItem value={2}>2 Months</MenuItem>
@@ -161,7 +197,7 @@ export default function AdCard() {
                                     variant="outlined"
                                     type="number"
                                     sx={{width: '70px'}}
-                                    value={contractToEdit.page}
+                                    value={contractToEdit.page || ''}
                                     onChange={(event) => handleChange(event, "page")}
                                 />
                             </FormControl>
@@ -180,7 +216,9 @@ export default function AdCard() {
                                 <Typography variant="p">
                                     Image Upload
                                 </Typography>
-                                {/* drag and drop zone for uploading images */}
+                                <ImageUploader 
+                                    uploadComplete={uploadComplete}
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControl>
@@ -215,7 +253,7 @@ export default function AdCard() {
                                             variant="outlined"
                                             type="number"
                                             sx={{width: '70px'}}
-                                            value={contractToEdit.commissionPercentage}
+                                            value={contractToEdit.commissionPercentage || ''} 
                                             onChange={(event) => handleChange(event, "commissionPercentage")}
                                         />
                                     </FormControl>

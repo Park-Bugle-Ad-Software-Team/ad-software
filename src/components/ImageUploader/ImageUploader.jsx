@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
-import ProgressBar from './ProgressBar';
+//import ProgressBar from './ProgressBar';
 
 const dropStyles = {
   width: "300px",
@@ -36,7 +36,7 @@ const Uploader = ({uploadComplete}) => {
     const uploadOptions = {
     server: 'http://localhost:5000'
     }
-    const s3Url = 'https://pbadsoftware.s3.amazonaws.com'
+    const s3Url = 'https://snippetsbucket.s3.amazonaws.com';
     
     
     
@@ -66,7 +66,7 @@ const Uploader = ({uploadComplete}) => {
   return (
     <div style={{ paddingTop: '2em'}}>
       
-    <ProgressBar progress={progress} progressTitle={progressTitle} />
+    {/* <ProgressBar progress={progress} progressTitle={progressTitle} /> */}
 
     <DropzoneS3Uploader
 

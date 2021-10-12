@@ -34,7 +34,6 @@ CREATE TABLE "AdSize" (
    "adType" VARCHAR(255) NOT NULL,
    "columns" INT NOT NULL,
    "inches" INT NOT NULL,
-   "months" INT NOT NULL,
    "image" VARCHAR(255) NOT NULL
 );
  
@@ -76,7 +75,8 @@ CREATE TABLE "Contracts" (
    "page" INT,
    "holidayGuide" DECIMAL, -- Stretch, probably just rate schema reference
    "isApproved" BOOLEAN,
-   "pricingSchemaId" INT REFERENCES "Rates"
+   "pricingSchemaId" INT REFERENCES "Rates",
+   "months" INT NOT NULL
 );
 
 CREATE TABLE "Images" (
