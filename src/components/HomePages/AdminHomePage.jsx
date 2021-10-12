@@ -23,6 +23,8 @@ export default function AdminHomePage() {
     const user = store.user;
     const advertisers = store.advertisers;
     const pendingContracts = store.pendingContracts;
+    const activeContracts = store.activeContracts;
+    const closedContracts = store.closedContracts;
   
     function fetchFilteredContracts() {
         dispatch({type: 'FETCH_FILTERED_CONTRACTS'});
@@ -33,7 +35,6 @@ export default function AdminHomePage() {
     }
 
     return (
-        <>
             <Grid container>
                 <Grid item xs={12}>
                     <Typography variant="h2">Admin Home Page</Typography>  

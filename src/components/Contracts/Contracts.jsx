@@ -54,13 +54,13 @@ export default function Contracts( {item} ) {
     return (
         <>
             <td className="uTd">{formatDate(item.startMonth)}</td>
-            <td className="uTd">{item.AdSize.months}</td>
+            <td className="uTd">{item.months}</td>
             <td className="uTd">{item.contractType}</td>
             <td className="uTd">{item.AdSize.adType}</td>
             <td className="uTd">{item.page}</td>
             <td className="uTd">{item.Color.colorType}</td>
             <td className="uTd">${item.actualBill}</td>
-            <td className="uTd"><Button onClick={viewContract}>View</Button></td>
+            <td className="uTd"><Button onClick={() => viewContract(item.id)}>View</Button></td>
             <td className="uTd"><Button onClick={openChat}>Chat</Button></td>
             <Drawer
                 variant="temporary"
