@@ -280,6 +280,7 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
  * POST route template
  */
  router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
+  console.log('req.body is: ', req.body);
   const imageUrl  = req.body.imageUrl;
   delete req.body.userId;
   delete req.body.imageUrl
@@ -307,7 +308,7 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
           .then(innerDbResponse => {
             const imagesQuery = `INSERT INTO "Images" ("contractId", "imageUrl")
                                  VALUES ($1, $2)`;
-            const imagesParams = [dbRes.rows[0].id, 'imageUrl'];
+            const imagesParams = [dbRes.rows[0].id, imageUrl];
             pool
               .query(imagesQuery, imagesParams)
               .then(() => {
