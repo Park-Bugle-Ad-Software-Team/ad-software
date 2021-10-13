@@ -188,7 +188,6 @@ export default function AdSize() {
                                     <Card className="adSizeCardSelected" sx={{ minWidth: 220, maxWidth: 300}}>
                                         <>
                                         {user.authLevel !== ("admin" || "ad rep") ?
-
                                             <CardContent>
                                                 <div style={{textAlign: 'center', border: 5}}>
                                                     <img src={displayImageSource[index]} style={{width: '100%'}}/>

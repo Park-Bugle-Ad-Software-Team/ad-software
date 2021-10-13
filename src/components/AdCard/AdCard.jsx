@@ -27,13 +27,15 @@ export default function AdCard() {
     const rates = store.rates;
     const adSize = contractToEdit.AdSize;
     const color = contractToEdit.Color;
-    
+    console.log('contractId', contractId);
 
     useEffect(() => {
         if (contractId === 'undefined') {
             return;
+        } else if (contractId === undefined) {
+            return;
         }
-        console.log(params.id);
+        console.log('contractId', contractId);
         dispatch({
             type: 'FETCH_CONTRACT_TO_EDIT',
             payload: contractId
@@ -166,6 +168,11 @@ export default function AdCard() {
         }
     }
 
+    const calculateBillWithColor = () => {
+        let total = calculateBill();
+
+    }
+
     const monthlyBill = () => {
         return calculateBill() / contractToEdit.months;
     }
@@ -179,16 +186,21 @@ export default function AdCard() {
 
     const uploadComplete = (fileUrl) => {
         console.log('fileUrl upload complete', fileUrl);
-          setNewImage({src: fileUrl})
-      }
+        setNewImage({src: fileUrl})
+        // dispatch({
+        //     type: 'CREATE_NEW_IMAGE',
+        //     payload: {
+        //         contractId: contractToEdit.id,
+        //         imageUrl: newImage
+        //     }
+        // })
+    }
 
     return(
         <>
-            {(Object.keys(contractToEdit).length !== 0 && Object.keys(rates).length !== 0) &&
                 <Container>
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={4}>
-                            
                             <Grid item xs={4}>
                                 {contractId !== 'undefined' ?
                                     <Grid item xs={12}>
@@ -306,12 +318,21 @@ export default function AdCard() {
                                 <Grid item xs={12}>
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
+                                            <FormControl>
+                                                <Typography variant="p">
+                                                    Image Upload
+                                                </Typography>
+                                                <div className="imageUploaderDiv">
+                                                    <ImageUploader 
+                                                        uploadComplete={uploadComplete}
+                                                    />
+                                                </div>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item xs={12}>
                                             <Typography variant="p">
-                                                Image Upload
+                                                Image Bank
                                             </Typography>
-                                            <ImageUploader 
-                                                uploadComplete={uploadComplete}
-                                            />
                                         </Grid>
                                         {user.authLevel === ("admin" || "ad rep") ?
                                             <Grid item xs={12}>
@@ -385,46 +406,46 @@ export default function AdCard() {
                                                 </FormControl>
                                             </Grid>
                                         }
-                                        <Grid item xs={12}>
-                                            <Typography className="costHeader">Total Calculated Cost</Typography>
-                                            <Typography>${calculateBill().toFixed(2)}</Typography>
-                                            <Typography className="costHeader">Monthly Calculated Cost</Typography>
-                                            <Typography>${monthlyBill().toFixed(2)}</Typography>
-                                            <FormControl>
-                                                
-                                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                                    <>
-                                                        <FormLabel>
-                                                            Final Bill
-                                                        </FormLabel>
-                                                        <Input
-                                                            type="number"
-                                                            variant="outlined"
-                                                            value={contractToEdit.actualBill}
-                                                            onChange={(event) => handleChange(event, "actualBill")}
-                                                        >
-                                                        </Input> 
-                                                    </>:
-                                                    <>
-                                                        <FormLabel sx={{fontWeight: 1000}}>
-                                                            Final Bill
-                                                        </FormLabel>
-                                                        <Input
-                                                            type="number"
-                                                            disabled
-                                                            value={contractToEdit.actualBill}
-                                                            onChange={(event) => handleChange(event, "actualBill")}
-                                                        >
-                                                        </Input>
-                                                    </>
-                                                }   
-                                            </FormControl>
-                                        </Grid>
+                                        {/* {(rates && Object.keys[contractToEdit].length !== 0 && Object.keys[rates].length !== 0) &&
+                                            <Grid item xs={12}>
+                                                <Typography className="costHeader">Total Calculated Cost</Typography>
+                                                <Typography>${calculateBill().toFixed(2)}</Typography>
+                                                <Typography className="costHeader">Monthly Calculated Cost</Typography>
+                                                <Typography>${monthlyBill().toFixed(2)}</Typography>
+                                                <FormControl>
+                                                    
+                                                    {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                                        <>
+                                                            <FormLabel>
+                                                                Final Bill
+                                                            </FormLabel>
+                                                            <Input
+                                                                type="number"
+                                                                variant="outlined"
+                                                                value={contractToEdit.actualBill}
+                                                                onChange={(event) => handleChange(event, "actualBill")}
+                                                            >
+                                                            </Input> 
+                                                        </>:
+                                                        <>
+                                                            <FormLabel sx={{fontWeight: 1000}}>
+                                                                Final Bill
+                                                            </FormLabel>
+                                                            <Input
+                                                                type="number"
+                                                                disabled
+                                                                value={contractToEdit.actualBill}
+                                                                onChange={(event) => handleChange(event, "actualBill")}
+                                                            >
+                                                            </Input>
+                                                        </>
+                                                    }   
+                                                </FormControl>
+                                            </Grid>
+                                        } */}
                                     </Grid>
                                 </Grid>
                             </Grid>
-
-                            
                             {/* sectioning out a new container for the ad size selection since it will be quite large*/}
                             <Grid item xs={8}>
                                 <AdSize />
@@ -438,7 +459,7 @@ export default function AdCard() {
                         </Grid>
                     </Box>
                 </Container>
-            }
+        
         </> 
     );
 }
