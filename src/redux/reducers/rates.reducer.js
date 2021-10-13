@@ -1,6 +1,6 @@
 const ratesReducer = (state = [], action) => {
     switch (action.type) {
-        case 'SET_RATES_TO_EDIT':
+        case 'SET_RATES':
             return action.payload;
         default:
             return state;
