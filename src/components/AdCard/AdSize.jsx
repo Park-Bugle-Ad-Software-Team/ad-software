@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import './AdSize.css';
 
 // importing images for display
 import fullSize from './images/full-size.jpg';
@@ -173,28 +174,52 @@ export default function AdSize() {
             <h1>Select Size</h1>
 
             <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={{ xs: 1, md: 0 }} columns={{ xs: 3, sm: 6, md: 16}}>
+                <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 3, sm: 6, md: 16}}>
                     {adSizes.map((size, index) => (
-                        <Grid item xs={2} sm={4} md={4} key={index}>
-                            <Card className="adSizeCard" sx={{ minWidth: 10, maxWidth: 300 }}>
-                                <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
-                                    <CardContent>
-                                        <div style={{textAlign: 'center'}}>
-                                            <img src={displayImageSource[index]} style={{width: '100%'}}/>
-                                            <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
-                                                {size.adType}
-                                            </Typography>
-                                            <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                {size.desc}
-                                            </Typography>
-                                            {rates.length !== 0 &&
-                                                checkSize(size)
-                                            }
-                                        </div>     
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Grid>
+                        <>
+                            {size.id === contractToEdit.adSizeId ?
+                                <Grid item xs={2} sm={4} md={4} key={index}>
+                                    <Card className="adSizeCardSelected" sx={{ minWidth: 10, maxWidth: 300}}>
+                                        <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
+                                            <CardContent>
+                                                <div style={{textAlign: 'center', border: 5}}>
+                                                    <img src={displayImageSource[index]} style={{width: '100%'}}/>
+                                                    <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
+                                                        {size.adType}
+                                                    </Typography>
+                                                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                        {size.desc}
+                                                    </Typography>
+                                                    {rates.length !== 0 &&
+                                                        checkSize(size)
+                                                    }
+                                                </div>     
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                </Grid> :
+                                <Grid item xs={2} sm={4} md={4} key={index}>
+                                    <Card className="adSizeCard" sx={{ minWidth: 10, maxWidth: 300 }}>
+                                        <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
+                                            <CardContent>
+                                                <div style={{textAlign: 'center'}}>
+                                                    <img src={displayImageSource[index]} style={{width: '100%'}}/>
+                                                    <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
+                                                        {size.adType}
+                                                    </Typography>
+                                                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                        {size.desc}
+                                                    </Typography>
+                                                    {rates.length !== 0 &&
+                                                        checkSize(size)
+                                                    }
+                                                </div>     
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                </Grid>
+                            } 
+                        </>
                     ))}
                 </Grid>
             </Box>
