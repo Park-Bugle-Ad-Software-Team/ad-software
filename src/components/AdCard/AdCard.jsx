@@ -89,6 +89,7 @@ export default function AdCard() {
 
     const submitContract = () => {
         console.log('saving contract changes');
+        contractToEdit.imageUrl = newImage
         if (contractToEdit.id === undefined) {
             // submit post new contract
             dispatch({
@@ -179,7 +180,7 @@ export default function AdCard() {
 
     const uploadComplete = (fileUrl) => {
         console.log('fileUrl upload complete', fileUrl);
-          setNewImage({src: fileUrl})
+          setNewImage(fileUrl)
       }
 
     return(
