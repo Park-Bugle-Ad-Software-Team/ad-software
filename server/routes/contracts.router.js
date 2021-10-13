@@ -281,10 +281,11 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
 /**
  * POST route template
  */
- router.post('/:advertiserId', requireAuthLevel(['adming', 'ad rep']), (req, res) => {
+ router.post('/:advertiserId', requireAuthLevel(['admin', 'ad rep']), (req, res) => {
+
   const imageUrl  = req.body.imageUrl;
   delete req.body.userId;
-  delete req.body.imageUrl
+  delete req.body.imageUrl;
 
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
