@@ -196,7 +196,7 @@ router.put('/edit/:id', requireAuthLevel('admin'), (req, res) => {
       });
 });
 
-router.put('delete/:id', (req, res) => {
+router.put('delete/:id', requireAuthLevel('admin'), (req, res) => {
   const sqlQuery = `UPDATE "Users"
                     SET "isActive" = FALSE
                     WHERE "id" = $1`;
