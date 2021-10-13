@@ -181,19 +181,21 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   // removing chat from this pull for testing
   const sqlText = `
     SELECT
-    "Contracts".*,
-    to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color"
-    --to_json("Chat".*) as "Chat"
+      "Contracts".*,
+      to_json("AdSize".*) as "AdSize",
+      to_json("Color".*) as "Color",
+      to_json("Images".*) as "Images"
+      --to_json("Chat".*) as "Chat"
 
     FROM "Contracts"
       JOIN "AdSize"
         ON "AdSize"."id" = "Contracts"."adSizeId"
       JOIN "Color"
         ON "Color"."id" = "Contracts"."colorId"
-      
-      WHERE "Contracts"."id" = $1;
-    `;
+      JOIN "Images"
+        ON "Images"."contractId" = "Contracts"."id"
+      WHERE "Contracts"."id" = 1;
+  `;
   pool
     .query(sqlText, [req.params.id])
     .then(dbRes => {
