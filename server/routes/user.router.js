@@ -19,8 +19,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
-router.get('/all', rejectUnauthenticated, (req, res) => {
-  if (req.user.authLevel === 'admin') {
+router.get('/all', requireAuthLevel('admin'), (req, res) => {
     const sqlQuery = `SELECT "id", "email","name","authLevel",
                         "contactPreference","acceptAchPayment","companyName",
                         "doNotDisturb","isActive", "advertiserUrl",
@@ -37,13 +36,10 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
       .catch(error => {
         console.log('Failed to retrieve all users: ', error)
       })
-  } else {
-    res.sendStatus(403)
-  }
 });
 
 //route to get all companies, but eliminating repeat instances of companies
-router.get('/advertisers', rejectUnauthenticated, (req, res) => {
+router.get('/advertisers', requireAuthLevel('admin'), (req, res) => {
   const sqlQuery = `SELECT 
                       "id",
                       "companyName"
@@ -62,8 +58,7 @@ router.get('/advertisers', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
-  if (req.user.authLevel === 'admin') {
+router.get('/edit/:id', requireAuthLevel('admin'), (req, res) => {
     const sqlQuery = `SELECT "id", "email","name","authLevel",
                         "contactPreference","acceptAchPayment","companyName",
                         "doNotDisturb","isActive", "advertiserUrl",
@@ -83,17 +78,12 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
         console.log(`Failed to retrieve user ${req.user.id}:`, error)
         res.sendStatus(500);
       });
-  } else {
-    res.sendStatus(403);
-  }
 })
 
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
-router.post('/register', rejectUnauthenticated, (req, res) => {
-  if (req.user.authLevel === 'admin') {
-
+router.post('/register', requireAuthLevel('admin'), (req, res) => {
     req.body.inviteCode = generateCode(30)
     properties = strFromObj(req.body, ', ', element => `"${element}"`)
     values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
@@ -112,9 +102,6 @@ router.post('/register', rejectUnauthenticated, (req, res) => {
         console.log('User registration failed: ', err);
         res.sendStatus(500);
       });
-  } else {
-    res.sendStatus(403);
-  }
 });
 
 // Handles login form authenticate/login POST
