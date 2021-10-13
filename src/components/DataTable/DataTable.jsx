@@ -12,8 +12,15 @@ export default function DataTable( { tableData }) {
 
     // to format the time of chat messages
     const formatDate = (dateString) => {
-        const options = { year: "numeric", month: "long", day: "numeric" }
-        return new Date(dateString).toLocaleDateString(undefined, options)
+        let date = new Date(dateString);
+        return (`
+            ${(date.getMonth()+1)}/${date.getDay()}/${date.getFullYear()}
+            ${date.getHours() <= 12 ? 
+                date.getHours() : 
+                (date.getHours()-12)
+            }:${date.getMinutes()}
+            ${date.getHours() <= 12 ? `AM` : `PM`}
+        `);
     }
 
     // local state
@@ -122,7 +129,7 @@ export default function DataTable( { tableData }) {
                 open={isDrawerOpen}
             >
                 <Box
-                    sx={{ width: 300, padding: 5 }}
+                    sx={{ width: 400, padding: 5 }}
                 >
                     <center>
                         <h1>Chat</h1>
@@ -131,10 +138,9 @@ export default function DataTable( { tableData }) {
                     <Grid container>
                         {chat.map((item, i) => (
                             <Grid key={i} item xs={12}>
-                                <p className="chatTimeStamp">{formatDate(item.timeStamp)}</p>
                                 {user.id === item.userId ?
                                 <>
-                                    <p className="myName">{item.Users.name}</p>
+                                    <p className="myChatTimeStamp">{formatDate(item.timeStamp)}</p>
                                     <div className="myChat">
                                         <p className="chatContext">{item.message}</p>
                                     </div>
@@ -142,6 +148,7 @@ export default function DataTable( { tableData }) {
                                 :
                                 <>
                                     <p className="theirName">{item.Users.name}</p>
+                                    <p className="theirChatTimeStamp">{formatDate(item.timeStamp)}</p>
                                     <div className="theirChat">
                                         <p className="chatContext">{item.message}</p>
                                     </div>
