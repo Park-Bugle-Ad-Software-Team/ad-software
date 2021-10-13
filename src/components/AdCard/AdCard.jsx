@@ -207,11 +207,18 @@ export default function AdCard() {
                                         </Select>
                                     </Grid>
                                 }
-                                <Grid item xs={12}>
-                                    <FormLabel>Start Month:</FormLabel>
-                                    <input disabled type="month" id="start" name="start"
-                                        min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
-                                </Grid>
+                                {user.authLevel === ("admin" || "ad rep") ?
+                                    <Grid item xs={12}>
+                                        <FormLabel>Start Month:</FormLabel>
+                                        <input type="month" id="start" name="start"
+                                            min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
+                                    </Grid> :
+                                    <Grid item xs={12}>
+                                        <FormLabel>Start Month:</FormLabel>
+                                        <input type="month" id="start" name="start"
+                                            min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
+                                    </Grid>
+                                }
                                 {user.authLevel === ("admin" || "ad rep") ?
                                     <Grid item xs={12}>
                                         <FormControl>
