@@ -187,169 +187,169 @@ export default function AdCard() {
             {(Object.keys(contractToEdit).length !== 0 && Object.keys(rates).length !== 0) &&
                 <Container>
                     <Box sx={{ flexGrow: 1 }}>
-                        <Grid container spacing={2}>
-                            {contractId !== 'undefined' ?
-                                <Grid item xs={4}>
-                                    <Typography variant="h4">{advertiser.name}</Typography>
-                                </Grid> :
-                                <Grid item xs={4}>
-                                    <Typography variant="h4">Select Advertiser</Typography>
-                                    <Select
-                                        value={''}
-                                        onChange={(event) => handleChange(event, "userId")}
-                                    >
-                                        {/* map through advertisers */}
-                                        {advertisers.map((advertiser,i) => (
-                                            <MenuItem key={i} value={advertiser.id}>{advertiser.companyName}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </Grid>
-                            }
-                            <Grid item xs={2}>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <FormLabel>Start Month:</FormLabel>
-                                <input type="month" id="start" name="start"
-                                    min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <FormControl>
-                                    <FormLabel>Contract Length</FormLabel>
-                                    <Select
-                                        value={contractToEdit.months || ''}
-                                        onChange={(event) => handleChange(event, "months")}
-                                    >
-                                        <MenuItem value={1}>1 Month</MenuItem>
-                                        <MenuItem value={2}>2 Months</MenuItem>
-                                        <MenuItem value={4}>4 Months</MenuItem>
-                                        <MenuItem value={12}>12 Months</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-
-                            {/* row */}
-
-                            <Grid item xs={6}>
-                                <FormControl component="fieldset">
-                                    <FormLabel>Ad Type</FormLabel>
-                                    <Select
-                                        value={contractToEdit.contractType || ''}
-                                        onChange={(event) => handleChange(event, "contractType")}
-                                    >
-                                        <MenuItem value="Print">Print</MenuItem>
-                                        <MenuItem value="Web">Web</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                {contractToEdit.contractType === "Print" &&
-                                    <FormControl component="fieldset">
-                                        <FormLabel component="legend">Page Number</FormLabel>
-                                        <TextField
-                                            variant="outlined"
-                                            type="number"
-                                            sx={{width: '70px'}}
-                                            value={contractToEdit.page || ''}
-                                            onChange={(event) => handleChange(event, "page")}
-                                        />
-                                    </FormControl>
-                                }
-                            </Grid>
-                            <Grid item xs={3}>
-                            </Grid>
-                            <Grid item xs={3}>
-                            </Grid>
-
-                            {/* row */}
-
+                        <Grid container spacing={4}>
+                            
                             <Grid item xs={4}>
-                                <Grid container spacing={2}>
+                                {contractId !== 'undefined' ?
                                     <Grid item xs={12}>
-                                        <Typography variant="p">
-                                            Image Upload
-                                        </Typography>
-                                        <ImageUploader 
-                                            uploadComplete={uploadComplete}
-                                        />
+                                        <Typography variant="h4">{advertiser.name}</Typography>
+                                    </Grid> :
+                                    <Grid item xs={12}>
+                                        <Typography variant="h4">Select Advertiser</Typography>
+                                        <Select
+                                            value={''}
+                                            onChange={(event) => handleChange(event, "userId")}
+                                        >
+                                            {/* map through advertisers */}
+                                            {advertisers.map((advertiser,i) => (
+                                                <MenuItem key={i} value={advertiser.id}>{advertiser.companyName}</MenuItem>
+                                            ))}
+                                        </Select>
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel>Color Type</FormLabel>
-                                            <Select
-                                                value={contractToEdit.colorId || ''}
-                                                onChange={(event) => handleChange(event, "colorId")}
-                                            >
-                                                <MenuItem value={1}>Black and White</MenuItem>
-                                                <MenuItem value={2}>Spot</MenuItem>
-                                                <MenuItem value={3}>Full Color</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel>Notes</FormLabel>
+                                }
+                                <Grid item xs={4}>
+                                    <FormLabel>Start Month:</FormLabel>
+                                    <input type="month" id="start" name="start"
+                                        min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
+                                </Grid>
+                                <Grid item xs={8}>
+                                </Grid>
+
+                                <Grid item xs={4}>
+                                    <FormControl>
+                                        <FormLabel>Contract Length</FormLabel>
+                                        <Select
+                                            value={contractToEdit.months || ''}
+                                            onChange={(event) => handleChange(event, "months")}
+                                        >
+                                            <MenuItem value={1}>1 Month</MenuItem>
+                                            <MenuItem value={2}>2 Months</MenuItem>
+                                            <MenuItem value={4}>4 Months</MenuItem>
+                                            <MenuItem value={12}>12 Months</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={8}>
+                                </Grid>
+
+                                <Grid item xs={4}>
+                                    <FormControl component="fieldset">
+                                        <FormLabel>Ad Type</FormLabel>
+                                        <Select
+                                            value={contractToEdit.contractType || ''}
+                                            onChange={(event) => handleChange(event, "contractType")}
+                                        >
+                                            <MenuItem value="Print">Print</MenuItem>
+                                            <MenuItem value="Web">Web</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    {contractToEdit.contractType === "Print" &&
+                                        <FormControl component="fieldset">
+                                            <FormLabel component="legend">Page Number</FormLabel>
                                             <TextField
-                                                multiline
-                                                rows={6}
-                                                variant="filled"
-                                                value={contractToEdit.notes || ''}
-                                                onChange={(event) => handleChange(event, "notes")}
+                                                variant="outlined"
+                                                type="number"
+                                                sx={{width: '70px'}}
+                                                value={contractToEdit.page || ''}
+                                                onChange={(event) => handleChange(event, "page")}
                                             />
                                         </FormControl>
-                                    </Grid>
-                                    {user.authLevel === ("admin" || "ad rep") &&
+                                    }
+                                </Grid>
+                                <Grid item xs={8}>
+                                </Grid>
+
+                                <Grid item xs={4}>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12}>
+                                            <Typography variant="p">
+                                                Image Upload
+                                            </Typography>
+                                            <ImageUploader 
+                                                uploadComplete={uploadComplete}
+                                            />
+                                        </Grid>
                                         <Grid item xs={12}>
                                             <FormControl>
-                                                <FormLabel>Commission Percentage</FormLabel>
+                                                <FormLabel>Color Type</FormLabel>
+                                                <Select
+                                                    value={contractToEdit.colorId || ''}
+                                                    onChange={(event) => handleChange(event, "colorId")}
+                                                >
+                                                    <MenuItem value={1}>Black and White</MenuItem>
+                                                    <MenuItem value={2}>Spot</MenuItem>
+                                                    <MenuItem value={3}>Full Color</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <FormControl>
+                                                <FormLabel>Notes</FormLabel>
                                                 <TextField
-                                                    variant="outlined"
-                                                    type="number"
-                                                    sx={{width: '70px'}}
-                                                    value={contractToEdit.commissionPercentage || ''} 
-                                                    onChange={(event) => handleChange(event, "commissionPercentage")}
+                                                    multiline
+                                                    rows={6}
+                                                    variant="filled"
+                                                    value={contractToEdit.notes || ''}
+                                                    onChange={(event) => handleChange(event, "notes")}
                                                 />
                                             </FormControl>
                                         </Grid>
-                                    }
-                                    <Grid item xs={12}>
-                                        <Typography className="costHeader">Total Calculated Cost</Typography>
-                                        <Typography>${calculateBill().toFixed(2)}</Typography>
-                                        <Typography className="costHeader">Monthly Calculated Cost</Typography>
-                                        <Typography>${monthlyBill().toFixed(2)}</Typography>
-                                        <FormControl>
-                                            
-                                            {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                                <>
-                                                    <FormLabel>
-                                                        Final Bill
-                                                    </FormLabel>
-                                                    <Input
+                                        {user.authLevel === ("admin" || "ad rep") &&
+                                            <Grid item xs={12}>
+                                                <FormControl>
+                                                    <FormLabel>Commission Percentage</FormLabel>
+                                                    <TextField
+                                                        variant="outlined"
                                                         type="number"
-                                                        value={contractToEdit.actualBill}
-                                                        onChange={(event) => handleChange(event, "actualBill")}
-                                                    >
-                                                    </Input> 
-                                                </>:
-                                                <>
-                                                    <FormLabel sx={{fontWeight: 1000}}>
-                                                        Final Bill
-                                                    </FormLabel>
-                                                    <Input
-                                                        type="number"
-                                                        disabled
-                                                        value={contractToEdit.actualBill}
-                                                        onChange={(event) => handleChange(event, "actualBill")}
-                                                    >
-                                                    </Input>
-                                                </>
-                                            }   
-                                        </FormControl>
+                                                        sx={{width: '70px'}}
+                                                        value={contractToEdit.commissionPercentage || ''} 
+                                                        onChange={(event) => handleChange(event, "commissionPercentage")}
+                                                    />
+                                                </FormControl>
+                                            </Grid>
+                                        }
+                                        <Grid item xs={12}>
+                                            <Typography className="costHeader">Total Calculated Cost</Typography>
+                                            <Typography>${calculateBill().toFixed(2)}</Typography>
+                                            <Typography className="costHeader">Monthly Calculated Cost</Typography>
+                                            <Typography>${monthlyBill().toFixed(2)}</Typography>
+                                            <FormControl>
+                                                
+                                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                                    <>
+                                                        <FormLabel>
+                                                            Final Bill
+                                                        </FormLabel>
+                                                        <Input
+                                                            type="number"
+                                                            value={contractToEdit.actualBill}
+                                                            onChange={(event) => handleChange(event, "actualBill")}
+                                                        >
+                                                        </Input> 
+                                                    </>:
+                                                    <>
+                                                        <FormLabel sx={{fontWeight: 1000}}>
+                                                            Final Bill
+                                                        </FormLabel>
+                                                        <Input
+                                                            type="number"
+                                                            disabled
+                                                            value={contractToEdit.actualBill}
+                                                            onChange={(event) => handleChange(event, "actualBill")}
+                                                        >
+                                                        </Input>
+                                                    </>
+                                                }   
+                                            </FormControl>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
+
+                            
                             {/* sectioning out a new container for the ad size selection since it will be quite large*/}
                             <Grid item xs={8}>
-                                <Grid container spacing={2}>
-                                    <AdSize />
-                                </Grid>
+                                <AdSize />
                             </Grid>
                             <Grid item xs={6}>
                                 <Button variant="contained" color="primary" onClick={submitContract}>Save</Button>

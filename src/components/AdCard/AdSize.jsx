@@ -99,15 +99,20 @@ export default function AdSize() {
     //     return rateRow;
     // }
 
+    const round = (num) => {
+        return num;
+    }
+
+
     const checkSize = (size) => {
         if ((size.columns * size.inches) >= 20) {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        1-3 month rate = ${rates[0].isTwentyPlus * (size.columns * size.inches)}/month
+                        1-3 month rate = ${round(rates[0].isTwentyPlus * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        4-11 month rate = ${rates[1].isTwentyPlus * (size.columns * size.inches)}/month
+                        4-11 month rate = ${round(rates[1].isTwentyPlus * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
                         12 month rate = ${rates[2].isTwentyPlus * (size.columns * size.inches)}/month
@@ -174,12 +179,12 @@ export default function AdSize() {
             <h1>Select Size</h1>
 
             <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 3, sm: 6, md: 16}}>
+                <Grid container spacing={{ xs: 1, md: 10 }} columns={{ xs: 3, sm: 6, md: 16}}>
                     {adSizes.map((size, index) => (
                         <>
                             {size.id === contractToEdit.adSizeId ?
                                 <Grid item xs={2} sm={4} md={4} key={index}>
-                                    <Card className="adSizeCardSelected" sx={{ minWidth: 10, maxWidth: 300}}>
+                                    <Card className="adSizeCardSelected" sx={{ minWidth: 200, maxWidth: 300}}>
                                         <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
                                             <CardContent>
                                                 <div style={{textAlign: 'center', border: 5}}>
@@ -199,7 +204,7 @@ export default function AdSize() {
                                     </Card>
                                 </Grid> :
                                 <Grid item xs={2} sm={4} md={4} key={index}>
-                                    <Card className="adSizeCard" sx={{ minWidth: 10, maxWidth: 300 }}>
+                                    <Card className="adSizeCard" sx={{ minWidth: 200, maxWidth: 300 }}>
                                         <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
                                             <CardContent>
                                                 <div style={{textAlign: 'center'}}>

@@ -2,3 +2,10 @@
     border: 3px solid #7e0101;
 }
 
+.adSizeCard {
+    border: 3px solid transparent;
+}
+
+.adSizePriceDisplay {
+    font-size: 80px;
+}
