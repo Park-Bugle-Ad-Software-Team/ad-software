@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinearProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import Typography from "@mui/material/Typography";
 // import { black } from '@material-ui/core/colors';
 import { createTheme } from '@mui/material/styles';
@@ -30,7 +30,7 @@ const ProgressBar = ({ progress, progressTitle }) => {
                             {progressTitle}
                         </Typography>
                         <div >
-                            <LinearProgress variant="determinate" value={progress} color="primary" />
+                            <CircularProgress variant="determinate" value={progress} color="primary" />
                         </div>
                     </>
                 }
