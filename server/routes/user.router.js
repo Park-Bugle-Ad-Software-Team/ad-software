@@ -19,7 +19,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
-router.get('/all', requireAuthLevel('admin'), (req, res) => {
+router.get('/all', requireAuthLevel(['admin']), (req, res) => {
     const sqlQuery = `SELECT "id", "email","name","authLevel",
                         "contactPreference","acceptAchPayment","companyName",
                         "doNotDisturb","isActive", "advertiserUrl",
@@ -39,7 +39,7 @@ router.get('/all', requireAuthLevel('admin'), (req, res) => {
 });
 
 //route to get all companies, but eliminating repeat instances of companies
-router.get('/advertisers', requireAuthLevel('admin'), (req, res) => {
+router.get('/advertisers', requireAuthLevel(['admin']), (req, res) => {
   const sqlQuery = `SELECT 
                       "id",
                       "companyName"
@@ -58,7 +58,7 @@ router.get('/advertisers', requireAuthLevel('admin'), (req, res) => {
     });
 });
 
-router.get('/edit/:id', requireAuthLevel('admin'), (req, res) => {
+router.get('/edit/:id', requireAuthLevel(['admin']), (req, res) => {
     const sqlQuery = `SELECT "id", "email","name","authLevel",
                         "contactPreference","acceptAchPayment","companyName",
                         "doNotDisturb","isActive", "advertiserUrl",
@@ -83,7 +83,7 @@ router.get('/edit/:id', requireAuthLevel('admin'), (req, res) => {
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
-router.post('/register', requireAuthLevel('admin'), (req, res) => {
+router.post('/register', requireAuthLevel(['admin']), (req, res) => {
     req.body.inviteCode = generateCode(30)
     properties = strFromObj(req.body, ', ', element => `"${element}"`)
     values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
@@ -139,7 +139,7 @@ router.put('/set-password/:inviteCode', (req, res) => {
 });
 
 // for editing user's non-password information.
-router.put('/edit/:id', requireAuthLevel('admin'), (req, res) => {
+router.put('/edit/:id', requireAuthLevel(['admin']), (req, res) => {
     sqlQuery = `UPDATE "Users" SET "email" = $1, "name" = $2 ,"authLevel" = $3,
                   "contactPreference" = $4,"acceptAchPayment" = $5,"companyName" = $6,
                   "doNotDisturb" = $7, "advertiserUrl" = $8,
@@ -183,7 +183,7 @@ router.put('/edit/:id', requireAuthLevel('admin'), (req, res) => {
       });
 });
 
-router.put('delete/:id', requireAuthLevel('admin'), (req, res) => {
+router.put('delete/:id', requireAuthLevel(['admin']), (req, res) => {
   const sqlQuery = `UPDATE "Users"
                     SET "isActive" = FALSE
                     WHERE "id" = $1`;

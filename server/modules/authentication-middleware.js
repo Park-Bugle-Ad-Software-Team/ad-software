@@ -10,11 +10,11 @@ const rejectUnauthenticated = (req, res, next) => {
   }
 };
 
-const requireAuthLevel = (str) => {
+const requireAuthLevel = (authLevels) => {
   return (
     requireAuthType = (req, res, next) => {
       // check if logged in
-      if (req.isAuthenticated() && req.user.authLevel === str) {
+      if (req.isAuthenticated() && authLevels.includes(req.user.authLevel)) {
         // They were authenticated! User may do the next thing
         // Note! They may not be Authorized to do all things
         next();

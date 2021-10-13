@@ -1,6 +1,7 @@
 const express = require('express');
 const {
     rejectUnauthenticated,
+    requireAuthLevel,
 } = require('../modules/authentication-middleware');
 const pool = require('../modules/pool');
 const router = express.Router();
@@ -8,7 +9,8 @@ const strFromObj = require('../modules/strFromObj')
 
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an employee or admin
-router.get('/pending', rejectUnauthenticated, (req, res) => {
+const employeelevels = ['admin', 'ad rep', 'web designer', 'print ad designer', 'finance']
+router.get('/pending', requireAuthLevel(employeelevels), (req, res) => {
   const sqlText = `
     SELECT
     "Contracts".*,
@@ -33,7 +35,7 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
 
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an advertiser
-router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
+router.get('/pending/advertiser', requireAuthLevel(['advertiser']), (req, res) => {
   const companyName = req.query.companyName;
   const sqlText = `
     SELECT
@@ -90,7 +92,7 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
 
 // GET request that happens upon FETCH_ACTIVE_CONTRACTS
 // IF the logged in user is an advertiser
-router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
+router.get('/active/advertiser', requireAuthLevel(['advertiser']), (req, res) => {
   const companyName = req.query.companyName;
   const sqlText = `
     SELECT
@@ -147,7 +149,7 @@ router.get('/closed', rejectUnauthenticated, (req, res) => {
 
 // GET request that happens upon FETCH_CLOSED_CONTRACTS
 // IF the logged in user is an advertiser
-router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
+router.get('/closed/advertiser', requireAuthLevel(['advertiser']), (req, res) => {
   const companyName = req.query.companyName;
   const sqlText = `
     SELECT
@@ -202,7 +204,7 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     })
 })
 
-router.put('/edit/:id', (req, res) => {
+router.put('/edit/:id', requireAuthLevel(['']), (req, res) => {
   const sqlText = `
   UPDATE "Contracts"
   SET 
@@ -279,12 +281,10 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
 /**
  * POST route template
  */
- router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
+ router.post('/:advertiserId', requireAuthLevel(['adming', 'ad rep']), (req, res) => {
   const imageUrl  = req.body.imageUrl;
   delete req.body.userId;
   delete req.body.imageUrl
-
- 
 
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
@@ -329,7 +329,7 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.delete('/:id', rejectUnauthenticated, (req, res) => {
+router.delete('/:id', requireAuthLevel(['ad rep', 'admin']), (req, res) => {
   const sqlQuery = `DELETE FROM "Contracts"
                     WHERE "id" = $1`;
   const sqlParams = [req.params.id]
