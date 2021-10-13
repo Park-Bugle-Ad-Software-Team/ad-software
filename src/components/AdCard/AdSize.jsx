@@ -5,13 +5,23 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid'
-import fullSize from './images/full-size.jpg';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardMedia from '@mui/material/CardMedia';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+
+// importing images for display
+import fullSize from './images/full-size.jpg';
+import halfColumn from './images/half-page.PNG';
+import halfHorizontal from './images/half-page-horizontal.PNG';
+import quarterPage from './images/quarter-page.PNG';
+import eigthPage from './images/eigth-page.PNG';
+import column from './images/column.PNG';
+import businessCard from './images/bus-card.PNG';
+import feature from './images/feature.PNG';
+
 
 const bull = (
     <Box
@@ -136,6 +146,16 @@ export default function AdSize() {
         }
     }
     
+    const displayImageSource = [
+        fullSize,
+        halfColumn,
+        halfHorizontal,
+        quarterPage,
+        eigthPage,
+        column,
+        businessCard,
+        feature,
+    ]
 
     return (
         <>
@@ -145,12 +165,12 @@ export default function AdSize() {
                 <Grid container spacing={{ xs: 1, md: 0 }} columns={{ xs: 3, sm: 6, md: 16}}>
                     {adSizes.map((size, index) => (
                         <Grid item xs={2} sm={4} md={4} key={index}>
-                            <Card className="adSizeCard" sx={{ minWidth: 10, maxWidth: 210 }}>
+                            <Card className="adSizeCard" sx={{ minWidth: 10, maxWidth: 300 }}>
                                 <CardActionArea>
                                     <CardContent>
                                         <div style={{textAlign: 'center'}}>
-                                            <img src={fullSize} style={{width: '50%'}}/>
-                                            <Typography sx={{ fontSize: 12, color: '#7E0001' }} color="text.secondary" gutterBottom>
+                                            <img src={displayImageSource[index]} style={{width: '100%'}}/>
+                                            <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
                                                 {size.adType}
                                             </Typography>
                                             <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>

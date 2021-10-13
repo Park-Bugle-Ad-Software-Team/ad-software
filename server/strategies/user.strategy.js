@@ -38,14 +38,14 @@ passport.deserializeUser((id, done) => {
 passport.use(
   'local',
   new LocalStrategy((username, password, done) => {
-    console.log('In user.strategy');
-    console.log('username and password', username, password);
+    // console.log('In user.strategy');
+    // console.log('username and password', username, password);
     
     
     pool
       .query('SELECT * FROM "Users" WHERE "email" = $1', [username])
       .then((result) => {
-        console.log('query result is: ', result.rows[0]);
+        // console.log('query result is: ', result.rows[0]);
         const user = result && result.rows && result.rows[0];
         if (user && encryptLib.comparePassword(password, user.password)) {
           // All good! Passwords match!
