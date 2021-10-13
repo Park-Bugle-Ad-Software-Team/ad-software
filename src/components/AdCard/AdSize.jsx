@@ -179,12 +179,12 @@ export default function AdSize() {
             <h1>Select Size</h1>
 
             <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={{ xs: 1, md: 10 }} columns={{ xs: 3, sm: 6, md: 16}}>
+                <Grid container spacing={{ xs: 1, md: 22 }} columns={{ xs: 3, sm: 6, md: 16}}>
                     {adSizes.map((size, index) => (
                         <>
                             {size.id === contractToEdit.adSizeId ?
                                 <Grid item xs={2} sm={4} md={4} key={index}>
-                                    <Card className="adSizeCardSelected" sx={{ minWidth: 200, maxWidth: 300}}>
+                                    <Card className="adSizeCardSelected" sx={{ minWidth: 220, maxWidth: 300}}>
                                         <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
                                             <CardContent>
                                                 <div style={{textAlign: 'center', border: 5}}>
@@ -204,7 +204,7 @@ export default function AdSize() {
                                     </Card>
                                 </Grid> :
                                 <Grid item xs={2} sm={4} md={4} key={index}>
-                                    <Card className="adSizeCard" sx={{ minWidth: 200, maxWidth: 300 }}>
+                                    <Card className="adSizeCard" sx={{ minWidth: 220, maxWidth: 300 }}>
                                         <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
                                             <CardContent>
                                                 <div style={{textAlign: 'center'}}>

@@ -207,59 +207,96 @@ export default function AdCard() {
                                         </Select>
                                     </Grid>
                                 }
-                                <Grid item xs={4}>
+                                <Grid item xs={12}>
                                     <FormLabel>Start Month:</FormLabel>
-                                    <input type="month" id="start" name="start"
+                                    <input disabled type="month" id="start" name="start"
                                         min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
                                 </Grid>
-                                <Grid item xs={8}>
-                                </Grid>
-
-                                <Grid item xs={4}>
-                                    <FormControl>
-                                        <FormLabel>Contract Length</FormLabel>
-                                        <Select
-                                            value={contractToEdit.months || ''}
-                                            onChange={(event) => handleChange(event, "months")}
-                                        >
-                                            <MenuItem value={1}>1 Month</MenuItem>
-                                            <MenuItem value={2}>2 Months</MenuItem>
-                                            <MenuItem value={4}>4 Months</MenuItem>
-                                            <MenuItem value={12}>12 Months</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={8}>
-                                </Grid>
-
-                                <Grid item xs={4}>
-                                    <FormControl component="fieldset">
-                                        <FormLabel>Ad Type</FormLabel>
-                                        <Select
-                                            value={contractToEdit.contractType || ''}
-                                            onChange={(event) => handleChange(event, "contractType")}
-                                        >
-                                            <MenuItem value="Print">Print</MenuItem>
-                                            <MenuItem value="Web">Web</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    {contractToEdit.contractType === "Print" &&
-                                        <FormControl component="fieldset">
-                                            <FormLabel component="legend">Page Number</FormLabel>
-                                            <TextField
-                                                variant="outlined"
-                                                type="number"
-                                                sx={{width: '70px'}}
-                                                value={contractToEdit.page || ''}
-                                                onChange={(event) => handleChange(event, "page")}
-                                            />
+                                {user.authLevel === ("admin" || "ad rep") ?
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Contract Length</FormLabel>
+                                            <Select
+                                                value={contractToEdit.months || ''}
+                                                onChange={(event) => handleChange(event, "months")}
+                                            >
+                                                <MenuItem value={1}>1 Month</MenuItem>
+                                                <MenuItem value={2}>2 Months</MenuItem>
+                                                <MenuItem value={4}>4 Months</MenuItem>
+                                                <MenuItem value={12}>12 Months</MenuItem>
+                                            </Select>
                                         </FormControl>
-                                    }
-                                </Grid>
-                                <Grid item xs={8}>
-                                </Grid>
+                                    </Grid> :
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Contract Length</FormLabel>
+                                            <Select
+                                                value={contractToEdit.months || ''}
+                                                onChange={(event) => handleChange(event, "months")}
+                                                disabled
+                                            >
+                                                <MenuItem value={1}>1 Month</MenuItem>
+                                                <MenuItem value={2}>2 Months</MenuItem>
+                                                <MenuItem value={4}>4 Months</MenuItem>
+                                                <MenuItem value={12}>12 Months</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                }
+                                {user.authLevel === ("admin" || "ad rep") ?
+                                    <Grid item xs={12}>
+                                        <FormControl component="fieldset">
+                                            <FormLabel>Ad Type</FormLabel>
+                                            <Select
+                                                value={contractToEdit.contractType || ''}
+                                                onChange={(event) => handleChange(event, "contractType")}
+                                            >
+                                                <MenuItem value="Print">Print</MenuItem>
+                                                <MenuItem value="Web">Web</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        {contractToEdit.contractType === "Print" &&
+                                            <FormControl component="fieldset">
+                                                <FormLabel component="legend">Page Number</FormLabel>
+                                                <TextField
+                                                    variant="outlined"
+                                                    type="number"
+                                                    sx={{width: '70px'}}
+                                                    value={contractToEdit.page || ''}
+                                                    onChange={(event) => handleChange(event, "page")}
+                                                />
+                                            </FormControl>
+                                        }
+                                    </Grid> :
+                                    <Grid item xs={12}>
+                                        <FormControl component="fieldset">
+                                            <FormLabel>Ad Type</FormLabel>
+                                            <Select
+                                                disabled
+                                                value={contractToEdit.contractType || ''}
+                                                onChange={(event) => handleChange(event, "contractType")}
+                                            >
+                                                <MenuItem value="Print">Print</MenuItem>
+                                                <MenuItem value="Web">Web</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        {contractToEdit.contractType === "Print" &&
+                                            <FormControl component="fieldset">
+                                                <FormLabel component="legend">Page Number</FormLabel>
+                                                <TextField
+                                                    disabled
+                                                    variant="outlined"
+                                                    type="number"
+                                                    sx={{width: '70px'}}
+                                                    value={contractToEdit.page || ''}
+                                                    onChange={(event) => handleChange(event, "page")}
+                                                />
+                                            </FormControl>
+                                        }
+                                    </Grid>
+                                }
 
-                                <Grid item xs={4}>
+                                <Grid item xs={12}>
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
                                             <Typography variant="p">
@@ -269,31 +306,64 @@ export default function AdCard() {
                                                 uploadComplete={uploadComplete}
                                             />
                                         </Grid>
-                                        <Grid item xs={12}>
-                                            <FormControl>
-                                                <FormLabel>Color Type</FormLabel>
-                                                <Select
-                                                    value={contractToEdit.colorId || ''}
-                                                    onChange={(event) => handleChange(event, "colorId")}
-                                                >
-                                                    <MenuItem value={1}>Black and White</MenuItem>
-                                                    <MenuItem value={2}>Spot</MenuItem>
-                                                    <MenuItem value={3}>Full Color</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <FormControl>
-                                                <FormLabel>Notes</FormLabel>
-                                                <TextField
-                                                    multiline
-                                                    rows={6}
-                                                    variant="filled"
-                                                    value={contractToEdit.notes || ''}
-                                                    onChange={(event) => handleChange(event, "notes")}
-                                                />
-                                            </FormControl>
-                                        </Grid>
+                                        {user.authLevel === ("admin" || "ad rep") ?
+                                            <Grid item xs={12}>
+                                                <FormControl>
+                                                    <FormLabel>Color Type</FormLabel>
+                                                    <Select
+                                                        value={contractToEdit.colorId || ''}
+                                                        onChange={(event) => handleChange(event, "colorId")}
+                                                    >
+                                                        <MenuItem value={1}>Black and White</MenuItem>
+                                                        <MenuItem value={2}>Spot</MenuItem>
+                                                        <MenuItem value={3}>Full Color</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid> :
+                                            <Grid item xs={12}>
+                                                <FormControl>
+                                                    <FormLabel>Color Type</FormLabel>
+                                                    <Select
+                                                        disabled
+                                                        value={contractToEdit.colorId || ''}
+                                                        onChange={(event) => handleChange(event, "colorId")}
+                                                    >
+                                                        <MenuItem value={1}>Black and White</MenuItem>
+                                                        <MenuItem value={2}>Spot</MenuItem>
+                                                        <MenuItem value={3}>Full Color</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
+                                        }
+                                        {user.authLevel === ("admin" || "ad rep") ?
+                                            <Grid item xs={12}>
+                                                <FormControl>
+                                                    <FormLabel>Notes</FormLabel>
+                                                    <TextField
+                                                        multiline
+                                                        rows={6}
+                                                        variant="outlined"
+                                                        sx={{width: 300}}
+                                                        value={contractToEdit.notes || ''}
+                                                        onChange={(event) => handleChange(event, "notes")}
+                                                    />
+                                                </FormControl>
+                                            </Grid> :
+                                            <Grid item xs={12}>
+                                                <FormControl>
+                                                    <FormLabel>Notes</FormLabel>
+                                                    <TextField
+                                                        multiline
+                                                        disabled
+                                                        rows={6}
+                                                        variant="outlined"
+                                                        sx={{width: 300}}
+                                                        value={contractToEdit.notes || ''}
+                                                        onChange={(event) => handleChange(event, "notes")}
+                                                    />
+                                                </FormControl>
+                                            </Grid>
+                                        }
                                         {user.authLevel === ("admin" || "ad rep") &&
                                             <Grid item xs={12}>
                                                 <FormControl>
@@ -322,6 +392,7 @@ export default function AdCard() {
                                                         </FormLabel>
                                                         <Input
                                                             type="number"
+                                                            variant="outlined"
                                                             value={contractToEdit.actualBill}
                                                             onChange={(event) => handleChange(event, "actualBill")}
                                                         >
