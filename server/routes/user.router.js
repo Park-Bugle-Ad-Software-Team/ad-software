@@ -2,6 +2,7 @@ const generateCode = require('../modules/registrationCode');
 const express = require('express');
 const {
   rejectUnauthenticated,
+  requireAuthLevel,
 } = require('../modules/authentication-middleware');
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
@@ -151,8 +152,7 @@ router.put('/set-password/:inviteCode', (req, res) => {
 });
 
 // for editing user's non-password information.
-router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
-  if (req.user.authLevel === 'admin') { 
+router.put('/edit/:id', requireAuthLevel('admin'), (req, res) => {
     sqlQuery = `UPDATE "Users" SET "email" = $1, "name" = $2 ,"authLevel" = $3,
                   "contactPreference" = $4,"acceptAchPayment" = $5,"companyName" = $6,
                   "doNotDisturb" = $7, "advertiserUrl" = $8,
@@ -194,7 +194,6 @@ router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
         console.log(`Failed to update user`, error)
         res.sendStatus(500);
       });
-  }
 });
 
 router.put('delete/:id', (req, res) => {
