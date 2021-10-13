@@ -165,15 +165,7 @@ export default function AdCard() {
                                 >
                                     <MenuItem value={1}>1 Month</MenuItem>
                                     <MenuItem value={2}>2 Months</MenuItem>
-                                    <MenuItem value={3}>3 Months</MenuItem>
                                     <MenuItem value={4}>4 Months</MenuItem>
-                                    <MenuItem value={5}>5 Months</MenuItem>
-                                    <MenuItem value={6}>6 Months</MenuItem>
-                                    <MenuItem value={7}>7 Months</MenuItem>
-                                    <MenuItem value={8}>8 Months</MenuItem>
-                                    <MenuItem value={9}>9 Months</MenuItem>
-                                    <MenuItem value={10}>10 Months</MenuItem>
-                                    <MenuItem value={11}>11 Months</MenuItem>
                                     <MenuItem value={12}>12 Months</MenuItem>
                                 </Select>
                             </FormControl>

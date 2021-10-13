@@ -39,6 +39,16 @@ export default function AdSize() {
     const rates = store.rates;
     const contractToEdit = store.contractToEdit;
     const [rateRow, setRateRow] = useState({});
+    const displayImageSource = [
+        fullSize,
+        halfColumn,
+        halfHorizontal,
+        quarterPage,
+        eigthPage,
+        column,
+        businessCard,
+        feature,
+    ];
 
     useEffect(() => {
         dispatch({
@@ -54,6 +64,16 @@ export default function AdSize() {
             
     //     }
     // }, [rates])
+
+    const handleChange = (index, property) => {
+        dispatch({
+            type: 'UPDATE_CONTRACT_TO_EDIT',
+            payload: {
+                ...contractToEdit,
+                [property]: index + 1
+            }
+        })
+    }
     
     let currentLength = 0;
 
@@ -146,16 +166,7 @@ export default function AdSize() {
         }
     }
     
-    const displayImageSource = [
-        fullSize,
-        halfColumn,
-        halfHorizontal,
-        quarterPage,
-        eigthPage,
-        column,
-        businessCard,
-        feature,
-    ]
+    
 
     return (
         <>
@@ -166,7 +177,7 @@ export default function AdSize() {
                     {adSizes.map((size, index) => (
                         <Grid item xs={2} sm={4} md={4} key={index}>
                             <Card className="adSizeCard" sx={{ minWidth: 10, maxWidth: 300 }}>
-                                <CardActionArea>
+                                <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
                                     <CardContent>
                                         <div style={{textAlign: 'center'}}>
                                             <img src={displayImageSource[index]} style={{width: '100%'}}/>
