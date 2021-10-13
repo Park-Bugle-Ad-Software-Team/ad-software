@@ -126,10 +126,54 @@ input {
   padding: 15px;
 }
 
+.chatTimeStamp {
+  text-align: center;
+  color: grey;
+  margin: 0px;
+}
+
+.myName {
+  margin: 5px 28%;
+}
+
+.theirName {
+  margin: 5px 3%;
+}
+
 .myChat {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 30%;
   color: maroon;
+}
+
+.theirChat {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 30%;
+  background-color: #D3D3D3;
+  border: 1pt solid grey;
+  border-radius: 5pt;
+  color: black;
+}
+
+.chatContext {
+  text-align: left;
+  font-size: 14px;
+  margin: 3px 3px;
 }
 
 .chatBar {
   width: 300px;
+}
+
+.dataTable {
+  margin: 25px 2%;
+  border: 2pt solid maroon;
+  border-radius: 5pt;
+}
+
+.contractHeader {
+  margin-left: 10%;
+  margin-top: 25px;
 }

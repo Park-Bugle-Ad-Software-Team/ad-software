@@ -1,10 +1,15 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid, Input } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect, useState } from 'react';
-import Contracts from '../Contracts/Contracts';
+import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid,
+    Container, TableBody, TableHead, TableCell, TableContainer, TableRow, Input
+} from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import DataTable from '../DataTable/DataTable';
 
 export default function EmployeeHomePage() {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     useEffect(() => {
         dispatch({type: 'FETCH_ADVERTISERS'});
@@ -13,7 +18,7 @@ export default function EmployeeHomePage() {
     // local state
     let [filteredContract, setFilteredContract] = useState({ advertiser: '', month: '' });
 
-    // global state from redux
+    // global state from redux store
     const store = useSelector((store) => store);
     const user = store.user;
     const advertisers = store.advertisers;
@@ -25,29 +30,39 @@ export default function EmployeeHomePage() {
         dispatch({type: 'FETCH_FILTERED_CONTRACTS'});
     }
 
+    const goToAdCard = (contractId) => {
+        history.push(`/contracts/edit/${contractId}`);
+    }
+
     return (
         <Grid container>
             <Grid item xs={12}>
-                <Typography variant="h1">Employee Home Page</Typography>  
+                <center>
+                    <Typography variant="h2">Employee Home Page</Typography>
+                </center>  
             </Grid>
             <Grid item xs={8}>
-                User: {user.name}
+                <Typography variant="h4">User: {user.name}</Typography>
             </Grid>
             <Grid item xs={4}>
                 <Button 
                     variant="contained" 
                     color="primary"
-                    onClick={() => console.log('in Export button')}
+                    // onClick
                 >
                     Export
                 </Button>
-                <Button 
-                    variant="contained"
-                    color="primary"
-                    onClick={() => console.log('in Create New Ad Contract button')}
-                >
-                    Create New Ad Contract
-                </Button>
+                {user.authLevel === 'adRep' ? 
+                    <Button 
+                        variant="contained"
+                        color="primary"
+                        onClick={() => goToAdCard()}
+                    >
+                        Create New Ad Contract
+                    </Button>
+                    :
+                    null
+                }
             </Grid>
             <Grid item xs={12}>
                 <FormControl>
@@ -85,92 +100,36 @@ export default function EmployeeHomePage() {
                 </Button>
             </Grid>
 
-            {/* Pending Contracts component */}
+            {/* Pending Contracts */}
             <Grid item xs={12}>
-                <center>
-                    <Typography variant="h3">Pending Contracts</Typography>  
-                </center>
+                <div className="contractHeader">
+                    <Typography variant="h3">Pending Contracts</Typography> 
+                </div> 
             </Grid>
             <Grid item xs={12}>
-                <table className="uTable">
-                    <thead>
-                        <tr className="uTr">
-                            <th className="uTh">Start Month</th>
-                            <th className="uTh">Contract Length</th>
-                            <th className="uTh">Type</th>
-                            <th className="uTh">Size</th>
-                            <th className="uTh">Page</th>
-                            <th className="uTh">Color</th>
-                            <th className="uTh">Total Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pendingContracts.map((item, i) => (
-                            <tr className="uTr" key={i}>
-                                <Contracts item={item} />
-                            </tr>
-                        ))}
-                    </tbody>
-                </table> 
+                <DataTable tableData={pendingContracts}/>
             </Grid>
 
-            {/* Active Contracts component */} 
+            {/* Active Contracts */}
             <Grid item xs={12}>
-                <center>
-                    <Typography variant="h3">Active Contracts</Typography>  
-                </center>
+                <div className="contractHeader">
+                    <Typography variant="h3">Active Contracts</Typography> 
+                </div> 
             </Grid>
             <Grid item xs={12}>
-                <table className="uTable">
-                    <thead>
-                        <tr className="uTr">
-                            <th className="uTh">Start Month</th>
-                            <th className="uTh">Contract Length</th>
-                            <th className="uTh">Type</th>
-                            <th className="uTh">Size</th>
-                            <th className="uTh">Page</th>
-                            <th className="uTh">Color</th>
-                            <th className="uTh">Total Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {activeContracts.map((item, i) => (
-                            <tr className="uTr" key={i}>
-                                <Contracts item={item} />
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <DataTable tableData={activeContracts}/>
             </Grid>
 
-            {/* Closed Contracts component */}
+            {/* Closed Contracts */}
             <Grid item xs={12}>
-                <center>
-                    <Typography variant="h3">Closed Contracts</Typography>  
-                </center>
+                <div className="contractHeader">
+                    <Typography variant="h3">Closed Contracts</Typography> 
+                </div>  
             </Grid>
             <Grid item xs={12}>
-                <table className="uTable">
-                    <thead>
-                        <tr className="uTr">
-                            <th className="uTh">Start Month</th>
-                            <th className="uTh">Contract Length</th>
-                            <th className="uTh">Type</th>
-                            <th className="uTh">Size</th>
-                            <th className="uTh">Page</th>
-                            <th className="uTh">Color</th>
-                            <th className="uTh">Total Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {closedContracts.map((item, i) => (
-                            <tr className="uTr" key={i}>
-                                <Contracts item={item} />
-                            </tr>
-                        ))}
-                    </tbody>
-                </table> 
+                <DataTable tableData={closedContracts}/>
             </Grid>
+
         </Grid>
     );
 }

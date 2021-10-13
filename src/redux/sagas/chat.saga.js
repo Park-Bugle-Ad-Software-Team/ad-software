@@ -14,6 +14,6 @@ function* fetchChat(action) {
         yield put({ type: 'SET_CHAT', payload: response.data});
     
     } catch (error) {
-        console.log('Closed contracts GET request failed', error);
+        console.log('Chat GET request failed', error);
     }
 }
