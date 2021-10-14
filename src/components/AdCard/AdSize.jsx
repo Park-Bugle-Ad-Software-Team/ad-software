@@ -190,22 +190,23 @@ export default function AdSize() {
                                 <Grid item xs={2} sm={4} md={4} key={index}>
                                     <Card className="adSizeCardSelected" sx={{ minWidth: 220, maxWidth: 300}}>
                                         <>
-                                        {user.authLevel !== ("admin" || "ad rep") ?
-                                            <CardContent>
-                                                <div style={{textAlign: 'center', border: 5}}>
-                                                    <img src={displayImageSource[index]} style={{width: '100%'}}/>
-                                                    <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
-                                                        {size.adType}
-                                                    </Typography>
-                                                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                        {size.desc}
-                                                    </Typography>
-                                                    {rates.length !== 0 &&
-                                                        checkSize(size)
-                                                    }
-                                                </div>     
-                                            </CardContent> :
-                                        <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
+                                        {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                            <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
+                                                <CardContent>
+                                                    <div style={{textAlign: 'center', border: 5}}>
+                                                        <img src={displayImageSource[index]} style={{width: '100%'}}/>
+                                                        <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
+                                                            {size.adType}
+                                                        </Typography>
+                                                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                            {size.desc}
+                                                        </Typography>
+                                                        {rates.length !== 0 &&
+                                                            checkSize(size)
+                                                        }
+                                                    </div>     
+                                                </CardContent> 
+                                            </CardActionArea>:
                                             <CardContent>
                                                 <div style={{textAlign: 'center', border: 5}}>
                                                     <img src={displayImageSource[index]} style={{width: '100%'}}/>
@@ -220,7 +221,6 @@ export default function AdSize() {
                                                     }
                                                 </div>     
                                             </CardContent>
-                                        </CardActionArea>
                                         }   
                                         </>
                                     </Card>
@@ -228,21 +228,7 @@ export default function AdSize() {
                                 <Grid item xs={2} sm={4} md={4} key={index}>
                                     <Card className="adSizeCard" sx={{ minWidth: 220, maxWidth: 300 }}>
                                         <>
-                                        {user.authLevel !== ("admin" || "ad rep") ?
-                                                <CardContent>
-                                                    <div style={{textAlign: 'center'}}>
-                                                        <img src={displayImageSource[index]} style={{width: '100%'}}/>
-                                                        <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
-                                                            {size.adType}
-                                                        </Typography>
-                                                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                            {size.desc}
-                                                        </Typography>
-                                                        {rates.length !== 0 &&
-                                                            checkSize(size)
-                                                        }
-                                                    </div>     
-                                                </CardContent> :
+                                        {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                             <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
                                                 <CardContent>
                                                     <div style={{textAlign: 'center'}}>
@@ -257,8 +243,22 @@ export default function AdSize() {
                                                             checkSize(size)
                                                         }
                                                     </div>     
-                                                </CardContent>
-                                            </CardActionArea>
+                                                </CardContent> 
+                                            </CardActionArea>:    
+                                            <CardContent>
+                                                <div style={{textAlign: 'center'}}>
+                                                    <img src={displayImageSource[index]} style={{width: '100%'}}/>
+                                                    <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
+                                                        {size.adType}
+                                                    </Typography>
+                                                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                        {size.desc}
+                                                    </Typography>
+                                                    {rates.length !== 0 &&
+                                                        checkSize(size)
+                                                    }
+                                                </div>     
+                                            </CardContent>
                                         }
                                         </>
                                     </Card>

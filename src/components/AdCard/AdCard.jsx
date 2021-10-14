@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import ImageUploader from '../ImageUploader/ImageUploader';
 import './AdCard.css';
+import { MonthPicker, YearPicker } from "@mui/lab";
 
 export default function AdCard() {
     // testing data
@@ -27,9 +28,8 @@ export default function AdCard() {
     const rates = store.rates;
     const adSize = contractToEdit.AdSize;
     const color = contractToEdit.Color;
-    console.log('contractId', contractId);
-    console.log('contracttoedit.adsize', contractToEdit.AdSize);
-    console.log('contracttoedit.months', contractToEdit.months);
+    const minDate = new Date('2021-01-01T00:00:00.000');
+    const maxDate = new Date('2034-01-01T00:00:00.000');
 
     useEffect(() => {
         if (contractId === 'undefined') {
@@ -194,6 +194,8 @@ export default function AdCard() {
         setNewImage(fileUrl)
     }
 
+    const [date, setDate] = useState(new Date());
+
     return(
         <>
                 <Container>
@@ -217,18 +219,39 @@ export default function AdCard() {
                                         </Select>
                                     </Grid>
                                 }
-                                {user.authLevel === ("admin" || "ad rep") ?
+                                <div className="spacer">
+                                </div>
+                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                     <Grid item xs={12}>
-                                        <FormLabel>Start Month:</FormLabel>
-                                        <input type="month" id="start" name="start"
-                                            min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
+                                        <FormControl>
+                                            <FormLabel id="startMonthLabel">Start Month:</FormLabel>
+                                            <Input
+                                                label="Start Month"
+                                                labelId="startMonthLabel"
+                                                type="month"
+                                                min="2021-09"
+                                                value={(yyyy + '-' + mm)}
+                                                onChange={(event) => handleChange(event, "startMonth")}
+                                            />
+                                        </FormControl>
                                     </Grid> :
                                     <Grid item xs={12}>
-                                        <FormLabel>Start Month:</FormLabel>
-                                        <input type="month" id="start" name="start"
-                                            min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
+                                        <FormControl>
+                                            <FormControlLabel id="startMonthLabel">Start Month:</FormControlLabel>
+                                            <Input
+                                                label="Start Month"
+                                                labelId="startMonthLabel"
+                                                type="month"
+                                                disabled
+                                                min="2021-09"
+                                                value={(yyyy + '-' + mm)}
+                                                onChange={(event) => handleChange(event, "startMonth")}
+                                            />
+                                        </FormControl>
                                     </Grid>
                                 }
+                                <div className="spacer">
+                                </div>
                                 {user.authLevel === ("admin" || "ad rep") ?
                                     <Grid item xs={12}>
                                         <FormControl>
@@ -260,6 +283,8 @@ export default function AdCard() {
                                         </FormControl>
                                     </Grid>
                                 }
+                                <div className="spacer">
+                                </div>
                                 {user.authLevel === ("admin" || "ad rep") ?
                                     <Grid item xs={12}>
                                         <FormControl component="fieldset">
@@ -312,156 +337,164 @@ export default function AdCard() {
                                         }
                                     </Grid>
                                 }
-
+                                <div className="spacer">
+                                </div>
                                 <Grid item xs={12}>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12}>
-                                            <FormControl>
-                                                <Typography variant="p">
-                                                    Image Upload
-                                                </Typography>
-                                                <div className="imageUploaderDiv">
-                                                    <ImageUploader 
-                                                        uploadComplete={uploadComplete}
-                                                    />
-                                                </div>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography variant="p">
-                                                Image Bank
-                                            </Typography>
-                                            <div className="imageBank">
-                                                {contractToEdit.image &&
-                                                    <>
-                                                        {contractToEdit.image.map((image, i) => (
-                                                            <div className="imageDiv">
-                                                                <a href={image.imageUrl} target="_blank">
-                                                                    <img src={image.imageUrl}/>
-                                                                </a>
-                                                            </div>
-                                                        ))}
-                                                    </>
-                                                }
-                                            </div>
-                                                    
-                                        </Grid>
-                                        {user.authLevel === ("admin" || "ad rep") ?
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Color Type</FormLabel>
-                                                    <Select
-                                                        value={contractToEdit.colorId || ''}
-                                                        onChange={(event) => handleChange(event, "colorId")}
-                                                    >
-                                                        <MenuItem value={1}>Black and White</MenuItem>
-                                                        <MenuItem value={2}>Spot</MenuItem>
-                                                        <MenuItem value={3}>Full Color</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid> :
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Color Type</FormLabel>
-                                                    <Select
-                                                        disabled
-                                                        value={contractToEdit.colorId || ''}
-                                                        onChange={(event) => handleChange(event, "colorId")}
-                                                    >
-                                                        <MenuItem value={1}>Black and White</MenuItem>
-                                                        <MenuItem value={2}>Spot</MenuItem>
-                                                        <MenuItem value={3}>Full Color</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
+                                    <FormControl>
+                                        <Typography variant="p">
+                                            Image Upload
+                                        </Typography>
+                                        <div className="imageUploaderDiv">
+                                            <ImageUploader 
+                                                uploadComplete={uploadComplete}
+                                            />
+                                        </div>
+                                    </FormControl>
+                                </Grid>
+                                <div className="spacer">
+                                </div>
+                                <Grid item xs={12}>
+                                    <Typography variant="p">
+                                        Image Bank
+                                    </Typography>
+                                    <div className="imageBank">
+                                        {contractToEdit.image &&
+                                            <>
+                                                {contractToEdit.image.map((image, i) => (
+                                                    <div className="imageDiv">
+                                                        <a href={image.imageUrl} target="_blank">
+                                                            <img src={image.imageUrl}/>
+                                                        </a>
+                                                    </div>
+                                                ))}
+                                            </>
                                         }
-                                        {user.authLevel === ("admin" || "ad rep") ?
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Notes</FormLabel>
-                                                    <TextField
-                                                        multiline
-                                                        rows={6}
-                                                        variant="outlined"
-                                                        sx={{width: 300}}
-                                                        value={contractToEdit.notes || ''}
-                                                        onChange={(event) => handleChange(event, "notes")}
-                                                    />
-                                                </FormControl>
-                                            </Grid> :
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Notes</FormLabel>
-                                                    <TextField
-                                                        multiline
-                                                        disabled
-                                                        rows={6}
-                                                        variant="outlined"
-                                                        sx={{width: 300}}
-                                                        value={contractToEdit.notes || ''}
-                                                        onChange={(event) => handleChange(event, "notes")}
-                                                    />
-                                                </FormControl>
-                                            </Grid>
-                                        }
-                                        {user.authLevel === ("admin" || "ad rep") &&
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Commission Percentage</FormLabel>
-                                                    <TextField
-                                                        variant="outlined"
-                                                        type="number"
-                                                        sx={{width: '70px'}}
-                                                        value={contractToEdit.commissionPercentage || ''} 
-                                                        onChange={(event) => handleChange(event, "commissionPercentage")}
-                                                    />
-                                                </FormControl>
-                                            </Grid>
-                                        }
-                                        <Grid item xs={12}>
-                                            {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
-                                                <>
-                                                    <Typography className="costHeader">Total Calculated Cost</Typography>
-                                                    <Typography>${calculateBill().toFixed(2)}</Typography>
-                                                </>
-                                            }
-                                            {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
-                                                <>
-                                                    <Typography className="costHeader">Monthly Calculated Cost</Typography>
-                                                    <Typography>${monthlyBill().toFixed(2)}</Typography>
-                                                </>
-                                            }
-                                            <FormControl>
-                                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                                    <>
-                                                        <FormLabel>
-                                                            Final Bill
-                                                        </FormLabel>
-                                                        <TextField
-                                                            // label="Final Bill"
-                                                            variant="outlined"
-                                                            value={contractToEdit.actualBill || ''}
-                                                            onChange={(event) => handleChange(event, "actualBill")}
-                                                        />
-                                                    </>:
-                                                    <>
-                                                        <FormLabel sx={{fontWeight: 1000}}>
-                                                            Final Bill
-                                                        </FormLabel>
-                                                        <Input
-                                                            type="number"
-                                                            disabled
-                                                            value={contractToEdit.actualBill}
-                                                            onChange={(event) => handleChange(event, "actualBill")}
-                                                        >
-                                                        </Input>
-                                                    </>
-                                                }   
-                                            </FormControl>
-                                        </Grid>
+                                    </div>      
+                                </Grid>
+                                <div className="spacer">
+                                </div>
+                                {user.authLevel === ("admin" || "ad rep") ?
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Color Type</FormLabel>
+                                            <Select
+                                                value={contractToEdit.colorId || ''}
+                                                onChange={(event) => handleChange(event, "colorId")}
+                                            >
+                                                <MenuItem value={1}>Black and White</MenuItem>
+                                                <MenuItem value={2}>Spot</MenuItem>
+                                                <MenuItem value={3}>Full Color</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid> :
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Color Type</FormLabel>
+                                            <Select
+                                                disabled
+                                                value={contractToEdit.colorId || ''}
+                                                onChange={(event) => handleChange(event, "colorId")}
+                                            >
+                                                <MenuItem value={1}>Black and White</MenuItem>
+                                                <MenuItem value={2}>Spot</MenuItem>
+                                                <MenuItem value={3}>Full Color</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
+                                }
+                                <div className="spacer">
+                                </div>
+                                {user.authLevel === ("admin" || "ad rep") ?
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Notes</FormLabel>
+                                            <TextField
+                                                multiline
+                                                rows={6}
+                                                variant="outlined"
+                                                sx={{width: 300}}
+                                                value={contractToEdit.notes || ''}
+                                                onChange={(event) => handleChange(event, "notes")}
+                                            />
+                                        </FormControl>
+                                    </Grid> :
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Notes</FormLabel>
+                                            <TextField
+                                                multiline
+                                                disabled
+                                                rows={6}
+                                                variant="outlined"
+                                                sx={{width: 300}}
+                                                value={contractToEdit.notes || ''}
+                                                onChange={(event) => handleChange(event, "notes")}
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                }
+                                <div className="spacer">
+                                </div>
+                                {user.authLevel === ("admin" || "ad rep") &&
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Commission Percentage</FormLabel>
+                                            <TextField
+                                                variant="outlined"
+                                                type="number"
+                                                sx={{width: '70px'}}
+                                                value={contractToEdit.commissionPercentage || ''} 
+                                                onChange={(event) => handleChange(event, "commissionPercentage")}
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                }
+                                <div className="spacer">
+                                </div>
+                                <Grid item xs={12}>
+                                    {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
+                                        <>
+                                            <Typography className="costHeader">Total Calculated Cost</Typography>
+                                            <Typography>${calculateBill().toFixed(2)}</Typography>
+                                        </>
+                                    }
+                                    {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
+                                        <>
+                                            <Typography className="costHeader">Monthly Calculated Cost</Typography>
+                                            <Typography>${monthlyBill().toFixed(2)}</Typography>
+                                        </>
+                                    }
+                                    <FormControl>
+                                        {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                            <>
+                                                <FormLabel>
+                                                    Final Bill
+                                                </FormLabel>
+                                                <TextField
+                                                    // label="Final Bill"
+                                                    variant="outlined"
+                                                    value={contractToEdit.actualBill || ''}
+                                                    onChange={(event) => handleChange(event, "actualBill")}
+                                                />
+                                            </>:
+                                            <>
+                                                <FormLabel sx={{fontWeight: 1000}}>
+                                                    Final Bill
+                                                </FormLabel>
+                                                <Input
+                                                    type="number"
+                                                    disabled
+                                                    value={contractToEdit.actualBill}
+                                                    onChange={(event) => handleChange(event, "actualBill")}
+                                                >
+                                                </Input>
+                                            </>
+                                        }   
+                                    </FormControl> 
                                 </Grid>
                             </Grid>
+                            <div className="spacer">
+                            </div>
                             {/* sectioning out a new container for the ad size selection since it will be quite large*/}
                             <Grid item xs={8}>
                                 <AdSize />
