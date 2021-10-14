@@ -285,7 +285,6 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
   delete req.body.imageUrl
 
  
-
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
 
