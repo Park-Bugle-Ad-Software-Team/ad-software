@@ -4,7 +4,7 @@
 
  change `prime_app` to the name of your database, and you should be all set!
 */
-
+require('dotenv').config();
 const pg = require('pg');
 const url = require('url');
 
@@ -19,7 +19,7 @@ if (process.env.DATABASE_URL) {
   config = {
     user: auth[0],
     password: auth[1],
-    host: params.hostname,
+    host: params.hostname || process.env.DB_PASSWORD,
     port: params.port,
     database: params.pathname.split('/')[1],
     ssl: { rejectUnauthorized: false },

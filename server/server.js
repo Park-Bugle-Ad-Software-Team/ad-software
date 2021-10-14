@@ -11,6 +11,8 @@ const passport = require('./strategies/user.strategy');
 const userRouter = require('./routes/user.router');
 const chatRouter = require('./routes/chat.router');
 const contractsRouter = require('./routes/contracts.router');
+const ratesRouter = require('./routes/rates.router');
+const adSizeRouter = require('./routes/adSize.router')
 const s3Uploader = require('react-s3-uploader/s3router');
 
 // Body parser middleware
@@ -28,6 +30,8 @@ app.use(passport.session());
 app.use('/api/user', userRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/contracts', contractsRouter);
+app.use('/api/rates', ratesRouter);
+app.use('/api/ad-size', adSizeRouter)
 app.use('/s3', s3Uploader({
   bucket: "snippetsbucket", // required
   region: 'us-east-2',      // optional

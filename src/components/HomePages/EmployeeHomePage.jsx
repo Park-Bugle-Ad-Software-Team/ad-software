@@ -84,7 +84,7 @@ export default function EmployeeHomePage() {
                         `Export View`
                     }
                 </button>
-                {user.authLevel === 'adRep' ? 
+                {user.authLevel === 'ad rep' ? 
                     <button className="btn" onClick={() => goToAdCard()}>
                         Create Contract
                     </button>

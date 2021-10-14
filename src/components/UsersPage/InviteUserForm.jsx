@@ -22,7 +22,7 @@ export default function InviteUserForm() {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        if (userId === undefined) {
+        if (userId === 'undefined') {
             return;
         }
         dispatch({
@@ -93,10 +93,11 @@ export default function InviteUserForm() {
     };
 
     const handleOpen = () => {
-    setOpen(true);
+        setOpen(true);
     };
 
     const returnToUsers = () => {
+        clearUserFields();
         history.goBack();
     }
     
