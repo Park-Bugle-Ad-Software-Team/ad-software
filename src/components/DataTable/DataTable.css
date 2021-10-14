@@ -1,0 +1,61 @@
+.myChatTimeStamp {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    margin-left: 42%;
+    font-size: 10px;
+}
+
+.myChat {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 40%;
+    border-radius: 5pt;
+    background-color: maroon;
+    color: white;
+}
+
+.theirName {
+    margin-top: 20px;
+    margin-bottom: 3px;
+    margin-left: 2%;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.theirChatTimeStamp {
+    margin-top: 0px;
+    margin-bottom: 5px;
+    margin-left: 2%;
+    font-size: 10px;
+}
+
+.theirChat {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 40%;
+    background-color: #D3D3D3;
+    border-radius: 5pt;
+    color: black;
+}
+
+.chatContext {
+    text-align: left;
+    font-size: 14px;
+    margin: 0px 0px;
+    padding: 8px;
+}
+
+.chatBar {
+    border: 2pt solid maroon;
+    border-radius: 3pt;
+    width: 80%;
+    height: 30px;
+    margin: 10px 10%;
+    padding: 2px 5px;
+}
+
+.dataTable {
+    border: 3pt solid maroon;
+    border-radius: 6pt;
+    margin: 25px 2%;
+}

@@ -6,20 +6,44 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const strFromObj = require('../modules/strFromObj')
 
+router.get('/all', rejectUnauthenticated, (req, res) => {
+  const sqlText = `
+    SELECT
+    "Contracts".*,
+    "AdSize"."adType" as "adType",
+    "Color"."colorType" as "colorType"
+    FROM "Contracts"
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    GROUP BY "Contracts"."id", "adType", "colorType"
+  `;
+  pool.query(sqlText)
+  .then((dbRes) => {
+      res.send(dbRes.rows);
+  })
+  .catch((error) => {
+      console.log('get pending contracts error', error);
+      res.sendStatus(500);
+  });
+});
+
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an employee or admin
 router.get('/pending', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT
     "Contracts".*,
-    to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color"
+    "AdSize"."adType" as "adType",
+    "Color"."colorType" as "colorType"
     FROM "Contracts"
-      JOIN "AdSize"
-        ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Color"
-        ON "Color"."id" = "Contracts"."colorId"
-    WHERE "isApproved" = false;
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    WHERE "isApproved" = false
+    GROUP BY "Contracts"."id", "adType", "colorType"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -38,20 +62,19 @@ router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT
     "Contracts".*,
-    to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color"
+    "AdSize"."adType" as "adType",
+    "Color"."colorType" as "colorType"
     FROM "Contracts"
-      JOIN "AdSize"
-        ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Sponsorship"
-        ON "Sponsorship"."id" = "Contracts"."sponsorshipId"
-      JOIN "Color"
-        ON "Color"."id" = "Contracts"."colorId"
-      JOIN "Contracts_Users"
-        ON "Contracts_Users"."contractId" = "Contracts"."id"
-      JOIN "Users"
-        ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "isApproved" = false AND "Users"."companyName" = '${companyName}';
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "isApproved" = false AND "Users"."companyName" = '${companyName}'
+    GROUP BY "Contracts"."id", "adType", "colorType"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -69,14 +92,15 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT
     "Contracts".*,
-    to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color"
+    "AdSize"."adType" as "adType",
+    "Color"."colorType" as "colorType"
     FROM "Contracts"
-      JOIN "AdSize"
-        ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Color"
-        ON "Color"."id" = "Contracts"."colorId"
-      WHERE "startMonth" <= 'NOW';
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    WHERE "startMonth" <= 'NOW'
+    GROUP BY "Contracts"."id", "adType", "colorType"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -95,20 +119,19 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT
     "Contracts".*,
-    to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color"
+    "AdSize"."adType" as "adType",
+    "Color"."colorType" as "colorType"
     FROM "Contracts"
-      JOIN "AdSize"
-        ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Sponsorship"
-        ON "Sponsorship"."id" = "Contracts"."sponsorshipId"
-      JOIN "Color"
-        ON "Color"."id" = "Contracts"."colorId"
-      JOIN "Contracts_Users"
-        ON "Contracts_Users"."contractId" = "Contracts"."id"
-      JOIN "Users"
-        ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Users"."companyName" = '${companyName}';
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "startMonth" <= 'NOW' AND "Users"."companyName" = '${companyName}'
+    GROUP BY "Contracts"."id", "adType", "colorType"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -124,16 +147,17 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_CLOSED_CONTRACTS
 router.get('/closed', rejectUnauthenticated, (req, res) => {
   const sqlText = `
-  SELECT
-  "Contracts".*,
-  to_json("AdSize".*) as "AdSize",
-  to_json("Color".*) as "Color"
-  FROM "Contracts"
+    SELECT
+    "Contracts".*,
+    "AdSize"."adType" as "adType",
+    "Color"."colorType" as "colorType"
+    FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
     JOIN "Color"
       ON "Color"."id" = "Contracts"."colorId"
-    WHERE "startMonth" <= 'NOW';
+    WHERE "startMonth" <= 'NOW'
+    GROUP BY "Contracts"."id", "adType", "colorType"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -152,18 +176,19 @@ router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT
     "Contracts".*,
-    to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color"
+    "AdSize"."adType" as "adType",
+    "Color"."colorType" as "colorType"
     FROM "Contracts"
-      JOIN "AdSize"
-        ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Color"
-        ON "Color"."id" = "Contracts"."colorId"
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
       JOIN "Contracts_Users"
         ON "Contracts_Users"."contractId" = "Contracts"."id"
       JOIN "Users"
         ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" >= 'NOW' AND "Users"."companyName" = '${companyName}';
+    WHERE "startMonth" >= 'NOW' AND "Users"."companyName" = '${companyName}'
+    GROUP BY "Contracts"."id", "adType", "colorType"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -181,16 +206,19 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     SELECT
     "Contracts".*,
     to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color"
+    to_json("Color".*) as "Color",
+     array_agg(to_json("Images".*)) as "image"
     --to_json("Chat".*) as "Chat"
-
-    FROM "Contracts"
-      JOIN "AdSize"
-        ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Color"
-        ON "Color"."id" = "Contracts"."colorId"
-      
-      WHERE "Contracts"."id" = $1;
+  
+  FROM "Contracts"
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    JOIN "Images"
+      ON "Images"."contractId" = "Contracts"."id"
+    WHERE "Contracts"."id" = $1
+  Group by "Contracts"."id", "AdSize".*, "Color".*;
     `;
   pool
     .query(sqlText, [req.params.id])
@@ -203,38 +231,25 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 })
 
 router.put('/edit/:id', (req, res) => {
+  delete req.body.id;
+  // const adRepId = req.body.adRepId
+  // delete req.body.adRepId
+  delete req.body.AdSize;
+  delete req.body.Color;
+
+  properties = strFromObj(req.body, ', ', (element, i) => `"${element}" = $${i + 2}`)
+
+  // console.log('req.body is: ', req.body)
   const sqlText = `
   UPDATE "Contracts"
   SET 
-    "adSizeId" = $2,
-    "notes" = $3,
-    "startMonth" = $4,
-    "commissionPercentage" = $5,
-    "colorId" = $6,
-    "contractType" = $7,
-    "calculatedBill" = $8,
-    "actualBill" = $9,
-    "page" = $10,
-    "isApproved" = $11,
-    "pricingSchemaId" = $12,
-    "months" = $13
+    ${properties}
   WHERE "id" = $1
   `;
 
   const sqlParams = [
-    req.body.id,
-    req.body.adSizeId,
-    req.body.notes,
-    req.body.startMonth,
-    req.body.commissionPercentage,
-    req.body.colorId,
-    req.body.contractType,
-    req.body.calculatedBill,
-    req.body.actualBill,
-    req.body.page,
-    req.body.isApproved,
-    req.body.pricingSchemaId,
-    req.body.months
+    req.params.id,
+    ...Object.values(req.body)
   ];
 
   pool.query(sqlText, sqlParams)
@@ -245,6 +260,8 @@ router.put('/edit/:id', (req, res) => {
       console.error(`Failed to update contract at id: ${req.body.id}`, error);
     });
 })
+
+
 
 router.get('/rates', rejectUnauthenticated, (req, res) => {
   let sqlText = `
@@ -283,10 +300,9 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
   console.log('req.body is: ', req.body);
   const imageUrl  = req.body.imageUrl;
   delete req.body.userId;
-  delete req.body.imageUrl
-
+  delete req.body.imageUrl;
+  delete req.body.AdSize;
  
-
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
 
@@ -325,7 +341,7 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
           })
     })
     .catch((err) => {
-      console.log('User registration failed: ', err);
+      console.log('New contract creation failed: ', err);
       res.sendStatus(500);
     });
 });

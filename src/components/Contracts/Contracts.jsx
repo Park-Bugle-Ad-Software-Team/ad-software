@@ -14,9 +14,9 @@ export default function Contracts( {item} ) {
         return new Date(dateString).toLocaleDateString(undefined, options)
     }
 
-    // local state
-    let [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    let [messageToSend, setMessageToSend] = useState('');
+    // // local state
+    // let [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    // let [messageToSend, setMessageToSend] = useState('');
 
     // global state from redux
     const store = useSelector((store) => store);
@@ -31,25 +31,11 @@ export default function Contracts( {item} ) {
         history.push(`/contracts/edit/${contractId}`);
     }
 
-    function openChat() {
-        dispatch({type: 'FETCH_CHAT', payload: contractId});
-        setIsDrawerOpen(true);
-    }
+    // function openChat() {
+    //     dispatch({type: 'FETCH_CHAT', payload: contractId});
+    //     setIsDrawerOpen(true);
+    // }
 
-    function sendMessage(event) {
-        event.preventDefault();
-
-        axios.post('/api/chat', {
-            messageToSend, userId, contractId
-        })
-        .then(() => {
-            // reload chat after message sends to appear real-time
-            dispatch({ type: 'FETCH_CHAT', payload: contractId })
-        });
-
-        // clear the chat input field after message sends
-        setMessageToSend('');
-    }
 
     return (
         <>

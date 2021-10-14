@@ -5,12 +5,34 @@ export default function* contractsSaga() {
     yield takeLatest('FETCH_PENDING_CONTRACTS', fetchPendingContracts);
     yield takeLatest('FETCH_ACTIVE_CONTRACTS', fetchActiveContracts);
     yield takeLatest('FETCH_CLOSED_CONTRACTS', fetchClosedContracts);
-    // yield takeLatest('FETCH_ALL_CONTRACTS', fetchAllContracts);
+    yield takeLatest('FETCH_ALL_CONTRACTS', fetchAllContracts);
     yield takeLatest('FETCH_CONTRACT_TO_EDIT', fetchContractToEdit);
     yield takeLatest('UPDATE_CONTRACT', updateContract);
     yield takeLatest('FETCH_RATES', fetchRates);
     yield takeLatest('FETCH_AD_SIZES', fetchAdSizes);
     yield takeLatest('CREATE_NEW_CONTRACT', createNewContract);
+    yield takeLatest('UPDATE_RATES', updateRates);
+    yield takeLatest('FETCH_AD_SIZE_OBJECT', fetchAdSizeObject);
+}
+
+function* fetchAdSizeObject(action) {
+    try {
+        const response = yield axios.get(`/api/ad-size/${action.payload}`);
+        yield put({
+            type: 'INSERT_AD_SIZE',
+            payload: response.data
+        });
+    } catch (error) {
+        console.error('Failed to fetch ad size object', error);
+    }
+}
+
+function* updateRates(action) {
+    try {
+        yield axios.put('/api/rates', action.payload);
+    } catch (error) {
+        console.error('Failed to update rates', error);
+    }
 }
 
 function* createNewContract(action) {
@@ -55,6 +77,17 @@ function* fetchContractToEdit(action) {
       } catch (error) {
         console.log(`Failed to fetch user to edit at id ${action.payload}:`, error);
       }
+}
+
+function* fetchAllContracts() {
+    try {
+        const response = yield axios.get('/api/contracts/all');
+
+        yield put({ type: 'SET_ALL_CONTRACTS', payload: response.data});
+    
+    } catch (error) {
+        console.log('All contracts GET request failed', error);
+    }
 }
 
 function* fetchPendingContracts(action) {

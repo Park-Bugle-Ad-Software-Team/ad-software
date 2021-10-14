@@ -27,13 +27,17 @@ export default function AdCard() {
     const rates = store.rates;
     const adSize = contractToEdit.AdSize;
     const color = contractToEdit.Color;
-    
+    console.log('contractId', contractId);
+    console.log('contracttoedit.adsize', contractToEdit.AdSize);
+    console.log('contracttoedit.months', contractToEdit.months);
 
     useEffect(() => {
         if (contractId === 'undefined') {
             return;
+        } else if (contractId === undefined) {
+            return;
         }
-        console.log(params.id);
+        console.log('contractId', contractId);
         dispatch({
             type: 'FETCH_CONTRACT_TO_EDIT',
             payload: contractId
@@ -47,8 +51,6 @@ export default function AdCard() {
     }, [])
 
     const handleChange = (event, property) => {
-        console.log('property we are updating is', property);
-        console.log('value we are updating to is', event.target.value);
         if (property === "colorId") {
             dispatch({
                 type: 'UPDATE_CONTRACT_TO_EDIT',
@@ -58,7 +60,6 @@ export default function AdCard() {
                 }
             })
         } else if (property === "startMonth") {
-            console.log('value is ', (event.target.value));
             // this only works sometimes. will need some help to figure it out properly
             let newDate = new Date(event.target.value);
             newDate.setMonth(newDate.getMonth() + 1);
@@ -119,19 +120,13 @@ export default function AdCard() {
     }
 
     // this formats our month and year from contractToEdit.startMonth for use in the month picker component
-
-
     let startDate = new Date(contractToEdit.startMonth);
     let yyyy = startDate.getFullYear();
     let mm = String(startDate.getMonth() + 1).padStart(2, '0');
     console.log('test', (yyyy + '-' + mm));
 
-    const totalBill = () => {
-        console.log('calc', contractToEdit.months, contractToEdit.AdSize.columns, contractToEdit.AdSize.inches);
-        return Number(contractToEdit.months * contractToEdit.AdSize.columns * contractToEdit.AdSize.inches).toFixed(2);
-    }    
-
     const calculateBill = () => {
+        let total = 0;
         switch (contractToEdit.months) {
             case 1:
             case 2:
@@ -164,8 +159,24 @@ export default function AdCard() {
                 } else {
                     return rates[2].isTwentyPlus * grabSize();
                 }
+            default:
+                throw new Error(`contractToEdit months has no value ${contractToEdit.months}`);
         }
+        // console.log('total', total);
+        // switch (contractToEdit.colorId) {
+        //     case 2:
+        //         total += (100 * contractToEdit.months);
+        //     case 3: 
+        //         total += (200 * contractToEdit.months);
+        // }
+        // console.log('total', total);
+        // return total;
     }
+
+    // const calculateBillWithColor = () => {
+    //     let total = calculateBill();
+
+    // }
 
     const monthlyBill = () => {
         return calculateBill() / contractToEdit.months;
@@ -180,16 +191,14 @@ export default function AdCard() {
 
     const uploadComplete = (fileUrl) => {
         console.log('fileUrl upload complete', fileUrl);
-          setNewImage(fileUrl)
-      }
+        setNewImage(fileUrl)
+    }
 
     return(
         <>
-            {(Object.keys(contractToEdit).length !== 0 && Object.keys(rates).length !== 0) &&
                 <Container>
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={4}>
-                            
                             <Grid item xs={4}>
                                 {contractId !== 'undefined' ?
                                     <Grid item xs={12}>
@@ -307,12 +316,21 @@ export default function AdCard() {
                                 <Grid item xs={12}>
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
+                                            <FormControl>
+                                                <Typography variant="p">
+                                                    Image Upload
+                                                </Typography>
+                                                <div className="imageUploaderDiv">
+                                                    <ImageUploader 
+                                                        uploadComplete={uploadComplete}
+                                                    />
+                                                </div>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item xs={12}>
                                             <Typography variant="p">
-                                                Image Upload
+                                                Image Bank
                                             </Typography>
-                                            <ImageUploader 
-                                                uploadComplete={uploadComplete}
-                                            />
                                         </Grid>
                                         {user.authLevel === ("admin" || "ad rep") ?
                                             <Grid item xs={12}>
@@ -387,12 +405,19 @@ export default function AdCard() {
                                             </Grid>
                                         }
                                         <Grid item xs={12}>
-                                            <Typography className="costHeader">Total Calculated Cost</Typography>
-                                            <Typography>${calculateBill().toFixed(2)}</Typography>
-                                            <Typography className="costHeader">Monthly Calculated Cost</Typography>
-                                            <Typography>${monthlyBill().toFixed(2)}</Typography>
+                                            {contractToEdit.AdSize && contractToEdit.months &&
+                                                <>
+                                                    <Typography className="costHeader">Total Calculated Cost</Typography>
+                                                    <Typography>${calculateBill().toFixed(2)}</Typography>
+                                                </>
+                                            }
+                                            {contractToEdit.AdSize && contractToEdit.months &&
+                                                <>
+                                                    <Typography className="costHeader">Monthly Calculated Cost</Typography>
+                                                    <Typography>${monthlyBill().toFixed(2)}</Typography>
+                                                </>
+                                            }
                                             <FormControl>
-                                                
                                                 {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                                     <>
                                                         <FormLabel>
@@ -424,8 +449,6 @@ export default function AdCard() {
                                     </Grid>
                                 </Grid>
                             </Grid>
-
-                            
                             {/* sectioning out a new container for the ad size selection since it will be quite large*/}
                             <Grid item xs={8}>
                                 <AdSize />
@@ -439,7 +462,7 @@ export default function AdCard() {
                         </Grid>
                     </Box>
                 </Container>
-            }
+        
         </> 
     );
 }
