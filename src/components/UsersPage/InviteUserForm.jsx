@@ -5,7 +5,9 @@ This component is going to be used for rendering both the user creation and user
 import { Button, FormControl, TextField, 
             Select, MenuItem, InputLabel,
                 Switch, Grid, Typography, 
-                    Container } from '@mui/material';
+                    Container, 
+                    FormGroup,
+                    FormControlLabel} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
@@ -123,28 +125,31 @@ export default function InviteUserForm() {
                     </Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography variant="p">Name</Typography>
-                    <TextField 
-                        id="name-input"
-                        variant="outlined" 
+                    <TextField
+                        label="Name"
+                        variant="outlined"
                         value={userToEdit.name || ''}
                         onChange={(event) => handleChange(event, "name")}
                     />
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography variant="p">Email</Typography>
-                    <TextField 
-                        id="email-input" 
-                        variant="outlined" 
-                        value={userToEdit.email || ''}
-                        onChange={(event) => handleChange(event, "email")}
-                    />
+                    <FormControl>
+                        <TextField
+                            labelId="emailLabel"
+                            label="Email"
+                            variant="outlined"
+                            value={userToEdit.email || ''}
+                            onChange={(event) => handleChange(event, "email")}
+                        />
+                    </FormControl>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography variant="p">Privilege</Typography>
                     {userToEdit &&
-                        <FormControl sx={{ m: 1, minWidth: 200}}>
+                        <FormControl sx={{minWidth: 200}}>
+                            <InputLabel id="authLevelLabel">Privelege</InputLabel>
                             <Select
+                                labelId="authLevelLabel"
+                                label="Privelege"
                                 open={open}
                                 onClose={handleClose}
                                 onOpen={handleOpen}
@@ -163,6 +168,28 @@ export default function InviteUserForm() {
                 </Grid>
                 <Grid item xs={12}>
                     <h1>Additional Info Field</h1>
+                </Grid>
+                <Grid item xs={6}>
+                    {userToEdit && userToEdit.authLevel === "advertiser" &&
+                        <FormGroup>
+                            <Typography variant="p">Accept ACH Payments</Typography>
+                            <Switch
+                                checked={userToEdit.acceptAchPayment || false}
+                                onChange={(event) => flipAch(event, "acceptAchPayment")}
+                            />
+                        </FormGroup>
+                    }
+                </Grid>
+                <Grid item xs={6}>
+                    {userToEdit && userToEdit.authLevel === "advertiser" &&
+                        <FormGroup>
+                            <Typography variant="p">Do Not Disturb</Typography>
+                            <Switch
+                                checked={userToEdit.doNotDisturb || false}
+                                onChange={(event) => flipDoNotDisturb(event, "acceptAchPayment")}
+                            />
+                        </FormGroup>
+                    }
                 </Grid>
                 <Grid item xs={6}>
                     <TextField
@@ -281,7 +308,7 @@ export default function InviteUserForm() {
                         label="Notes"
                         variant="outlined"
                         multiline
-                        fullWidth
+                        sx={{width: 725}}
                         rows={4}
                         value={userToEdit.notes || ''}
                         onChange={(event) => handleChange(event, "notes")}
