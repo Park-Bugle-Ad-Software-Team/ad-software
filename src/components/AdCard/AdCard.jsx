@@ -331,6 +331,20 @@ export default function AdCard() {
                                             <Typography variant="p">
                                                 Image Bank
                                             </Typography>
+                                            <div className="imageBank">
+                                                {contractToEdit.image &&
+                                                    <>
+                                                        {contractToEdit.image.map((image, i) => (
+                                                            <div className="imageDiv">
+                                                                <a href={image.imageUrl} target="_blank">
+                                                                    <img src={image.imageUrl}/>
+                                                                </a>
+                                                            </div>
+                                                        ))}
+                                                    </>
+                                                }
+                                            </div>
+                                                    
                                         </Grid>
                                         {user.authLevel === ("admin" || "ad rep") ?
                                             <Grid item xs={12}>
@@ -423,13 +437,12 @@ export default function AdCard() {
                                                         <FormLabel>
                                                             Final Bill
                                                         </FormLabel>
-                                                        <Input
-                                                            type="number"
+                                                        <TextField
+                                                            // label="Final Bill"
                                                             variant="outlined"
-                                                            value={contractToEdit.actualBill}
+                                                            value={contractToEdit.actualBill || ''}
                                                             onChange={(event) => handleChange(event, "actualBill")}
-                                                        >
-                                                        </Input> 
+                                                        />
                                                     </>:
                                                     <>
                                                         <FormLabel sx={{fontWeight: 1000}}>

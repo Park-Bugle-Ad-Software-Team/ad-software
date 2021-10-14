@@ -119,7 +119,7 @@ export default function AdSize() {
                         4-11 month rate = ${round(rates[1].isTwentyPlus * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = ${rates[2].isTwentyPlus * (size.columns * size.inches)}/month
+                        12 month rate = ${round(rates[2].isTwentyPlus * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography> 
                 </>
             )
@@ -127,13 +127,13 @@ export default function AdSize() {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        1-3 month rate = ${rates[0].isTwelveToTwenty * (size.columns * size.inches)}/month
+                        1-3 month rate = ${round(rates[0].isTwelveToTwenty * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        4-11 month rate = ${rates[1].isTwelveToTwenty * (size.columns * size.inches)}/month
+                        4-11 month rate = ${round(rates[1].isTwelveToTwenty * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = ${rates[2].isTwelveToTwenty * (size.columns * size.inches)}/month
+                        12 month rate = ${round(rates[2].isTwelveToTwenty * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography> 
                 </>
             )
@@ -141,13 +141,13 @@ export default function AdSize() {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        1-3 month rate = ${rates[0].isEightToTwelve * (size.columns * size.inches)}/month
+                        1-3 month rate = ${round(rates[0].isEightToTwelve * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        4-11 month rate = ${rates[1].isEightToTwelve * (size.columns * size.inches)}/month
+                        4-11 month rate = ${round(rates[1].isEightToTwelve * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = ${rates[2].isEightToTwelve * (size.columns * size.inches)}/month
+                        12 month rate = ${round(rates[2].isEightToTwelve * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography> 
                 </>
             )
@@ -155,13 +155,13 @@ export default function AdSize() {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        1-3 month rate = ${rates[0].isLessThanEight * (size.columns * size.inches)}/month
+                        1-3 month rate = ${round(rates[0].isLessThanEight * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        4-11 month rate = ${rates[1].isLessThanEight * (size.columns * size.inches)}/month
+                        4-11 month rate = ${round(rates[1].isLessThanEight * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = ${rates[2].isLessThanEight * (size.columns * size.inches)}/month
+                        12 month rate = ${round(rates[2].isLessThanEight * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography> 
                 </>
             )
@@ -169,7 +169,7 @@ export default function AdSize() {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = $275/month
+                        12 month rate = ${round(275).toFixed(2)}/month
                     </Typography> 
                 </>
             )
