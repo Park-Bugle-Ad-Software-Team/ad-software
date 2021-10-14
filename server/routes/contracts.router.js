@@ -177,16 +177,19 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     SELECT
     "Contracts".*,
     to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color"
+    to_json("Color".*) as "Color",
+     array_agg(to_json("Images".*)) as "image"
     --to_json("Chat".*) as "Chat"
-
-    FROM "Contracts"
-      JOIN "AdSize"
-        ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Color"
-        ON "Color"."id" = "Contracts"."colorId"
-      
-      WHERE "Contracts"."id" = $1;
+  
+  FROM "Contracts"
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    JOIN "Images"
+      ON "Images"."contractId" = "Contracts"."id"
+    WHERE "Contracts"."id" = $1
+  Group by "Contracts"."id", "AdSize".*, "Color".*;
     `;
   pool
     .query(sqlText, [req.params.id])
@@ -199,38 +202,25 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 })
 
 router.put('/edit/:id', (req, res) => {
+  delete req.body.id;
+  // const adRepId = req.body.adRepId
+  // delete req.body.adRepId
+  delete req.body.AdSize;
+  delete req.body.Color;
+
+  properties = strFromObj(req.body, ', ', (element, i) => `"${element}" = $${i + 2}`)
+
+  // console.log('req.body is: ', req.body)
   const sqlText = `
   UPDATE "Contracts"
   SET 
-    "adSizeId" = $2,
-    "notes" = $3,
-    "startMonth" = $4,
-    "commissionPercentage" = $5,
-    "colorId" = $6,
-    "contractType" = $7,
-    "calculatedBill" = $8,
-    "actualBill" = $9,
-    "page" = $10,
-    "isApproved" = $11,
-    "pricingSchemaId" = $12,
-    "months" = $13
+    ${properties}
   WHERE "id" = $1
   `;
 
   const sqlParams = [
-    req.body.id,
-    req.body.adSizeId,
-    req.body.notes,
-    req.body.startMonth,
-    req.body.commissionPercentage,
-    req.body.colorId,
-    req.body.contractType,
-    req.body.calculatedBill,
-    req.body.actualBill,
-    req.body.page,
-    req.body.isApproved,
-    req.body.pricingSchemaId,
-    req.body.months
+    req.params.id,
+    ...Object.values(req.body)
   ];
 
   pool.query(sqlText, sqlParams)
@@ -241,6 +231,8 @@ router.put('/edit/:id', (req, res) => {
       console.error(`Failed to update contract at id: ${req.body.id}`, error);
     });
 })
+
+
 
 router.get('/rates', rejectUnauthenticated, (req, res) => {
   let sqlText = `
