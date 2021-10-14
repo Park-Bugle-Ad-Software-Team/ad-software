@@ -300,8 +300,8 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
   console.log('req.body is: ', req.body);
   const imageUrl  = req.body.imageUrl;
   delete req.body.userId;
-  delete req.body.imageUrl
-
+  delete req.body.imageUrl;
+  delete req.body.AdSize;
  
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
@@ -341,7 +341,7 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
           })
     })
     .catch((err) => {
-      console.log('User registration failed: ', err);
+      console.log('New contract creation failed: ', err);
       res.sendStatus(500);
     });
 });
