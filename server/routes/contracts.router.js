@@ -199,38 +199,25 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 })
 
 router.put('/edit/:id', (req, res) => {
+  delete req.body.id;
+  // const adRepId = req.body.adRepId
+  // delete req.body.adRepId
+  delete req.body.AdSize;
+  delete req.body.Color;
+
+  properties = strFromObj(req.body, ', ', (element, i) => `"${element}" = $${i + 2}`)
+
+  console.log('req.body is: ', req.body)
   const sqlText = `
   UPDATE "Contracts"
   SET 
-    "adSizeId" = $2,
-    "notes" = $3,
-    "startMonth" = $4,
-    "commissionPercentage" = $5,
-    "colorId" = $6,
-    "contractType" = $7,
-    "calculatedBill" = $8,
-    "actualBill" = $9,
-    "page" = $10,
-    "isApproved" = $11,
-    "pricingSchemaId" = $12,
-    "months" = $13
+    ${properties}
   WHERE "id" = $1
   `;
 
   const sqlParams = [
-    req.body.id,
-    req.body.adSizeId,
-    req.body.notes,
-    req.body.startMonth,
-    req.body.commissionPercentage,
-    req.body.colorId,
-    req.body.contractType,
-    req.body.calculatedBill,
-    req.body.actualBill,
-    req.body.page,
-    req.body.isApproved,
-    req.body.pricingSchemaId,
-    req.body.months
+    req.params.id,
+    ...Object.values(req.body)
   ];
 
   pool.query(sqlText, sqlParams)
@@ -241,6 +228,8 @@ router.put('/edit/:id', (req, res) => {
       console.error(`Failed to update contract at id: ${req.body.id}`, error);
     });
 })
+
+
 
 router.get('/rates', rejectUnauthenticated, (req, res) => {
   let sqlText = `

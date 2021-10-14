@@ -407,10 +407,14 @@ export default function AdCard() {
                                             </Grid>
                                         }
                                         <Grid item xs={12}>
-                                            <Typography className="costHeader">Total Calculated Cost</Typography>
-                                            <Typography>${calculateBill()}</Typography>
-                                            <Typography className="costHeader">Monthly Calculated Cost</Typography>
-                                            <Typography>${monthlyBill()}</Typography>
+                                            {(contractToEdit.months !== undefined && contractToEdit.adSize !== undefined ) &&
+                                            <>
+                                                <Typography className="costHeader">Total Calculated Cost</Typography>
+                                                <Typography>${calculateBill()}</Typography>
+                                                <Typography className="costHeader">Monthly Calculated Cost</Typography>
+                                                <Typography>${monthlyBill()}</Typography>
+                                            </>
+                                            }
                                             <FormControl>
                                                 
                                                 {user.authLevel === "admin" || user.authLevel === "ad rep" ?
