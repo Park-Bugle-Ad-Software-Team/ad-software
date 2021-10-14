@@ -15,14 +15,11 @@ export default function AdvertiserHomePage() {
     return (
         <Grid container>
             
-            <Grid item xs={12}>
-                <Typography variant="h1">Advertiser Home Page</Typography>  
-            </Grid>
-            <Grid item xs={12}>
-                <Typography variant="h2">Welcome, {user.name}!</Typography>  
-            </Grid>
-            <Grid item xs={12}>
+            <Grid align="center" item xs={12}>
                 <Typography variant="h2">{user.companyName}</Typography>  
+            </Grid>
+            <Grid align="center" item xs={12}>
+                <Typography variant="h4">Welcome, {user.name}!</Typography>  
             </Grid>
 
             {/* Pending Contracts */}

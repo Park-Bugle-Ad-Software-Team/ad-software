@@ -1,9 +1,10 @@
 import { Box, Button, Drawer, Grid, ListItemText, TextField } from '@material-ui/core';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useState } from 'react';
 import axios from 'axios';
+import './DataTable.css';
 
 export default function DataTable( { tableData }) {
     const dispatch = useDispatch();
@@ -38,15 +39,14 @@ export default function DataTable( { tableData }) {
     const renderViewButton = (params) => {
         const contractId = params.row.id;
         return (
-            <Button
-                variant="contained"
-                color="primary"
+            <button
+                className="btn"
                 onClick={() => {
                     history.push(`/contracts/edit/${contractId}`);
                 }}
             >
                 View
-            </Button>
+            </button>
         );
     }
 
@@ -55,9 +55,7 @@ export default function DataTable( { tableData }) {
         const contractId = params.row.id;
         return (
         <>
-            <Button
-                variant="contained"
-                color="primary"
+            <button className="btn"
                 onClick={() => {
                     dispatch({type: 'FETCH_CHAT', payload: contractId});
                     dispatch({type: 'SET_CONTRACT_CHAT_ID', payload: contractId});
@@ -65,7 +63,7 @@ export default function DataTable( { tableData }) {
                 }}
             >
                 Chat
-            </Button>
+            </button>
         </>
         );
     }
@@ -93,6 +91,14 @@ export default function DataTable( { tableData }) {
         }
     ];
 
+    function customToolbar() {
+        return (
+            <GridToolbarContainer>
+                <GridToolbarFilterButton/>
+            </GridToolbarContainer>
+        )
+    }
+
     function sendMessage(event) {
         event.preventDefault();
 
@@ -118,6 +124,9 @@ export default function DataTable( { tableData }) {
                         columns={columns}
                         pageSize={5}
                         checkboxSelection={false}
+                        components={{
+                            Toolbar: customToolbar,
+                        }}
                     />
                 </div>
             </div>
@@ -160,15 +169,15 @@ export default function DataTable( { tableData }) {
                     <br/>
                     <center>
                         <form onSubmit={sendMessage}>
-                            <TextField className="chatBar"
-                                id="outlined-multiline-flexible"
-                                label="Message"
+                            <input
+                                placeholder="Send Message"
+                                className="chatBar"
                                 value={messageToSend}
                                 onChange={(event) => setMessageToSend(event.target.value)}
                             />
                         </form>
                         <div>
-                            <Button onClick={() => setIsDrawerOpen(false)}>Close</Button>
+                            <button className="btn" onClick={() => setIsDrawerOpen(false)}>Close</button>
                         </div>
                     </center>
                 </Box>

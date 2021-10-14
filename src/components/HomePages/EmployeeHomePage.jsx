@@ -6,6 +6,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import DataTable from '../DataTable/DataTable';
+import DataTableExport from '../DataTable/DataTableExport';
 
 export default function EmployeeHomePage() {
     const dispatch = useDispatch();
@@ -16,7 +17,8 @@ export default function EmployeeHomePage() {
     }, []);
 
     // local state
-    let [filteredContract, setFilteredContract] = useState({ advertiser: '', month: '' });
+    let [filteredContract, setFilteredContract] = useState({ advertiser: 0, month: '' });
+    let [showingExportView, setShowingExportView] = useState(false);
 
     // global state from redux store
     const store = useSelector((store) => store);
@@ -36,99 +38,105 @@ export default function EmployeeHomePage() {
 
     return (
         <Grid container>
-            <Grid item xs={12}>
-                <center>
-                    <Typography variant="h2">Employee Home Page</Typography>
-                </center>  
+            <Grid align="center" item xs={12}>
+                <Typography variant="h2">Welcome, {user.name}!</Typography>
             </Grid>
-            <Grid item xs={8}>
-                <Typography variant="h4">User: {user.name}</Typography>
+            <Grid align="left" item xs={4}></Grid>
+            <Grid align="center" item xs={4}>
+                <Typography variant="h6">Role: {user.authLevel}</Typography>
             </Grid>
-            <Grid item xs={4}>
-                <Button 
-                    variant="contained" 
-                    color="primary"
-                    // onClick
-                >
-                    Export
-                </Button>
-                {user.authLevel === 'adRep' ? 
-                    <Button 
-                        variant="contained"
-                        color="primary"
-                        onClick={() => goToAdCard()}
-                    >
-                        Create New Ad Contract
-                    </Button>
-                    :
-                    null
-                }
-            </Grid>
-            <Grid item xs={12}>
-                <FormControl>
-                    <InputLabel id="advertiser-select-label">Advertiser</InputLabel>
-                    <Select
-                        labelId="advertiser-select-label"
-                        id="advertiser-select"
-                        label="Advertiser"
+            <Grid item xs={6}>
+                {/* <div className="employeeFunctions">
+                    <select
+                        className="dropdownMenu"
                         value={filteredContract.advertiser}
-                        onChange={(event) => setFilteredContract({...filteredContract, advertiser: event.target.value})}
-                    >
-                        {advertisers.map((advertiser, i) => (
-                            <MenuItem key={i} value={advertiser.companyName}>
+                        onChange={(event) => setFilteredContract({...filteredContract, advertiser: event.target.value})}>
+                        <option disabled value='0'>Advertiser</option>
+                        {advertisers.map((advertiser) => (
+                            <option key={advertiser.id} value={advertiser.id}>
                                 {advertiser.companyName}
-                            </MenuItem>
+                            </option>
                         ))}
-                    </Select>
-                </FormControl>
-                <FormControl>
-                    <InputLabel id="month-select-label">Month</InputLabel>
-                    <Input
-                        id="month-select"
-                        label="Month"
+                    </select>
+                    <input
+                        className="monthPicker"
                         value={filteredContract.month}
                         type="month"
                         onChange={(event) => setFilteredContract({...filteredContract, month: event.target.value})}
                     />
-                </FormControl>
-                <Button 
-                    variant="contained" 
-                    color="primary"
-                    onClick={fetchFilteredContracts}
+                    <button className="btn" onClick={fetchFilteredContracts}>
+                        Search
+                    </button>
+                </div> */}
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid align="center" item xs={4}>
+                <button className="btn"
+                    onClick={
+                        showingExportView === true ?
+                        () => setShowingExportView(false) :
+                        () => setShowingExportView(true)
+                    }
                 >
-                    Search
-                </Button>
+                    {showingExportView === true ?
+                        `Contracts View` :
+                        `Export View`
+                    }
+                </button>
+                {user.authLevel === 'adRep' ? 
+                    <button className="btn" onClick={() => goToAdCard()}>
+                        Create Contract
+                    </button>
+                    :
+                    null
+                }
             </Grid>
+            
+            {showingExportView === false ?
+                <>
+                    {/* Pending Contracts */}
+                    <Grid item xs={12}>
+                        <div className="contractHeader">
+                            <Typography variant="h3">Pending Contracts</Typography> 
+                        </div> 
+                    </Grid>
+                    <Grid item xs={12}>
+                        <DataTable tableData={pendingContracts}/>
+                    </Grid>
 
-            {/* Pending Contracts */}
-            <Grid item xs={12}>
-                <div className="contractHeader">
-                    <Typography variant="h3">Pending Contracts</Typography> 
-                </div> 
-            </Grid>
-            <Grid item xs={12}>
-                <DataTable tableData={pendingContracts}/>
-            </Grid>
+                    {/* Active Contracts */}
+                    <Grid item xs={12}>
+                        <div className="contractHeader">
+                            <Typography variant="h3">Active Contracts</Typography> 
+                        </div> 
+                    </Grid>
+                    <Grid item xs={12}>
+                        <DataTable tableData={activeContracts}/>
+                    </Grid>
 
-            {/* Active Contracts */}
-            <Grid item xs={12}>
-                <div className="contractHeader">
-                    <Typography variant="h3">Active Contracts</Typography> 
-                </div> 
-            </Grid>
-            <Grid item xs={12}>
-                <DataTable tableData={activeContracts}/>
-            </Grid>
-
-            {/* Closed Contracts */}
-            <Grid item xs={12}>
-                <div className="contractHeader">
-                    <Typography variant="h3">Closed Contracts</Typography> 
-                </div>  
-            </Grid>
-            <Grid item xs={12}>
-                <DataTable tableData={closedContracts}/>
-            </Grid>
+                    {/* Closed Contracts */}
+                    <Grid item xs={12}>
+                        <div className="contractHeader">
+                            <Typography variant="h3">Closed Contracts</Typography> 
+                        </div>  
+                    </Grid>
+                    <Grid item xs={12}>
+                        <DataTable tableData={closedContracts}/>
+                    </Grid>
+                </>
+                :
+                <>
+                    {/* All Contracts */}
+                    <Grid item xs={12}>
+                        <div className="contractHeader">
+                            <Typography variant="h3">All Contracts</Typography> 
+                        </div> 
+                    </Grid>
+                    <Grid item xs={12}>
+                        <DataTableExport tableData={closedContracts}/>
+                    </Grid>
+                </>
+            }
 
         </Grid>
     );
