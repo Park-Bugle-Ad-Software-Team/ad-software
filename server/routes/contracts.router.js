@@ -177,16 +177,19 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     SELECT
     "Contracts".*,
     to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color"
+    to_json("Color".*) as "Color",
+     array_agg(to_json("Images".*)) as "image"
     --to_json("Chat".*) as "Chat"
-
-    FROM "Contracts"
-      JOIN "AdSize"
-        ON "AdSize"."id" = "Contracts"."adSizeId"
-      JOIN "Color"
-        ON "Color"."id" = "Contracts"."colorId"
-      
-      WHERE "Contracts"."id" = $1;
+  
+  FROM "Contracts"
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    JOIN "Images"
+      ON "Images"."contractId" = "Contracts"."id"
+    WHERE "Contracts"."id" = $1
+  Group by "Contracts"."id", "AdSize".*, "Color".*;
     `;
   pool
     .query(sqlText, [req.params.id])
@@ -207,7 +210,7 @@ router.put('/edit/:id', (req, res) => {
 
   properties = strFromObj(req.body, ', ', (element, i) => `"${element}" = $${i + 2}`)
 
-  console.log('req.body is: ', req.body)
+  // console.log('req.body is: ', req.body)
   const sqlText = `
   UPDATE "Contracts"
   SET 
