@@ -408,15 +408,9 @@ export default function AdCard() {
                                         }
                                         <Grid item xs={12}>
                                             <Typography className="costHeader">Total Calculated Cost</Typography>
-                                            {!rates || !contractToEdit ?
-                                                <Typography>$</Typography> :
-                                                <Typography>${calculateBill()}</Typography>
-                                            }
+                                            <Typography>${calculateBill()}</Typography>
                                             <Typography className="costHeader">Monthly Calculated Cost</Typography>
-                                            {!rates || !contractToEdit ?
-                                                <Typography>$</Typography> :
-                                                <Typography>${monthlyBill()}</Typography>
-                                            }
+                                            <Typography>${monthlyBill()}</Typography>
                                             <FormControl>
                                                 
                                                 {user.authLevel === "admin" || user.authLevel === "ad rep" ?
