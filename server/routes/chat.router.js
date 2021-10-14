@@ -16,6 +16,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
         JOIN "Users"
             ON "Users"."id" = "Chat"."userId"
         WHERE "Chat"."contractId" = ${contractId}
+        ORDER BY "Chat"."timeStamp" ASC
     `;
     pool.query(sqlText)
     .then((dbRes) => {
@@ -29,6 +30,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 });
 
 router.post('/', (req, res) => {
+    console.log('req.body is', req.body);
     const sqlText = `
         INSERT INTO "Chat"
             ("message", "userId", "contractId")
@@ -38,7 +40,7 @@ router.post('/', (req, res) => {
     const sqlParams = [
         req.body.messageToSend,
         req.body.userId,
-        req.body.contractId
+        req.body.contractChatId
     ];
     pool.query(sqlText, sqlParams)
     .then((results) => {
