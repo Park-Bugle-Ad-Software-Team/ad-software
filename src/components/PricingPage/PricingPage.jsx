@@ -1,4 +1,4 @@
-import { Container, Grid, Input, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Container, Button, Grid, Input, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -9,21 +9,34 @@ export default function PricingPage() {
     const dispatch = useDispatch();
 
     const store = useSelector(store => store);
-    const rates = store.ratesToEdit;
-
+    const ratesToEdit = store.ratesToEdit;
+    console.log(ratesToEdit);
     useEffect(() => {
         dispatch({
             type: 'FETCH_RATES_TO_EDIT'
         })
     }, [])
 
-    const handleChange = (event, property) => {
-        console.log('event value and property changing is', event, property);
+    const handleChange = (event, i, property) => {
+        console.log('event value and property changing is', event.target.value, property);
+        ratesToEdit[i] = {...ratesToEdit[i], [property]: Number(event.target.value)};
+        dispatch({
+            type: 'UPDATE_RATES_TO_EDIT',
+            payload: [...ratesToEdit]
+        });
+    }
+
+    const updateRates = () => {
+        console.log('updating permanent rates');
+        dispatch({
+            type: 'UPDATE_RATES',
+            payload: ratesToEdit
+        });
     }
 
     return (
         <Container>
-            <Grid container style={{textAlign: 'center'}}>
+            <Grid container spacing={4} style={{textAlign: 'center'}}>
                 <Grid item xs={12}>
                     <h1>Edit Default Rates</h1>
                 </Grid> 
@@ -40,9 +53,9 @@ export default function PricingPage() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rates.length !== 0 &&
+                                {ratesToEdit.length !== 0 &&
                                     <>
-                                        {rates.map((item, i) => (
+                                        {ratesToEdit.map((item, i) => (
                                             <TableRow key={i}>
                                                 <TableCell>{item.rateName}</TableCell>
                                                 <TableCell>
@@ -50,7 +63,7 @@ export default function PricingPage() {
                                                         type="number"
                                                         value={item.isLessThanEight || ''}
                                                         sx={{width: 80}}
-                                                        onChange={(event) => handleChange(event, "isLessThanEight")}
+                                                        onChange={(event) => handleChange(event, i, "isLessThanEight")}
                                                     />
                                                 </TableCell>
                                                 <TableCell>
@@ -58,7 +71,7 @@ export default function PricingPage() {
                                                         type="number"
                                                         value={item.isEightToTwelve || ''}
                                                         sx={{width: 80}}
-                                                        onChange={(event) => handleChange(event, "isEightToTwelve")}
+                                                        onChange={(event) => handleChange(event, i, "isEightToTwelve")}
                                                     />
                                                 </TableCell>
                                                 <TableCell>
@@ -66,7 +79,7 @@ export default function PricingPage() {
                                                         type="number"
                                                         value={item.isTwelveToTwenty || ''}
                                                         sx={{width: 80}}
-                                                        onChange={(event) => handleChange(event, "isTwelveToTwenty")}
+                                                        onChange={(event) => handleChange(event, i, "isTwelveToTwenty")}
                                                     />
                                                 </TableCell>
                                                 <TableCell>
@@ -74,7 +87,7 @@ export default function PricingPage() {
                                                         type="number"
                                                         value={item.isTwentyPlus || ''}
                                                         sx={{width: 80}}
-                                                        onChange={(event) => handleChange(event, "isTwentyPlus")}
+                                                        onChange={(event) => handleChange(event, i, "isTwentyPlus")}
                                                     />
                                                 </TableCell>
                                             </TableRow>
@@ -84,6 +97,15 @@ export default function PricingPage() {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                </Grid>
+                <Grid item xs={12} style={{textAlign: 'center'}}>
+                    <Button 
+                        variant="contained" 
+                        color="primary"
+                        onClick={updateRates}
+                    >
+                        Save
+                    </Button>
                 </Grid>
             </Grid>
         </Container>

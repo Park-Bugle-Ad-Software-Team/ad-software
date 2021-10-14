@@ -8,12 +8,19 @@ export default function* contractsSaga() {
     // yield takeLatest('FETCH_ALL_CONTRACTS', fetchAllContracts);
     yield takeLatest('FETCH_CONTRACT_TO_EDIT', fetchContractToEdit);
     yield takeLatest('UPDATE_CONTRACT', updateContract);
-    // yield takeLatest('FETCH_RATES', fetchRates);
+    yield takeLatest('FETCH_RATES', fetchRates);
     yield takeLatest('FETCH_AD_SIZES', fetchAdSizes);
     yield takeLatest('CREATE_NEW_CONTRACT', createNewContract);
+    yield takeLatest('UPDATE_RATES', updateRates);
 }
 
-
+function* updateRates(action) {
+    try {
+        yield axios.put('/api/rates', action.payload);
+    } catch (error) {
+        console.error('Failed to update rates', error);
+    }
+}
 
 function* createNewContract(action) {
     try {
