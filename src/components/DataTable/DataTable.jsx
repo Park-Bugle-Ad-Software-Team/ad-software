@@ -74,30 +74,23 @@ export default function DataTable( { tableData }) {
         );
     }
 
-    // to format the length to add 'months' to the value
-    function generateMonthsString(item) {
-        return (`
-            ${item} months
-        `);
-    }
-
-    // to add a $ to the cost value
-    function generateDollarSign(item) {
-        return (`
-            $${item}
-        `);
-    }
-
     // columns for the DataGrid
     const columns = [
         {field: 'startMonth', headerName: 'Start Month', width: 180,
             valueFormatter: (params) => {
                 return formatStartMonthTimestamp(params.row.startMonth);
+            },
+            // valueGetter is needed to filter properly
+            valueGetter: (params) => {
+                return formatStartMonthTimestamp(params.row.startMonth);
             }
         },
         {field: 'months', headerName: 'Length', width: 120,
             valueFormatter: (params) => {
-                return generateMonthsString(params.row.months)
+                return `${params.row.months} months`
+            },
+            valueGetter: (params) => {
+                return `${params.row.months} months`
             }
         },
         {field: 'contractType', headerName: 'Type', width: 120},
@@ -106,7 +99,10 @@ export default function DataTable( { tableData }) {
         {field: 'colorType', headerName: 'Color', width: 180},
         {field: 'actualBill', headerName: 'Cost', width: 120,
             valueFormatter: (params) => {
-                return generateDollarSign(params.row.actualBill);
+                return `$${params.row.actualBill}`
+            },
+            valueGetter: (params) => {
+                return `$${params.row.actualBill}`
             }
         },
         {
