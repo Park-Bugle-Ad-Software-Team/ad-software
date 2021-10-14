@@ -17,21 +17,15 @@ export default function EmployeeHomePage() {
     }, []);
 
     // local state
-    let [filteredContract, setFilteredContract] = useState({ advertiser: 0, month: '' });
     let [showingExportView, setShowingExportView] = useState(false);
 
     // global state from redux store
     const store = useSelector((store) => store);
     const user = store.user;
-    const advertisers = store.advertisers;
     const pendingContracts = store.pendingContracts;
     const activeContracts = store.activeContracts;
     const closedContracts = store.closedContracts;
     const allContracts = store.allContracts;
-
-    function fetchFilteredContracts() {
-        dispatch({type: 'FETCH_FILTERED_CONTRACTS'});
-    }
 
     const goToAdCard = (contractId) => {
         history.push(`/contracts/edit/${contractId}`);
@@ -46,31 +40,7 @@ export default function EmployeeHomePage() {
             <Grid align="center" item xs={4}>
                 <Typography variant="h6">Role: {user.authLevel}</Typography>
             </Grid>
-            <Grid item xs={6}>
-                {/* <div className="employeeFunctions">
-                    <select
-                        className="dropdownMenu"
-                        value={filteredContract.advertiser}
-                        onChange={(event) => setFilteredContract({...filteredContract, advertiser: event.target.value})}>
-                        <option disabled value='0'>Advertiser</option>
-                        {advertisers.map((advertiser) => (
-                            <option key={advertiser.id} value={advertiser.id}>
-                                {advertiser.companyName}
-                            </option>
-                        ))}
-                    </select>
-                    <input
-                        className="monthPicker"
-                        value={filteredContract.month}
-                        type="month"
-                        onChange={(event) => setFilteredContract({...filteredContract, month: event.target.value})}
-                    />
-                    <button className="btn" onClick={fetchFilteredContracts}>
-                        Search
-                    </button>
-                </div> */}
-            </Grid>
-            <Grid item xs={2}></Grid>
+            <Grid item xs={8}></Grid>
             <Grid align="center" item xs={4}>
                 <button className="btn"
                     onClick={

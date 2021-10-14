@@ -9,15 +9,34 @@ const strFromObj = require('../modules/strFromObj')
 router.get('/all', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT
-    "Contracts".*,
-    "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType"
+      "Contracts".*,
+      "AdSize"."adType" as "adType",
+      "AdSize"."desc" as "desc",
+      "AdSize"."columns" as "columns",
+      "AdSize"."inches" as "inches",
+      "Color"."colorType" as "colorType",
+      "Color"."colorPrice" as "colorPrice",
+      "Rates"."rateName" as "rateName",
+      "Users"."name" as "name",
+      "Users"."email" as "email",
+      "Users"."contactPreference" as "contactPreference",
+      "Users"."companyName" as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
     JOIN "Color"
       ON "Color"."id" = "Contracts"."colorId"
-    GROUP BY "Contracts"."id", "adType", "colorType"
+    JOIN "Rates"
+      ON "Rates"."id" = "Contracts"."pricingSchemaId"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "Users"."authLevel" = 'advertiser'
+    GROUP BY "Contracts"."id", "adType", "desc", "columns",
+      "inches", "colorType", "colorPrice", "rateName", "name",
+      "email", "contactPreference", "companyName"
+    ORDER BY "startMonth" ASC
   `;
   pool.query(sqlText)
   .then((dbRes) => {
