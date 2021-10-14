@@ -12,6 +12,19 @@ export default function* contractsSaga() {
     yield takeLatest('FETCH_AD_SIZES', fetchAdSizes);
     yield takeLatest('CREATE_NEW_CONTRACT', createNewContract);
     yield takeLatest('UPDATE_RATES', updateRates);
+    yield takeLatest('FETCH_AD_SIZE_OBJECT', fetchAdSizeObject);
+}
+
+function* fetchAdSizeObject(action) {
+    try {
+        const response = yield axios.get(`/api/ad-size/${action.payload}`);
+        yield put({
+            type: 'INSERT_AD_SIZE',
+            payload: response.data
+        });
+    } catch (error) {
+        console.error('Failed to fetch ad size object', error);
+    }
 }
 
 function* updateRates(action) {

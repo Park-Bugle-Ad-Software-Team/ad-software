@@ -75,6 +75,10 @@ export default function AdSize() {
                 [property]: index + 1
             }
         })
+        dispatch({
+            type: 'FETCH_AD_SIZE_OBJECT',
+            payload: index + 1,
+        });
     }
     
     let currentLength = 0;
@@ -87,8 +91,7 @@ export default function AdSize() {
             if (currentLength <= rate.maxDuration && currentLength >= rate.minDuration) {
                 setRateRow(rate);
             }
-        }
-        
+        }   
     }, [contractToEdit, rates, adSizes])
 
     // const getRate = () => {

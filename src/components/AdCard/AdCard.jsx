@@ -127,10 +127,10 @@ export default function AdCard() {
     let mm = String(startDate.getMonth() + 1).padStart(2, '0');
     console.log('test', (yyyy + '-' + mm));
 
-    const totalBill = () => {
-        console.log('calc', contractToEdit.months, contractToEdit.AdSize.columns, contractToEdit.AdSize.inches);
-        return Number(contractToEdit.months * contractToEdit.AdSize.columns * contractToEdit.AdSize.inches).toFixed(2);
-    }    
+    // const totalBill = () => {
+    //     console.log('calc', contractToEdit.months, contractToEdit.AdSize.columns, contractToEdit.AdSize.inches);
+    //     return Number(contractToEdit.months * contractToEdit.AdSize.columns * contractToEdit.AdSize.inches).toFixed(2);
+    // }    
 
     const calculateBill = () => {
         switch (contractToEdit.months) {
@@ -406,43 +406,47 @@ export default function AdCard() {
                                                 </FormControl>
                                             </Grid>
                                         }
-                                        {/* {(rates && Object.keys[contractToEdit].length !== 0 && Object.keys[rates].length !== 0) &&
-                                            <Grid item xs={12}>
-                                                <Typography className="costHeader">Total Calculated Cost</Typography>
-                                                <Typography>${calculateBill().toFixed(2)}</Typography>
-                                                <Typography className="costHeader">Monthly Calculated Cost</Typography>
-                                                <Typography>${monthlyBill().toFixed(2)}</Typography>
-                                                <FormControl>
-                                                    
-                                                    {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                                        <>
-                                                            <FormLabel>
-                                                                Final Bill
-                                                            </FormLabel>
-                                                            <Input
-                                                                type="number"
-                                                                variant="outlined"
-                                                                value={contractToEdit.actualBill}
-                                                                onChange={(event) => handleChange(event, "actualBill")}
-                                                            >
-                                                            </Input> 
-                                                        </>:
-                                                        <>
-                                                            <FormLabel sx={{fontWeight: 1000}}>
-                                                                Final Bill
-                                                            </FormLabel>
-                                                            <Input
-                                                                type="number"
-                                                                disabled
-                                                                value={contractToEdit.actualBill}
-                                                                onChange={(event) => handleChange(event, "actualBill")}
-                                                            >
-                                                            </Input>
-                                                        </>
-                                                    }   
-                                                </FormControl>
-                                            </Grid>
-                                        } */}
+                                        <Grid item xs={12}>
+                                            <Typography className="costHeader">Total Calculated Cost</Typography>
+                                            {!rates || !contractToEdit ?
+                                                <Typography>$</Typography> :
+                                                <Typography>${calculateBill()}</Typography>
+                                            }
+                                            <Typography className="costHeader">Monthly Calculated Cost</Typography>
+                                            {!rates || !contractToEdit ?
+                                                <Typography>$</Typography> :
+                                                <Typography>${monthlyBill()}</Typography>
+                                            }
+                                            <FormControl>
+                                                
+                                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                                    <>
+                                                        <FormLabel>
+                                                            Final Bill
+                                                        </FormLabel>
+                                                        <Input
+                                                            type="number"
+                                                            variant="outlined"
+                                                            value={contractToEdit.actualBill}
+                                                            onChange={(event) => handleChange(event, "actualBill")}
+                                                        >
+                                                        </Input> 
+                                                    </>:
+                                                    <>
+                                                        <FormLabel sx={{fontWeight: 1000}}>
+                                                            Final Bill
+                                                        </FormLabel>
+                                                        <Input
+                                                            type="number"
+                                                            disabled
+                                                            value={contractToEdit.actualBill}
+                                                            onChange={(event) => handleChange(event, "actualBill")}
+                                                        >
+                                                        </Input>
+                                                    </>
+                                                }   
+                                            </FormControl>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
