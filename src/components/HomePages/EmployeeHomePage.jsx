@@ -27,6 +27,7 @@ export default function EmployeeHomePage() {
     const pendingContracts = store.pendingContracts;
     const activeContracts = store.activeContracts;
     const closedContracts = store.closedContracts;
+    const allContracts = store.allContracts;
 
     function fetchFilteredContracts() {
         dispatch({type: 'FETCH_FILTERED_CONTRACTS'});
@@ -133,7 +134,7 @@ export default function EmployeeHomePage() {
                         </div> 
                     </Grid>
                     <Grid item xs={12}>
-                        <DataTableExport tableData={closedContracts}/>
+                        <DataTableExport tableData={allContracts}/>
                     </Grid>
                 </>
             }

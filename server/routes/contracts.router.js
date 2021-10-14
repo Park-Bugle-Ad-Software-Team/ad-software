@@ -6,6 +6,29 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const strFromObj = require('../modules/strFromObj')
 
+router.get('/all', rejectUnauthenticated, (req, res) => {
+  const sqlText = `
+    SELECT
+    "Contracts".*,
+    "AdSize"."adType" as "adType",
+    "Color"."colorType" as "colorType"
+    FROM "Contracts"
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    GROUP BY "Contracts"."id", "adType", "colorType"
+  `;
+  pool.query(sqlText)
+  .then((dbRes) => {
+      res.send(dbRes.rows);
+  })
+  .catch((error) => {
+      console.log('get pending contracts error', error);
+      res.sendStatus(500);
+  });
+});
+
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an employee or admin
 router.get('/pending', rejectUnauthenticated, (req, res) => {

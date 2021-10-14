@@ -11,8 +11,19 @@ export default function DataTable( { tableData }) {
     const history = useHistory();
     const rows = tableData;
 
+    // local state
+    let [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    let [messageToSend, setMessageToSend] = useState('');
+
+    // global state from redux
+    const store = useSelector((store) => store);
+    const chat = store.chat;
+    const contractChatId = store.contractChatId;
+    const user = store.user;
+    const userId = user.id;
+
     // to format the time of chat messages
-    const formatDate = (dateString) => {
+    const formatChatTimestamp = (dateString) => {
         let date = new Date(dateString);
         return (`
             ${(date.getMonth()+1)}/${date.getDay()}/${date.getFullYear()}
@@ -24,16 +35,11 @@ export default function DataTable( { tableData }) {
         `);
     }
 
-    // local state
-    let [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    let [messageToSend, setMessageToSend] = useState('');
-
-    // global state from redux
-    const store = useSelector((store) => store);
-    const chat = store.chat;
-    const contractChatId = store.contractChatId;
-    const user = store.user;
-    const userId = user.id;
+    // to format the time of a contract's start month
+    const formatStartMonthTimestamp = (dateString) => {
+        const options = { year: "numeric", month: "long"}
+        return new Date(dateString).toLocaleDateString(undefined, options)
+    }
 
     // button rendered by viewContract renderCell
     const renderViewButton = (params) => {
@@ -70,13 +76,21 @@ export default function DataTable( { tableData }) {
 
     // columns for the DataGrid
     const columns = [
-        {field: 'startMonth', headerName: 'Start Month', width: 180},
+        {field: 'startMonth', headerName: 'Start Month', width: 180,
+            valueFormatter: (params) => {
+                return formatStartMonthTimestamp(params.row.startMonth);
+            }
+        },
         {field: 'months', headerName: 'Length', width: 120},
         {field: 'contractType', headerName: 'Type', width: 120},
         {field: 'adType', headerName: 'Size', width: 180},
         {field: 'page', headerName: 'Page', width: 120},
         {field: 'colorType', headerName: 'Color', width: 180},
-        {field: 'actualBill', headerName: 'Cost', width: 120},
+        {field: 'actualBill', headerName: 'Cost', width: 120,
+            valueFormatter: (params) => {
+                return generateDollarSign(params.row.actualBill);
+            }
+        },
         {
             field: 'viewContract',
             headerName: 'Details',
@@ -90,6 +104,12 @@ export default function DataTable( { tableData }) {
             renderCell: renderChatButton
         }
     ];
+
+    function generateDollarSign(item) {
+        return (`
+            $${item}
+        `);
+    }
 
     function customToolbar() {
         return (
@@ -149,7 +169,7 @@ export default function DataTable( { tableData }) {
                             <Grid key={i} item xs={12}>
                                 {user.id === item.userId ?
                                 <>
-                                    <p className="myChatTimeStamp">{formatDate(item.timeStamp)}</p>
+                                    <p className="myChatTimeStamp">{formatChatTimestamp(item.timeStamp)}</p>
                                     <div className="myChat">
                                         <p className="chatContext">{item.message}</p>
                                     </div>
@@ -157,7 +177,7 @@ export default function DataTable( { tableData }) {
                                 :
                                 <>
                                     <p className="theirName">{item.Users.name}</p>
-                                    <p className="theirChatTimeStamp">{formatDate(item.timeStamp)}</p>
+                                    <p className="theirChatTimeStamp">{formatChatTimestamp(item.timeStamp)}</p>
                                     <div className="theirChat">
                                         <p className="chatContext">{item.message}</p>
                                     </div>

@@ -5,7 +5,7 @@ export default function* contractsSaga() {
     yield takeLatest('FETCH_PENDING_CONTRACTS', fetchPendingContracts);
     yield takeLatest('FETCH_ACTIVE_CONTRACTS', fetchActiveContracts);
     yield takeLatest('FETCH_CLOSED_CONTRACTS', fetchClosedContracts);
-    // yield takeLatest('FETCH_ALL_CONTRACTS', fetchAllContracts);
+    yield takeLatest('FETCH_ALL_CONTRACTS', fetchAllContracts);
     yield takeLatest('FETCH_CONTRACT_TO_EDIT', fetchContractToEdit);
     yield takeLatest('UPDATE_CONTRACT', updateContract);
     yield takeLatest('FETCH_RATES', fetchRates);
@@ -55,6 +55,17 @@ function* fetchContractToEdit(action) {
       } catch (error) {
         console.log(`Failed to fetch user to edit at id ${action.payload}:`, error);
       }
+}
+
+function* fetchAllContracts() {
+    try {
+        const response = yield axios.get('/api/contracts/all');
+
+        yield put({ type: 'SET_ALL_CONTRACTS', payload: response.data});
+    
+    } catch (error) {
+        console.log('All contracts GET request failed', error);
+    }
 }
 
 function* fetchPendingContracts(action) {
