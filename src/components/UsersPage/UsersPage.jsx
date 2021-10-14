@@ -37,10 +37,7 @@ export default function UsersPage() {
                     </Grid>
                     <Grid item xs={3}>
                     </Grid>
-                    <Grid item xs={6}>
-
-                            <Typography variant="h3">Employee List</Typography>
-                        
+                    <Grid item xs={6}>             
                         <TableContainer>
                             <TableHead>
                                 <TableRow>

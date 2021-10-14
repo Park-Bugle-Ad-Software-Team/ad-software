@@ -405,13 +405,13 @@ export default function AdCard() {
                                             </Grid>
                                         }
                                         <Grid item xs={12}>
-                                            {contractToEdit.AdSize && contractToEdit.months &&
+                                            {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
                                                 <>
                                                     <Typography className="costHeader">Total Calculated Cost</Typography>
                                                     <Typography>${calculateBill().toFixed(2)}</Typography>
                                                 </>
                                             }
-                                            {contractToEdit.AdSize && contractToEdit.months &&
+                                            {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
                                                 <>
                                                     <Typography className="costHeader">Monthly Calculated Cost</Typography>
                                                     <Typography>${monthlyBill().toFixed(2)}</Typography>

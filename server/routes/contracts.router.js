@@ -202,6 +202,7 @@ router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
 
 router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   // removing chat from this pull for testing
+  console.log('req.params', req.params.id);
   const sqlText = `
     SELECT
     "Contracts".*,
@@ -223,6 +224,7 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   pool
     .query(sqlText, [req.params.id])
     .then(dbRes => {
+      console.log(dbRes.rows);
       res.send(dbRes.rows[0]);
     })
     .catch(error => {
