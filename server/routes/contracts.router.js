@@ -223,7 +223,6 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   pool
     .query(sqlText, [req.params.id])
     .then(dbRes => {
-      console.log('object to be edited: ', dbRes.rows[0]);
       res.send(dbRes.rows[0]);
     })
     .catch(error => {
@@ -315,11 +314,13 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
 /**
  * POST route template
  */
- router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
+ router.post('/:advertiserId', rejectUnauthenticated, async (req, res) => {
   const imageUrl  = req.body.imageUrl;
-  delete req.body.userId;
   delete req.body.imageUrl;
+
+  delete req.body.userId;
   delete req.body.AdSize;
+  delete req.body.adRepId;
  
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
@@ -328,40 +329,62 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
                       VALUES (${values}) 
                       RETURNING id`;
   const sqlParams = Object.values(req.body);
-  pool
-    .query(queryText, sqlParams)
-    .then((dbRes) => {
-      // res.sendStatus(201)
-      // also need to insert:
-        const contractsUsersQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")
-                          VALUES ($1, $2)`;
-        // users_contracts - which use
-        const contractsUsersParams = [dbRes.rows[0].id, req.params.advertiserId]
-        pool
-          .query(contractsUsersQuery, contractsUsersParams)
-          .then(innerDbResponse => {
-            const imagesQuery = `INSERT INTO "Images" ("contractId", "imageUrl")
-                                 VALUES ($1, $2)`;
-            const imagesParams = [dbRes.rows[0].id, imageUrl];
-            pool
-              .query(imagesQuery, imagesParams)
-              .then(() => {
-                res.sendStatus(200)
-              })
-              .catch(error => {
-                console.log('Failed to POST to "Images" while posting a new contract: ', error)
-                res.sendStatus(500);
-              })
-          })
-          .catch(error => {
-            console.log('Failed to POST to contracts_user while posting new contract: ', error);
-            res.sendStatus(500);
-          })
-    })
-    .catch((err) => {
-      console.log('New contract creation failed: ', err);
-      res.sendStatus(500);
-    });
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    // all of the relevant queries listed here
+    const contractsPostResults = await client.query(queryText, sqlParams);
+    const contractsContractsUsersResults = await client.query(`INSERT INTO "Contracts_Users" ("contractId", "userId")
+    VALUES ($1, $2)`, [contractsPostResults.rows.id, imageUrl]);
+    // const contractsImageResults = await client.query();
+    console.log(contractsPostResults)
+
+
+    await client.query('COMMIT');
+    res.sendStatus(200);
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.log('Error POST /api/contracts: ', error)
+  } finally {
+    client.release();
+  }
+
+
+  // pool
+  //   .query(queryText, sqlParams)
+  //   .then((dbRes) => {
+  //     // res.sendStatus(201)
+  //     // also need to insert:
+  //       const contractsUsersQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")
+  //                         VALUES ($1, $2)`;
+  //       // users_contracts - which use
+  //       const contractsUsersParams = [dbRes.rows[0].id, req.params.advertiserId]
+  //       pool
+  //         .query(contractsUsersQuery, contractsUsersParams)
+  //         .then(innerDbResponse => {
+  //           const imagesQuery = `INSERT INTO "Images" ("contractId", "imageUrl")
+  //                                VALUES ($1, $2)`;
+  //           const imagesParams = [dbRes.rows[0].id, imageUrl];
+  //           pool
+  //             .query(imagesQuery, imagesParams)
+  //             .then(() => {
+  //               res.sendStatus(200)
+  //             })
+  //             .catch(error => {
+  //               console.log('Failed to POST to "Images" while posting a new contract: ', error)
+  //               res.sendStatus(500);
+  //             })
+  //         })
+  //         .catch(error => {
+  //           console.log('Failed to POST to contracts_user while posting new contract: ', error);
+  //           res.sendStatus(500);
+  //         })
+  //   })
+  //   .catch((err) => {
+  //     console.log('New contract creation failed: ', err);
+  //     res.sendStatus(500);
+  //   });
 });
 
 
