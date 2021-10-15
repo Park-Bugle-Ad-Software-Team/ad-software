@@ -1,13 +1,10 @@
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid'
 import CardActionArea from '@mui/material/CardActionArea';
-import CardMedia from '@mui/material/CardMedia';
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -58,15 +55,6 @@ export default function AdSize() {
         })
     }, []);
 
-    // useEffect(() => {
-    //     for (const rate of rates) {
-    //         if (contractToEdit.pricingSchemaId === rate.id){
-    //             console.log('matching rate row is ', rate);
-    //         }
-            
-    //     }
-    // }, [rates])
-
     const handleChange = (index, property) => {
         dispatch({
             type: 'UPDATE_CONTRACT_TO_EDIT',
@@ -94,19 +82,9 @@ export default function AdSize() {
         }   
     }, [contractToEdit, rates, adSizes])
 
-    // const getRate = () => {
-    //     for (let rate of rates) {
-    //         if (currentLength <= rate.maxDuration && currentLength >= rate.minDuration) {
-    //             rateRow = rate;
-    //         }
-    //     }
-    //     return rateRow;
-    // }
-
     const round = (num) => {
         return num;
     }
-
 
     const checkSize = (size) => {
         if ((size.columns * size.inches) >= 20) {
@@ -182,13 +160,13 @@ export default function AdSize() {
         <>
             <h1>Select Size</h1>
 
-            <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={{ xs: 1, md: 22 }} columns={{ xs: 3, sm: 6, md: 16}}>
+            <Box sx={{ flexGrow: 1, flexShrink: 1 }}>
+                <Grid container spacing={{ xs: 1, md: 0  }} columns={{ xs: 3, sm: 6, md: 16}} columnSpacing={22}>
                     {adSizes.map((size, index) => (
                         <>
                             {size.id === contractToEdit.adSizeId ?
-                                <Grid item xs={2} sm={4} md={4} key={index}>
-                                    <Card className="adSizeCardSelected" sx={{ minWidth: 220, maxWidth: 300}}>
+                                <Grid item xs={2} sm={4} md={4} key={index} className="adSizeGrid">
+                                    <Card className="adSizeCardSelected" sx={{ minWidth: 220, maxWidth: 300 }}>
                                         <>
                                         {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                             <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
@@ -267,8 +245,7 @@ export default function AdSize() {
                         </>
                     ))}
                 </Grid>
-            </Box>
-            
+            </Box>         
         </>
     )
 }

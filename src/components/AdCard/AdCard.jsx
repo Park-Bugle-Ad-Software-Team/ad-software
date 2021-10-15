@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import ImageUploader from '../ImageUploader/ImageUploader';
 import './AdCard.css';
 import { MonthPicker, YearPicker } from "@mui/lab";
+import ActualSizes from "../SubComponents/ActualSizes";
 
 export default function AdCard() {
     // testing data
@@ -209,7 +210,7 @@ export default function AdCard() {
                                     <Grid item xs={12}>
                                         <Typography variant="h4">Select Advertiser</Typography>
                                         <Select
-                                            value={''}
+                                            value={contractToEdit.companyName || ''}
                                             onChange={(event) => handleChange(event, "userId")}
                                         >
                                             {/* map through advertisers */}
@@ -339,11 +340,14 @@ export default function AdCard() {
                                 }
                                 <div className="spacer">
                                 </div>
+                                <ActualSizes
+                                    handleChange={handleChange}
+                                />
+                                <div className="spacer">
+                                </div>
                                 <Grid item xs={12}>
                                     <FormControl>
-                                        <Typography variant="p">
-                                            Image Upload
-                                        </Typography>
+                                        <FormLabel>Image Upload</FormLabel>
                                         <div className="imageUploaderDiv">
                                             <ImageUploader 
                                                 uploadComplete={uploadComplete}
@@ -354,9 +358,7 @@ export default function AdCard() {
                                 <div className="spacer">
                                 </div>
                                 <Grid item xs={12}>
-                                    <Typography variant="p">
-                                        Image Bank
-                                    </Typography>
+                                    <FormLabel>Image Bank</FormLabel>
                                     <div className="imageBank">
                                         {contractToEdit.image &&
                                             <>
@@ -452,18 +454,22 @@ export default function AdCard() {
                                 <div className="spacer">
                                 </div>
                                 <Grid item xs={12}>
-                                    {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
+                                    {/* {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
                                         <>
-                                            <Typography className="costHeader">Total Calculated Cost</Typography>
+                                            <FormLabel>Commission Percentage</FormLabel>
                                             <Typography>${calculateBill().toFixed(2)}</Typography>
                                         </>
                                     }
+                                    <div className="spacer">
+                                    </div> */}
                                     {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
                                         <>
-                                            <Typography className="costHeader">Monthly Calculated Cost</Typography>
+                                            <FormLabel>Calculated Monthly Bill</FormLabel>
                                             <Typography>${monthlyBill().toFixed(2)}</Typography>
                                         </>
                                     }
+                                    <div className="spacer">
+                                    </div>
                                     <FormControl>
                                         {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                             <>
@@ -472,6 +478,7 @@ export default function AdCard() {
                                                 </FormLabel>
                                                 <TextField
                                                     // label="Final Bill"
+                                                    sx={{width: 100}}
                                                     variant="outlined"
                                                     value={contractToEdit.actualBill || ''}
                                                     onChange={(event) => handleChange(event, "actualBill")}
@@ -484,7 +491,7 @@ export default function AdCard() {
                                                 <Input
                                                     type="number"
                                                     disabled
-                                                    value={contractToEdit.actualBill}
+                                                    value={contractToEdit.actualBill || ''}
                                                     onChange={(event) => handleChange(event, "actualBill")}
                                                 >
                                                 </Input>
@@ -499,11 +506,17 @@ export default function AdCard() {
                             <Grid item xs={8}>
                                 <AdSize />
                             </Grid>
+                            <div className="spacer">
+                            </div>
                             <Grid item xs={6}>
-                                <Button variant="contained" color="primary" onClick={submitContract}>Save</Button>
+                                <div style={{textAlign: 'center'}}>
+                                    <Button variant="contained" color="primary" onClick={submitContract}>Save</Button>
+                                </div>
                             </Grid>
                             <Grid item xs={6}>
-                                <Button variant="contained" color="primary" onClick={approveContract}>Approve</Button>
+                                <div style={{textAlign: 'center'}}>
+                                    <Button variant="contained" color="primary" onClick={approveContract}>Approve</Button>
+                                </div>
                             </Grid>
                         </Grid>
                     </Box>
