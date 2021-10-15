@@ -316,8 +316,6 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
  * POST route template
  */
  router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
-  console.log('req.body is: ', req.body);
-  req.body.isApproved = false;
   const imageUrl  = req.body.imageUrl;
   delete req.body.userId;
   delete req.body.imageUrl;
@@ -365,6 +363,49 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+
+/*
+router.delete('/:id', rejectUnauthenticated, async (req, res) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        // delete the info from the playersRankings table
+        const playersRankingsDeleteResults = await client.query(`
+                DELETE FROM "playersRankings"
+                WHERE "player_id" = $1
+            `, [req.params.id]
+        );
+        // then delete info from the playersTags table
+        const playersTagsDeleteResults = await client.query(`
+                DELETE FROM "playersTags"
+                WHERE "player_id" = $1
+            `, [req.params.id]
+        );
+        // then delete info from the players table
+        const playersDeleteResults = await client.query(`
+                DELETE FROM "players"
+                WHERE "id" = $1
+            `, [req.params.id]
+        );
+        await client.query('COMMIT');
+        res.sendStatus(200);
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.log('Error DELETE /api/player', error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+});
+
+
+
+
+*/
+
+
+
 
 router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const sqlQuery = `DELETE FROM "Contracts"
