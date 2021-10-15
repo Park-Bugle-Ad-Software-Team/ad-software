@@ -10,6 +10,8 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import ImageUploader from '../ImageUploader/ImageUploader';
 import './AdCard.css';
+import * as React from 'react';
+import Checkbox from '@mui/material/Checkbox';
 
 export default function AdCard() {
     // testing data
@@ -57,6 +59,14 @@ export default function AdCard() {
                 payload: {
                     ...contractToEdit,
                     [property]: Number(event.target.value)
+                }
+            })
+        } else if (property === 'isApproved') {
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: event.target.checked
                 }
             })
         } else if (property === "startMonth") {
@@ -197,6 +207,14 @@ export default function AdCard() {
     return(
         <>
                 <Container>
+                <Button 
+                id="backBtn" 
+                variant="contained" 
+                color="primary" 
+                onClick={returnToHome}
+            >
+                Back
+            </Button>
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={4}>
                             <Grid item xs={4}>
@@ -457,7 +475,13 @@ export default function AdCard() {
                                 <Button variant="contained" color="primary" onClick={submitContract}>Save</Button>
                             </Grid>
                             <Grid item xs={6}>
-                                <Button variant="contained" color="primary" onClick={approveContract}>Approve</Button>
+                                <FormControl>
+                                    <FormLabel>Approve: </FormLabel>
+                                    <Checkbox
+                                        checked={contractToEdit.isApproved}
+                                        onChange={(event) => handleChange(event, "isApproved")}
+                                    />
+                                </FormControl>
                             </Grid>
                         </Grid>
                     </Box>

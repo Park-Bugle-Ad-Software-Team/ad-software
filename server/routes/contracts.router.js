@@ -223,6 +223,7 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   pool
     .query(sqlText, [req.params.id])
     .then(dbRes => {
+      console.log('object to be edited: ', dbRes.rows[0]);
       res.send(dbRes.rows[0]);
     })
     .catch(error => {
@@ -316,6 +317,7 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
  */
  router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
   console.log('req.body is: ', req.body);
+  req.body.isApproved = false;
   const imageUrl  = req.body.imageUrl;
   delete req.body.userId;
   delete req.body.imageUrl;

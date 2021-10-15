@@ -13,6 +13,7 @@ export default function* contractsSaga() {
     yield takeLatest('CREATE_NEW_CONTRACT', createNewContract);
     yield takeLatest('UPDATE_RATES', updateRates);
     yield takeLatest('FETCH_AD_SIZE_OBJECT', fetchAdSizeObject);
+    yield takeLatest('UPDATE_CONTRACT_FOR_APPROVAL', updateContract)
 }
 
 function* fetchAdSizeObject(action) {
