@@ -142,15 +142,14 @@ INSERT INTO "AdSize"
 "inches", 
 "image")  
 VALUES 
-('FULL PAGE', '5 columns x 15.66"', 5, 15.66, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
-('1/2 PAGE VERTICAL', '3 columns x 12.5"', 3, 12.5, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
-('1/2 PAGE HORIZONTAL', '5 columns x 7.5"', 5, 7.5, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
-('1/4 PAGE', 'Vertical: 2 columns x 10" Horizontal: 3 columns x 6.5"', 2, 10, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
-('1/8 PAGE', 'Vertical: 2 columns x 5" Horizontal: 3 columns x 3.5"', 5, 5, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
-('1 COLUMN x 8" or 2 COLUMN x 4"', '', 1, 8, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
-('BUSINESS CARD', '2 columns x 2"', 2, 2, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
-('FEATURE SPONSOR AD', 'Includes banner ad, 2 columns x 5" display ad, and web tile ad', 0, 0, 'https://image.flaticon.com/icons/png/512/126/126249.png')
-;
+   ('FULL PAGE', '5 columns x 15.66"', 5, 15.66, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+   ('1/2 PAGE VERTICAL', '3 columns x 12.5"', 3, 12.5, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+   ('1/2 PAGE HORIZONTAL', '5 columns x 7.5"', 5, 7.5, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+   ('1/4 PAGE', 'Vertical: 2 columns x 10" Horizontal: 3 columns x 6.5"', 2, 10, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+   ('1/8 PAGE', 'Vertical: 2 columns x 5" Horizontal: 3 columns x 3.5"', 5, 5, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+   ('1 COLUMN x 8" or 2 COLUMN x 4"', '', 1, 8, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+   ('BUSINESS CARD', '2 columns x 2"', 2, 2, 'https://image.flaticon.com/icons/png/512/126/126249.png'),
+   ('FEATURE SPONSOR AD', 'Includes banner ad, 2 columns x 5" display ad, and web tile ad', 0, 0, 'https://image.flaticon.com/icons/png/512/126/126249.png');
 
 -- INSERT INTO "Sponsorship"
 --    ("isSponsored", "sponsorshipPrice")
@@ -221,9 +220,11 @@ CREATE TABLE "Contracts" (
    "actualBill" DECIMAL,
    "page" INT,
    -- "holidayGuide" DECIMAL, (stretch)
-   "isApproved" BOOLEAN,
+   "isApproved" BOOLEAN DEFAULT false,
    "pricingSchemaId" INT REFERENCES "Rates",
-   "months" INT NOT NULL
+   "months" INT,
+   "actualInches" FLOAT DEFAULT NULL,
+   "actualColumns" FLOAT DEFAULT NULL
 );
 
 INSERT INTO "Contracts" (
@@ -244,12 +245,20 @@ INSERT INTO "Contracts" (
    "months"
 )
 VALUES
-   (1, '8 month contract', '2021-10-01', 20, 1, 'Print', 270, 270, 2, true, 2, 3),
-   (2, '4 month contract', '2021-09-01', 25, 1, 'Print', 250, 270, 3, true, 1, 6),
-   (2, '8 month contract', '2021-11-01', 15, 2, 'Web', 200, 270, 1, true, 3, 9),
-   (1, '2 month contract', '2021-10-01', 20, 1, 'Print', 230, 270, 2, false, 2, 10),
-   (1, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, 3, true, 1, 2),
-   (2, '12 month contract', '2021-10-01', 25, 3, 'Print', 275, 270, 1, false, 2, 1);
+   (1, '2 month contract', '2021-10-01', 20, 1, 'Print', 270, 270, 2, true, 2, 2),
+   (2, '4 month contract', '2021-09-01', 25, 1, 'Print', 250, 270, 3, true, 1, 4),
+   (3, '12 month contract', '2021-11-01', 15, 2, 'Print', 200, 270, 1, true, 3, 12),
+   (4, '2 month contract', '2021-10-01', 20, 1, 'Print', 230, 270, 2, false, 2, 2),
+   (5, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, NULL, true, 1, 1),
+   (1, '12 month contract', '2021-10-01', 25, 3, 'Print', 275, 270, 1, false, 2, 12),
+   (2, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, NULL, true, 1, 1),
+   (3, '2 month contract', '2021-08-01', 20, 2, 'Print', 300, 270, 1, false, 1, 2),
+   (4, '1 month contract', '2021-08-01', 15, 3, 'Print', 300, 270, 3, false, 1, 1),
+   (5, '4 month contract', '2021-08-01', 15, 2, 'Print', 300, 270, 3, false, 1, 4),
+   (6, '12 month contract', '2021-08-01', 15, 3, 'Print', 300, 270, 4, true, 1, 12),
+   (1, '12 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, NULL, true, 1, 12),
+   (2, '4 month contract', '2021-08-01', 15, 1, 'Print', 300, 270, 5, true, 1, 4),
+   (3, '4 month contract', '2021-08-01', 15, 2, 'Print', 300, 270, 1, true, 1, 4);
 
 CREATE TABLE "Images" (
    "id" SERIAL PRIMARY KEY,
@@ -261,7 +270,21 @@ INSERT INTO "Images" (
    "imageUrl",
    "contractId"
 )
-VALUES ('https://image.flaticon.com/icons/png/512/126/126249.png', 1);
+VALUES 
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 1)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 2)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 3)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 4)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 5)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 6)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 7)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 8)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 9)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 10)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 11)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 12)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 13)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 14);
 
 -- CREATE TABLE "Invites" (
 --    "id" SERIAL PRIMARY KEY,
@@ -300,10 +323,8 @@ INSERT INTO "Contracts_Users" (
    "contractId",
    "userId"
 )
-VALUES (
-   1,
-   2
-);
+VALUES 
+   (1,2);
 
 CREATE TABLE "MiscRates" (
    "id" SERIAL PRIMARY KEY,

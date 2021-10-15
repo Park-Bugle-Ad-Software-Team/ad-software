@@ -1,4 +1,4 @@
-import { Box, Button, Drawer, Grid, ListItemText, TextField } from '@material-ui/core';
+import { Box, Button, Drawer, Grid, ListItemText, TextField } from '@mui/material';
 import { DataGrid, GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -100,10 +100,18 @@ export default function DataTable( { tableData }) {
         {field: 'colorType', headerName: 'Color', width: 180},
         {field: 'actualBill', headerName: 'Cost', width: 120,
             valueFormatter: (params) => {
-                return `$${params.row.actualBill}`
+                if (params.row.actualBill === null) {
+                    return (`$0`);
+                } else {
+                    return (`$${params.row.actualBill}`);
+                }
             },
             valueGetter: (params) => {
-                return `$${params.row.actualBill}`
+                if (params.row.actualBill === null) {
+                    return (`$0`);
+                } else {
+                    return (`$${params.row.actualBill}`);
+                }
             }
         },
         {

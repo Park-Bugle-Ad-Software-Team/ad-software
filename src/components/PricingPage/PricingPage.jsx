@@ -2,11 +2,13 @@ import { Container, Button, Grid, Input, Table, TableBody, TableCell, TableConta
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 
 
 export default function PricingPage() {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const store = useSelector(store => store);
     const ratesToEdit = store.ratesToEdit;
@@ -15,6 +17,9 @@ export default function PricingPage() {
         dispatch({
             type: 'FETCH_RATES_TO_EDIT'
         })
+        dispatch({
+            type: 'UNSET_CONTRACT_TO_EDIT'
+        });
     }, [])
 
     const handleChange = (event, i, property) => {
@@ -32,6 +37,7 @@ export default function PricingPage() {
             type: 'UPDATE_RATES',
             payload: ratesToEdit
         });
+        history.push('/home');
     }
 
     return (

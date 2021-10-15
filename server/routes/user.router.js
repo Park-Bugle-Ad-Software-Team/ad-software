@@ -19,7 +19,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 });
 
 router.get('/all', rejectUnauthenticated, (req, res) => {
-  if (req.user.authLevel === 'admin') {
+  if (req.user.authLevel === 'admin' || req.user.authLevel === 'ad rep') {
     const sqlQuery = `SELECT "id", "email","name","authLevel",
                         "contactPreference","acceptAchPayment","companyName",
                         "doNotDisturb","isActive", "advertiserUrl",
@@ -57,6 +57,46 @@ router.get('/advertisers', rejectUnauthenticated, (req, res) => {
     })
     .catch(error => {
       console.log('Failed to retrieve advertisers', error);
+      res.sendStatus(500);
+    });
+});
+
+//route to get all companies, but eliminating repeat instances of companies
+router.get('/adReps', rejectUnauthenticated, (req, res) => {
+  const sqlQuery = `SELECT 
+                      "id",
+                      "name"
+                    FROM "Users"
+                    WHERE "authLevel" = 'ad rep' AND "isActive" = TRUE
+                    ORDER BY "name" ASC
+                    `;
+  pool
+    .query(sqlQuery)
+    .then(dbRes => {
+      res.send(dbRes.rows)
+    })
+    .catch(error => {
+      console.log('Failed to retrieve ad reps', error);
+      res.sendStatus(500);
+    });
+});
+
+//route to get all companies, but eliminating repeat instances of companies
+router.get('/designers', rejectUnauthenticated, (req, res) => {
+  const sqlQuery = `SELECT 
+                      "id",
+                      "name"
+                    FROM "Users"
+                    WHERE "authLevel" = 'print designer' AND "isActive" = TRUE
+                    ORDER BY "name" ASC
+                    `;
+  pool
+    .query(sqlQuery)
+    .then(dbRes => {
+      res.send(dbRes.rows)
+    })
+    .catch(error => {
+      console.log('Failed to retrieve designers', error);
       res.sendStatus(500);
     });
 });

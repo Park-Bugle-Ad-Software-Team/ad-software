@@ -10,11 +10,14 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import ImageUploader from '../ImageUploader/ImageUploader';
 import './AdCard.css';
+import * as React from 'react';
+import Checkbox from '@mui/material/Checkbox';
+import ActualSizes from "../SubComponents/ActualSizes";
+import SelectAdvertiser from "../SubComponents/SelectAdvertiser";
+import SelectAdRep from "../SubComponents/SelectAdRep";
+import SelectDesigner from "../SubComponents/SelectDesigner";
 
 export default function AdCard() {
-    // testing data
-    let advertiser = {name: 'Chroma Zone'};
-
     const dispatch = useDispatch();
     const history = useHistory();
     const params = useParams();
@@ -25,11 +28,20 @@ export default function AdCard() {
     const user = store.user;
     const advertisers = store.advertisers;
     const rates = store.rates;
+    const allUsers = store.allUsers;
+    const adReps = store.adReps;
+    const designers = store.designers;
     const adSize = contractToEdit.AdSize;
     const color = contractToEdit.Color;
-    console.log('contractId', contractId);
-    console.log('contracttoedit.adsize', contractToEdit.AdSize);
-    console.log('contracttoedit.months', contractToEdit.months);
+    const minDate = new Date('2021-01-01T00:00:00.000');
+    const maxDate = new Date('2034-01-01T00:00:00.000');
+
+    const [newImage, setNewImage] = useState({})
+
+    // this formats our month and year from contractToEdit.startMonth for use in the month picker component
+    let startDate = new Date(contractToEdit.startMonth);
+    let yyyy = startDate.getFullYear();
+    let mm = String(startDate.getUTCMonth() + 1).padStart(2, '0');
 
     useEffect(() => {
         if (contractId === 'undefined') {
@@ -48,6 +60,9 @@ export default function AdCard() {
         dispatch({
             type: 'FETCH_RATES'
         });
+        dispatch({
+            type: 'FETCH_ADVERTISERS'
+        })
     }, [])
 
     const handleChange = (event, property) => {
@@ -59,10 +74,16 @@ export default function AdCard() {
                     [property]: Number(event.target.value)
                 }
             })
+        } else if (property === 'isApproved') {
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: event.target.checked
+                }
+            })
         } else if (property === "startMonth") {
-            // this only works sometimes. will need some help to figure it out properly
-            let newDate = new Date(event.target.value);
-            newDate.setMonth(newDate.getMonth() + 1);
+            let newDate = new Date(`${event.target.value}-01`);
 
             dispatch({
                 type: 'UPDATE_CONTRACT_TO_EDIT',
@@ -71,7 +92,61 @@ export default function AdCard() {
                     [property]: newDate
                 }
             });
-        } else {
+        } else if (property === "advertiserId") {
+            console.log('companyName', event.target.value);
+            let advertiserId;
+            for (let user of advertisers) {
+                if (Object.values(user).indexOf(event.target.value) > -1) {
+                    advertiserId = user.id;
+                    console.log('userId for advertiser', advertiserId)
+                }
+            }
+            console.log('advertiser id', advertiserId);
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: advertiserId,
+                    companyName: event.target.value
+                }
+            })
+        } else if (property === "adRepId") {
+            console.log('ad Rep name', event.target.value);
+            let adRepId;
+            for (let user of adReps) {
+                if (Object.values(user).indexOf(event.target.value) > -1) {
+                    adRepId = user.id;
+                }
+            }
+            console.log('adRepId id', adRepId);
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: adRepId,
+                    adRepName: event.target.value
+                }
+            })
+        } else if (property === "designerId") {
+            console.log('designer name', event.target.value);
+            let designerId;
+            for (let user of designers) {
+                if (Object.values(user).indexOf(event.target.value) > -1) {
+                    designerId = user.id;
+                }
+            }
+            console.log('designer id', designerId);
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: designerId,
+                    designerName: event.target.value
+                }
+            })
+        }
+        
+        else {
             dispatch({
                 type: 'UPDATE_CONTRACT_TO_EDIT',
                 payload: {
@@ -119,75 +194,37 @@ export default function AdCard() {
         history.goBack();
     }
 
-    // this formats our month and year from contractToEdit.startMonth for use in the month picker component
-    let startDate = new Date(contractToEdit.startMonth);
-    let yyyy = startDate.getFullYear();
-    let mm = String(startDate.getMonth() + 1).padStart(2, '0');
-    console.log('test', (yyyy + '-' + mm));
+    
+
+    const grabRate = (size, row) => {
+        if (size < 8) {
+            return rates[row].isLessThanEight * size;
+        } else if (size >= 8 && size < 12) {
+            return rates[row].isEightToTwelve * grabSize();
+        } else if (size >= 12 && size < 20) {
+            return rates[row].isTwelveToTwenty * grabSize();
+        } else {
+            return rates[row].isTwentyPlus * grabSize();
+        }
+    }
 
     const calculateBill = () => {
-        let total = 0;
         switch (contractToEdit.months) {
             case 1:
             case 2:
-                if (grabSize() < 8) {
-                    return rates[0].isLessThanEight * grabSize();
-                } else if (grabSize() >= 8 && grabSize() < 12) {
-                    return rates[0].isEightToTwelve * grabSize();
-                } else if (grabSize() >= 12 && grabSize() < 20) {
-                    return rates[0].isTwelveToTwenty * grabSize();
-                } else {
-                    return rates[0].isTwentyPlus * grabSize();
-                }
+                return grabRate(grabSize(), 0);
             case 4:
-                if (grabSize() < 8) {
-                    return rates[1].isLessThanEight * grabSize();
-                } else if (grabSize() >= 8 && grabSize() < 12) {
-                    return rates[1].isEightToTwelve * grabSize();
-                } else if (grabSize() >= 12 && grabSize() < 20) {
-                    return rates[1].isTwelveToTwenty * grabSize();
-                } else {
-                    return rates[1].isTwentyPlus * grabSize();
-                }
+                return grabRate(grabSize(), 1);
             case 12:
-                if (grabSize() < 8) {
-                    return rates[2].isLessThanEight * grabSize();
-                } else if (grabSize() >= 8 && grabSize() < 12) {
-                    return rates[2].isEightToTwelve * grabSize();
-                } else if (grabSize() >= 12 && grabSize() < 20) {
-                    return rates[2].isTwelveToTwenty * grabSize();
-                } else {
-                    return rates[2].isTwentyPlus * grabSize();
-                }
+                return grabRate(grabSize(), 2);
             default:
                 throw new Error(`contractToEdit months has no value ${contractToEdit.months}`);
         }
-        // console.log('total', total);
-        // switch (contractToEdit.colorId) {
-        //     case 2:
-        //         total += (100 * contractToEdit.months);
-        //     case 3: 
-        //         total += (200 * contractToEdit.months);
-        // }
-        // console.log('total', total);
-        // return total;
-    }
-
-    // const calculateBillWithColor = () => {
-    //     let total = calculateBill();
-
-    // }
-
-    const monthlyBill = () => {
-        return calculateBill() / contractToEdit.months;
     }
 
     const grabSize = () => {
-        return contractToEdit.AdSize.columns * contractToEdit.AdSize.inches;
+        return contractToEdit.actualColumns * contractToEdit.actualInches;
     }
-    
-
-    const [newImage, setNewImage] = useState({})
 
     const uploadComplete = (fileUrl) => {
         console.log('fileUrl upload complete', fileUrl);
@@ -197,39 +234,66 @@ export default function AdCard() {
     return(
         <>
                 <Container>
+                <Button 
+                id="backBtn" 
+                variant="contained" 
+                color="primary" 
+                onClick={returnToHome}
+            >
+                Back
+            </Button>
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={4}>
                             <Grid item xs={4}>
-                                {contractId !== 'undefined' ?
+                                <SelectAdvertiser 
+                                    contractId={contractId}
+                                    handleChange={handleChange}
+                                />
+                                <div className="spacer">
+                                </div>
+                                <SelectAdRep
+                                    handleChange={handleChange}
+                                />
+                                <div className="spacer">
+                                </div>
+                                <SelectDesigner
+                                    handleChange={handleChange}
+                                />
+                                <div className="spacer">
+                                </div>
+                                {/* placeholder for select ad rep and designers */}
+                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                     <Grid item xs={12}>
-                                        <Typography variant="h4">{advertiser.name}</Typography>
+                                        <FormControl>
+                                            <FormLabel id="startMonthLabel">Start Month:</FormLabel>
+                                            <Input
+                                                label="Start Month"
+                                                labelId="startMonthLabel"
+                                                type="month"
+                                                min="2021-09"
+                                                value={(yyyy + '-' + mm)}
+                                                onChange={(event) => handleChange(event, "startMonth")}
+                                            />
+                                        </FormControl>
                                     </Grid> :
                                     <Grid item xs={12}>
-                                        <Typography variant="h4">Select Advertiser</Typography>
-                                        <Select
-                                            value={''}
-                                            onChange={(event) => handleChange(event, "userId")}
-                                        >
-                                            {/* map through advertisers */}
-                                            {advertisers.map((advertiser,i) => (
-                                                <MenuItem key={i} value={advertiser.id}>{advertiser.companyName}</MenuItem>
-                                            ))}
-                                        </Select>
+                                        <FormControl>
+                                            <FormLabel id="startMonthLabel">Start Month:</FormLabel>
+                                            <Input
+                                                label="Start Month"
+                                                labelId="startMonthLabel"
+                                                type="month"
+                                                disabled
+                                                min="2021-01"
+                                                value={(yyyy + '-' + mm)}
+                                                onChange={(event) => handleChange(event, "startMonth")}
+                                            />
+                                        </FormControl>
                                     </Grid>
                                 }
-                                {user.authLevel === ("admin" || "ad rep") ?
-                                    <Grid item xs={12}>
-                                        <FormLabel>Start Month:</FormLabel>
-                                        <input type="month" id="start" name="start"
-                                            min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
-                                    </Grid> :
-                                    <Grid item xs={12}>
-                                        <FormLabel>Start Month:</FormLabel>
-                                        <input type="month" id="start" name="start"
-                                            min="2021-09" value={yyyy + '-' + mm} onChange={(event) => handleChange(event, "startMonth")}/>
-                                    </Grid>
-                                }
-                                {user.authLevel === ("admin" || "ad rep") ?
+                                <div className="spacer">
+                                </div>
+                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                     <Grid item xs={12}>
                                         <FormControl>
                                             <FormLabel>Contract Length</FormLabel>
@@ -260,7 +324,9 @@ export default function AdCard() {
                                         </FormControl>
                                     </Grid>
                                 }
-                                {user.authLevel === ("admin" || "ad rep") ?
+                                <div className="spacer">
+                                </div>
+                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                     <Grid item xs={12}>
                                         <FormControl component="fieldset">
                                             <FormLabel>Ad Type</FormLabel>
@@ -312,152 +378,194 @@ export default function AdCard() {
                                         }
                                     </Grid>
                                 }
-
+                                <div className="spacer">
+                                </div>
+                                <ActualSizes
+                                    handleChange={handleChange}
+                                />
+                                <div className="spacer">
+                                </div>
                                 <Grid item xs={12}>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12}>
-                                            <FormControl>
-                                                <Typography variant="p">
-                                                    Image Upload
-                                                </Typography>
-                                                <div className="imageUploaderDiv">
-                                                    <ImageUploader 
-                                                        uploadComplete={uploadComplete}
-                                                    />
-                                                </div>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography variant="p">
-                                                Image Bank
-                                            </Typography>
-                                        </Grid>
-                                        {user.authLevel === ("admin" || "ad rep") ?
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Color Type</FormLabel>
-                                                    <Select
-                                                        value={contractToEdit.colorId || ''}
-                                                        onChange={(event) => handleChange(event, "colorId")}
-                                                    >
-                                                        <MenuItem value={1}>Black and White</MenuItem>
-                                                        <MenuItem value={2}>Spot</MenuItem>
-                                                        <MenuItem value={3}>Full Color</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid> :
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Color Type</FormLabel>
-                                                    <Select
-                                                        disabled
-                                                        value={contractToEdit.colorId || ''}
-                                                        onChange={(event) => handleChange(event, "colorId")}
-                                                    >
-                                                        <MenuItem value={1}>Black and White</MenuItem>
-                                                        <MenuItem value={2}>Spot</MenuItem>
-                                                        <MenuItem value={3}>Full Color</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
-                                        }
-                                        {user.authLevel === ("admin" || "ad rep") ?
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Notes</FormLabel>
-                                                    <TextField
-                                                        multiline
-                                                        rows={6}
-                                                        variant="outlined"
-                                                        sx={{width: 300}}
-                                                        value={contractToEdit.notes || ''}
-                                                        onChange={(event) => handleChange(event, "notes")}
-                                                    />
-                                                </FormControl>
-                                            </Grid> :
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Notes</FormLabel>
-                                                    <TextField
-                                                        multiline
-                                                        disabled
-                                                        rows={6}
-                                                        variant="outlined"
-                                                        sx={{width: 300}}
-                                                        value={contractToEdit.notes || ''}
-                                                        onChange={(event) => handleChange(event, "notes")}
-                                                    />
-                                                </FormControl>
-                                            </Grid>
-                                        }
-                                        {user.authLevel === ("admin" || "ad rep") &&
-                                            <Grid item xs={12}>
-                                                <FormControl>
-                                                    <FormLabel>Commission Percentage</FormLabel>
-                                                    <TextField
-                                                        variant="outlined"
-                                                        type="number"
-                                                        sx={{width: '70px'}}
-                                                        value={contractToEdit.commissionPercentage || ''} 
-                                                        onChange={(event) => handleChange(event, "commissionPercentage")}
-                                                    />
-                                                </FormControl>
-                                            </Grid>
-                                        }
-                                        <Grid item xs={12}>
-                                            {contractToEdit.AdSize && contractToEdit.months &&
-                                                <>
-                                                    <Typography className="costHeader">Total Calculated Cost</Typography>
-                                                    <Typography>${calculateBill().toFixed(2)}</Typography>
-                                                </>
-                                            }
-                                            {contractToEdit.AdSize && contractToEdit.months &&
-                                                <>
-                                                    <Typography className="costHeader">Monthly Calculated Cost</Typography>
-                                                    <Typography>${monthlyBill().toFixed(2)}</Typography>
-                                                </>
-                                            }
-                                            <FormControl>
-                                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                    <FormControl>
+                                        <FormLabel>Image Upload</FormLabel>
+                                        <div className="imageUploaderDiv">
+                                            <ImageUploader 
+                                                uploadComplete={uploadComplete}
+                                            />
+                                        </div>
+                                    </FormControl>
+                                </Grid>
+                                <div className="spacer">
+                                </div>
+                                <Grid item xs={12}>
+                                    <FormLabel>Image Bank</FormLabel>
+                                    <div className="imageBank">
+                                        {contractToEdit.image &&
+                                            <>
+                                                {contractToEdit.image.map((image, i) => (
                                                     <>
-                                                        <FormLabel>
-                                                            Final Bill
-                                                        </FormLabel>
-                                                        <Input
-                                                            type="number"
-                                                            variant="outlined"
-                                                            value={contractToEdit.actualBill}
-                                                            onChange={(event) => handleChange(event, "actualBill")}
-                                                        >
-                                                        </Input> 
-                                                    </>:
-                                                    <>
-                                                        <FormLabel sx={{fontWeight: 1000}}>
-                                                            Final Bill
-                                                        </FormLabel>
-                                                        <Input
-                                                            type="number"
-                                                            disabled
-                                                            value={contractToEdit.actualBill}
-                                                            onChange={(event) => handleChange(event, "actualBill")}
-                                                        >
-                                                        </Input>
+                                                        {image.imageUrl !== '{}' ? 
+                                                            <div className="imageDiv">
+                                                                <a href={image.imageUrl} target="_blank">
+                                                                    <img src={image.imageUrl}/>
+                                                                </a>
+                                                            </div> :
+                                                            null
+                                                        }
                                                     </>
-                                                }   
-                                            </FormControl>
-                                        </Grid>
+                                                ))}
+                                            </>
+                                        }
+                                    </div>      
+                                </Grid>
+                                <div className="spacer">
+                                </div>
+                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Color Type</FormLabel>
+                                            <Select
+                                                value={contractToEdit.colorId || ''}
+                                                onChange={(event) => handleChange(event, "colorId")}
+                                            >
+                                                <MenuItem value={1}>Black and White</MenuItem>
+                                                <MenuItem value={2}>Spot</MenuItem>
+                                                <MenuItem value={3}>Full Color</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid> :
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Color Type</FormLabel>
+                                            <Select
+                                                disabled
+                                                value={contractToEdit.colorId || ''}
+                                                onChange={(event) => handleChange(event, "colorId")}
+                                            >
+                                                <MenuItem value={1}>Black and White</MenuItem>
+                                                <MenuItem value={2}>Spot</MenuItem>
+                                                <MenuItem value={3}>Full Color</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
+                                }
+                                <div className="spacer">
+                                </div>
+                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Notes</FormLabel>
+                                            <TextField
+                                                multiline
+                                                rows={6}
+                                                variant="outlined"
+                                                sx={{width: 300}}
+                                                value={contractToEdit.notes || ''}
+                                                onChange={(event) => handleChange(event, "notes")}
+                                            />
+                                        </FormControl>
+                                    </Grid> :
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Notes</FormLabel>
+                                            <TextField
+                                                multiline
+                                                disabled
+                                                rows={6}
+                                                variant="outlined"
+                                                sx={{width: 300}}
+                                                value={contractToEdit.notes || ''}
+                                                onChange={(event) => handleChange(event, "notes")}
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                }
+                                <div className="spacer">
+                                </div>
+                                {user.authLevel === "admin" || user.authLevel === "ad rep" &&
+                                    <Grid item xs={12}>
+                                        <FormControl>
+                                            <FormLabel>Commission Percentage</FormLabel>
+                                            <TextField
+                                                variant="outlined"
+                                                type="number"
+                                                sx={{width: '70px'}}
+                                                value={contractToEdit.commissionPercentage || ''} 
+                                                onChange={(event) => handleChange(event, "commissionPercentage")}
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                }
+                                <div className="spacer">
+                                </div>
+                                <Grid item xs={12}>
+                                    {/* {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
+                                        <>
+                                            <FormLabel>Commission Percentage</FormLabel>
+                                            <Typography>${calculateBill().toFixed(2)}</Typography>
+                                        </>
+                                    }
+                                    <div className="spacer">
+                                    </div> */}
+                                    {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
+                                        <>
+                                            <FormLabel>Calculated Monthly Bill</FormLabel>
+                                            <Typography>${calculateBill().toFixed(2)}</Typography>
+                                        </>
+                                    }
+                                    <div className="spacer">
+                                    </div>
+                                    <FormControl>
+                                        {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                            <>
+                                                <FormLabel>
+                                                    Final Bill
+                                                </FormLabel>
+                                                <TextField
+                                                    // label="Final Bill"
+                                                    sx={{width: 100}}
+                                                    variant="outlined"
+                                                    value={contractToEdit.actualBill || ''}
+                                                    onChange={(event) => handleChange(event, "actualBill")}
+                                                />
+                                            </>:
+                                            <>
+                                                <FormLabel sx={{fontWeight: 1000}}>
+                                                    Final Bill
+                                                </FormLabel>
+                                                <Input
+                                                    type="number"
+                                                    disabled
+                                                    value={contractToEdit.actualBill || ''}
+                                                    onChange={(event) => handleChange(event, "actualBill")}
+                                                >
+                                                </Input>
+                                            </>
+                                        }   
+                                    </FormControl> 
                                 </Grid>
                             </Grid>
+                            <div className="spacer">
+                            </div>
                             {/* sectioning out a new container for the ad size selection since it will be quite large*/}
                             <Grid item xs={8}>
                                 <AdSize />
                             </Grid>
+                            <div className="spacer">
+                            </div>
                             <Grid item xs={6}>
-                                <Button variant="contained" color="primary" onClick={submitContract}>Save</Button>
+                                <div style={{textAlign: 'center'}}>
+                                    <Button variant="contained" color="primary" onClick={submitContract}>Save</Button>
+                                </div>
                             </Grid>
                             <Grid item xs={6}>
-                                <Button variant="contained" color="primary" onClick={approveContract}>Approve</Button>
+                                <FormControl>
+                                    <FormLabel>Approve: </FormLabel>
+                                    <Checkbox
+                                        checked={contractToEdit.isApproved}
+                                        onChange={(event) => handleChange(event, "isApproved")}
+                                    />
+                                </FormControl>
                             </Grid>
                         </Grid>
                     </Box>

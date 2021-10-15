@@ -8,13 +8,9 @@ import { useHistory } from 'react-router-dom';
 import DataTable from '../DataTable/DataTable';
 import DataTableExport from '../DataTable/DataTableExport';
 
-export default function AdminHomePage() {
+export default function EmployeeHomePage() {
     const dispatch = useDispatch();
     const history = useHistory();
-
-    useEffect(() => {
-        dispatch({type: 'FETCH_ADVERTISERS'});
-    }, []);
 
     // local state
     let [showingExportView, setShowingExportView] = useState(false);
@@ -103,3 +99,4 @@ export default function AdminHomePage() {
         </Grid>
     );
 }
+

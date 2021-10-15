@@ -129,7 +129,7 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Users"."authLevel" = 'advertiser'
+    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "Users"."authLevel" = 'advertiser'
     GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
@@ -161,7 +161,7 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Users"."companyName" = '${companyName}' AND "Users"."authLevel" = 'advertiser'
+    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "Users"."companyName" = '${companyName}' AND "Users"."authLevel" = 'advertiser'
     GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
@@ -239,12 +239,14 @@ router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
 
 router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   // removing chat from this pull for testing
+  console.log('req.params', req.params.id);
   const sqlText = `
     SELECT
     "Contracts".*,
     to_json("AdSize".*) as "AdSize",
     to_json("Color".*) as "Color",
-     array_agg(to_json("Images".*)) as "image"
+    "Users"."companyName" as "companyName",
+    array_agg(to_json("Images".*)) as "image"
     --to_json("Chat".*) as "Chat"
   
   FROM "Contracts"
@@ -254,12 +256,18 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
       ON "Color"."id" = "Contracts"."colorId"
     JOIN "Images"
       ON "Images"."contractId" = "Contracts"."id"
-    WHERE "Contracts"."id" = 4
-  Group by "Contracts"."id", "AdSize".*, "Color".*;
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "Contracts"."id" = $1
+  Group by "Contracts"."id", "AdSize".*, "Color".*, "companyName";
     `;
+    
   pool
-    .query(sqlText)
+    .query(sqlText, [req.params.id])
     .then(dbRes => {
+      console.log(dbRes.rows);
       res.send(dbRes.rows[0]);
     })
     .catch(error => {
@@ -268,7 +276,12 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 })
 
 router.put('/edit/:id', (req, res) => {
+  console.log('req.body is: ', req.body);
+  let image = req.body.imageUrl
+  delete req.body.imageUrl
+  delete req.body.image
   delete req.body.id;
+  delete req.body.companyName;
   // const adRepId = req.body.adRepId
   // delete req.body.adRepId
   delete req.body.AdSize;
@@ -283,7 +296,7 @@ router.put('/edit/:id', (req, res) => {
     ${properties}
   WHERE "id" = $1
   `;
-
+  
   const sqlParams = [
     req.params.id,
     ...Object.values(req.body)
@@ -291,7 +304,21 @@ router.put('/edit/:id', (req, res) => {
 
   pool.query(sqlText, sqlParams)
     .then(dbRes => {
-      res.sendStatus(200);
+      // res.sendStatus(200);
+      imageQuery = `INSERT INTO "Images" ("imageUrl", "contractId")
+                    VALUES ($1, $2)
+                    `;
+
+      imageParams = [image, req.params.id];
+      pool
+        .query(imageQuery, imageParams)
+        .then(dbRes => {
+          res.sendStatus(200);
+        })
+        .catch(error => {
+          console.log('Failed to update the contract with an image relationship: ', error);
+          res.sendStatus(500);
+        })
     })
     .catch(error => {
       console.error(`Failed to update contract at id: ${req.body.id}`, error);
@@ -333,13 +360,26 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
 /**
  * POST route template
  */
- router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
-  console.log('req.body is: ', req.body);
+ router.post('/:advertiserId', rejectUnauthenticated, async (req, res) => {
+   console.log('req.body is: ', req.body);
   const imageUrl  = req.body.imageUrl;
-  delete req.body.userId;
   delete req.body.imageUrl;
+
+  const advertiserId = req.params.advertiserId; // or should we grab it from the body
+  delete req.body.advertiserId;
+
+  const designerId = req.body.designerId;
+  delete req.body.designerId;
+
+  const adRepId = req.body.adRepId;
+  delete req.body.adRepId;
+  // delete req.body.userId;
   delete req.body.AdSize;
- 
+  delete req.body.companyName;
+  delete req.body.adRepName;
+  delete req.body.designerName;
+
+
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
 
@@ -347,41 +387,116 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
                       VALUES (${values}) 
                       RETURNING id`;
   const sqlParams = Object.values(req.body);
-  pool
-    .query(queryText, sqlParams)
-    .then((dbRes) => {
-      // res.sendStatus(201)
-      // also need to insert:
-        const contractsUsersQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")
-                          VALUES ($1, $2)`;
-        // users_contracts - which use
-        const contractsUsersParams = [dbRes.rows[0].id, req.params.advertiserId]
-        pool
-          .query(contractsUsersQuery, contractsUsersParams)
-          .then(innerDbResponse => {
-            const imagesQuery = `INSERT INTO "Images" ("contractId", "imageUrl")
-                                 VALUES ($1, $2)`;
-            const imagesParams = [dbRes.rows[0].id, imageUrl];
-            pool
-              .query(imagesQuery, imagesParams)
-              .then(() => {
-                res.sendStatus(200)
-              })
-              .catch(error => {
-                console.log('Failed to POST to "Images" while posting a new contract: ', error)
-                res.sendStatus(500);
-              })
-          })
-          .catch(error => {
-            console.log('Failed to POST to contracts_user while posting new contract: ', error);
-            res.sendStatus(500);
-          })
-    })
-    .catch((err) => {
-      console.log('New contract creation failed: ', err);
-      res.sendStatus(500);
-    });
+
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+    // all of the relevant queries listed here
+    const contractsPostResults = await client.query(queryText, sqlParams);
+    const contractsContractsUsersResults = await client.query(
+      `INSERT INTO "Contracts_Users" ("contractId", "userId")
+      VALUES ($1, $2),
+             ($1, $3),
+             ($1, $4)`,
+      [contractsPostResults.rows[0].id, 
+      advertiserId, 
+      designerId, 
+      adRepId]);
+    const contractsImageResults = await client.query(
+      `INSERT INTO "Images" ("contractId", "imageUrl")
+      VALUES ($1, $2)`,
+      [contractsPostResults.rows[0].id, 
+      imageUrl]);
+    await client.query('COMMIT');
+    res.sendStatus(200);
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.log('Error POST /api/contracts: ', error)
+    res.sendStatus(500);
+  } finally {
+    client.release();
+  }
+
+
+  // pool
+  //   .query(queryText, sqlParams)
+  //   .then((dbRes) => {
+  //     // res.sendStatus(201)
+  //     // also need to insert:
+  //       const contractsUsersQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")
+  //                         VALUES ($1, $2)`;
+  //       // users_contracts - which use
+  //       const contractsUsersParams = [dbRes.rows[0].id, req.params.advertiserId]
+  //       pool
+  //         .query(contractsUsersQuery, contractsUsersParams)
+  //         .then(innerDbResponse => {
+  //           const imagesQuery = `INSERT INTO "Images" ("contractId", "imageUrl")
+  //                                VALUES ($1, $2)`;
+  //           const imagesParams = [dbRes.rows[0].id, imageUrl];
+  //           pool
+  //             .query(imagesQuery, imagesParams)
+  //             .then(() => {
+  //               res.sendStatus(200)
+  //             })
+  //             .catch(error => {
+  //               console.log('Failed to POST to "Images" while posting a new contract: ', error)
+  //               res.sendStatus(500);
+  //             })
+  //         })
+  //         .catch(error => {
+  //           console.log('Failed to POST to contracts_user while posting new contract: ', error);
+  //           res.sendStatus(500);
+  //         })
+  //   })
+  //   .catch((err) => {
+  //     console.log('New contract creation failed: ', err);
+  //     res.sendStatus(500);
+  //   });
 });
+
+
+/*
+router.delete('/:id', rejectUnauthenticated, async (req, res) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        // delete the info from the playersRankings table
+        const playersRankingsDeleteResults = await client.query(`
+                DELETE FROM "playersRankings"
+                WHERE "player_id" = $1
+            `, [req.params.id]
+        );
+        // then delete info from the playersTags table
+        const playersTagsDeleteResults = await client.query(`
+                DELETE FROM "playersTags"
+                WHERE "player_id" = $1
+            `, [req.params.id]
+        );
+        // then delete info from the players table
+        const playersDeleteResults = await client.query(`
+                DELETE FROM "players"
+                WHERE "id" = $1
+            `, [req.params.id]
+        );
+        await client.query('COMMIT');
+        res.sendStatus(200);
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.log('Error DELETE /api/player', error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+});
+
+
+
+
+*/
+
+
+
 
 router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const sqlQuery = `DELETE FROM "Contracts"

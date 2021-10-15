@@ -19,6 +19,9 @@ export default function UsersPage() {
         dispatch({
             type: 'FETCH_ALL_USERS'
         });
+        dispatch({
+            type: 'UNSET_CONTRACT_TO_EDIT'
+        });
     }, []);
 
     const goToEditUser = (userId) => {
@@ -37,10 +40,7 @@ export default function UsersPage() {
                     </Grid>
                     <Grid item xs={3}>
                     </Grid>
-                    <Grid item xs={6}>
-
-                            <Typography variant="h3">Employee List</Typography>
-                        
+                    <Grid item xs={6}>             
                         <TableContainer>
                             <TableHead>
                                 <TableRow>

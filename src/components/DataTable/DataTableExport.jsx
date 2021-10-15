@@ -34,8 +34,8 @@ export default function DataTable( { tableData }) {
         {field: 'contractType', headerName: 'Type', width: 120},
         {field: 'adType', headerName: 'Size', width: 180},
         {field: 'desc', headerName: 'Description', width: 180},
-        {field: 'columns', headerName: 'Columns', width: 180},
-        {field: 'inches', headerName: 'Inches', width: 180},
+        {field: 'actualColumns', headerName: 'Columns', width: 180},
+        {field: 'actualInches', headerName: 'Inches', width: 180},
         {field: 'page', headerName: 'Page', width: 120},
         {field: 'colorType', headerName: 'Color', width: 120},
         {field: 'colorPrice', headerName: 'Color Price', width: 180},
@@ -81,13 +81,14 @@ export default function DataTable( { tableData }) {
                         components={{
                             Toolbar: GridToolbar,
                         }}
-                        filterModel={{
-                            items: [{
-                                columnField: 'startMonth',
-                                operatorValue: 'contains',
-                                value: `${formatStartMonthTimestamp(Date.now())}`
-                            }]
-                        }}
+                        // start with filtered for current month
+                        // filterModel={{
+                        //     items: [{
+                        //         columnField: 'startMonth',
+                        //         operatorValue: 'contains',
+                        //         value: `${formatStartMonthTimestamp(Date.now())}`
+                        //     }]
+                        // }}
                     />
                 </div>
             </div>
