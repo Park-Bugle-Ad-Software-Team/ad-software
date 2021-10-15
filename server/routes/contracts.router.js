@@ -233,6 +233,10 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 })
 
 router.put('/edit/:id', (req, res) => {
+  console.log('req.body is: ', req.body);
+  let image = req.body.imageUrl
+  delete req.body.imageUrl
+  delete req.body.image
   delete req.body.id;
   // const adRepId = req.body.adRepId
   // delete req.body.adRepId
@@ -248,7 +252,7 @@ router.put('/edit/:id', (req, res) => {
     ${properties}
   WHERE "id" = $1
   `;
-
+  
   const sqlParams = [
     req.params.id,
     ...Object.values(req.body)
@@ -256,7 +260,21 @@ router.put('/edit/:id', (req, res) => {
 
   pool.query(sqlText, sqlParams)
     .then(dbRes => {
-      res.sendStatus(200);
+      // res.sendStatus(200);
+      imageQuery = `INSERT INTO "Images" ("imageUrl", "contractId")
+                    VALUES ($1, $2)
+                    `;
+
+      imageParams = [image, req.params.id];
+      pool
+        .query(imageQuery, imageParams)
+        .then(dbRes => {
+          res.sendStatus(200);
+        })
+        .catch(error => {
+          console.log('Failed to update the contract with an image relationship: ', error);
+          res.sendStatus(500);
+        })
     })
     .catch(error => {
       console.error(`Failed to update contract at id: ${req.body.id}`, error);

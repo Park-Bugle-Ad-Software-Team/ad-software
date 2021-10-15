@@ -17,6 +17,9 @@ export default function PricingPage() {
         dispatch({
             type: 'FETCH_RATES_TO_EDIT'
         })
+        dispatch({
+            type: 'UNSET_CONTRACT_TO_EDIT'
+        });
     }, [])
 
     const handleChange = (event, i, property) => {

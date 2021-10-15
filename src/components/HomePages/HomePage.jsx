@@ -8,6 +8,7 @@ export default function HomePage() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch({type: 'UNSET_CONTRACT_TO_EDIT'});
         dispatch({type: 'FETCH_PENDING_CONTRACTS', payload: user});
         dispatch({type: 'FETCH_ACTIVE_CONTRACTS', payload: user});
         dispatch({type: 'FETCH_CLOSED_CONTRACTS', payload: user});

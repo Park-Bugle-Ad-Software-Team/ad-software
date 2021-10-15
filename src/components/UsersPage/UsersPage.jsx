@@ -19,6 +19,9 @@ export default function UsersPage() {
         dispatch({
             type: 'FETCH_ALL_USERS'
         });
+        dispatch({
+            type: 'UNSET_CONTRACT_TO_EDIT'
+        });
     }, []);
 
     const goToEditUser = (userId) => {
