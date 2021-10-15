@@ -32,6 +32,8 @@ export default function AdCard() {
     const minDate = new Date('2021-01-01T00:00:00.000');
     const maxDate = new Date('2034-01-01T00:00:00.000');
 
+    const [newImage, setNewImage] = useState({})
+
     useEffect(() => {
         if (contractId === 'undefined') {
             return;
@@ -126,76 +128,40 @@ export default function AdCard() {
     let mm = String(startDate.getMonth() + 1).padStart(2, '0');
     console.log('test', (yyyy + '-' + mm));
 
+    const grabRate = (size, row) => {
+        if (size < 8) {
+            return rates[row].isLessThanEight * size;
+        } else if (size >= 8 && size < 12) {
+            return rates[row].isEightToTwelve * grabSize();
+        } else if (size >= 12 && size < 20) {
+            return rates[row].isTwelveToTwenty * grabSize();
+        } else {
+            return rates[row].isTwentyPlus * grabSize();
+        }
+    }
+
     const calculateBill = () => {
-        let total = 0;
         switch (contractToEdit.months) {
             case 1:
             case 2:
-                if (grabSize() < 8) {
-                    return rates[0].isLessThanEight * grabSize();
-                } else if (grabSize() >= 8 && grabSize() < 12) {
-                    return rates[0].isEightToTwelve * grabSize();
-                } else if (grabSize() >= 12 && grabSize() < 20) {
-                    return rates[0].isTwelveToTwenty * grabSize();
-                } else {
-                    return rates[0].isTwentyPlus * grabSize();
-                }
+                return grabRate(grabSize(), 0);
             case 4:
-                if (grabSize() < 8) {
-                    return rates[1].isLessThanEight * grabSize();
-                } else if (grabSize() >= 8 && grabSize() < 12) {
-                    return rates[1].isEightToTwelve * grabSize();
-                } else if (grabSize() >= 12 && grabSize() < 20) {
-                    return rates[1].isTwelveToTwenty * grabSize();
-                } else {
-                    return rates[1].isTwentyPlus * grabSize();
-                }
+                return grabRate(grabSize(), 1);
             case 12:
-                if (grabSize() < 8) {
-                    return rates[2].isLessThanEight * grabSize();
-                } else if (grabSize() >= 8 && grabSize() < 12) {
-                    return rates[2].isEightToTwelve * grabSize();
-                } else if (grabSize() >= 12 && grabSize() < 20) {
-                    return rates[2].isTwelveToTwenty * grabSize();
-                } else {
-                    return rates[2].isTwentyPlus * grabSize();
-                }
+                return grabRate(grabSize(), 2);
             default:
                 throw new Error(`contractToEdit months has no value ${contractToEdit.months}`);
         }
-        // console.log('total', total);
-        // switch (contractToEdit.colorId) {
-        //     case 2:
-        //         total += (100 * contractToEdit.months);
-        //     case 3: 
-        //         total += (200 * contractToEdit.months);
-        // }
-        // console.log('total', total);
-        // return total;
-    }
-
-    // const calculateBillWithColor = () => {
-    //     let total = calculateBill();
-
-    // }
-
-    const monthlyBill = () => {
-        return calculateBill() / contractToEdit.months;
     }
 
     const grabSize = () => {
-        return contractToEdit.AdSize.columns * contractToEdit.AdSize.inches;
+        return contractToEdit.actualColumns * contractToEdit.actualInches;
     }
-    
-
-    const [newImage, setNewImage] = useState({})
 
     const uploadComplete = (fileUrl) => {
         console.log('fileUrl upload complete', fileUrl);
         setNewImage(fileUrl)
     }
-
-    const [date, setDate] = useState(new Date());
 
     return(
         <>
@@ -363,11 +329,16 @@ export default function AdCard() {
                                         {contractToEdit.image &&
                                             <>
                                                 {contractToEdit.image.map((image, i) => (
-                                                    <div className="imageDiv">
-                                                        <a href={image.imageUrl} target="_blank">
-                                                            <img src={image.imageUrl}/>
-                                                        </a>
-                                                    </div>
+                                                    <>
+                                                        {image.imageUrl !== '{}' ? 
+                                                            <div className="imageDiv">
+                                                                <a href={image.imageUrl} target="_blank">
+                                                                    <img src={image.imageUrl}/>
+                                                                </a>
+                                                            </div> :
+                                                            null
+                                                        }
+                                                    </>
                                                 ))}
                                             </>
                                         }
@@ -465,7 +436,7 @@ export default function AdCard() {
                                     {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
                                         <>
                                             <FormLabel>Calculated Monthly Bill</FormLabel>
-                                            <Typography>${monthlyBill().toFixed(2)}</Typography>
+                                            <Typography>${calculateBill().toFixed(2)}</Typography>
                                         </>
                                     }
                                     <div className="spacer">
