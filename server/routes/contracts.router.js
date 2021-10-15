@@ -208,7 +208,8 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     "Contracts".*,
     to_json("AdSize".*) as "AdSize",
     to_json("Color".*) as "Color",
-     array_agg(to_json("Images".*)) as "image"
+    "Users"."companyName" as "companyName",
+    array_agg(to_json("Images".*)) as "image"
     --to_json("Chat".*) as "Chat"
   
   FROM "Contracts"
@@ -218,9 +219,14 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
       ON "Color"."id" = "Contracts"."colorId"
     JOIN "Images"
       ON "Images"."contractId" = "Contracts"."id"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
     WHERE "Contracts"."id" = $1
-  Group by "Contracts"."id", "AdSize".*, "Color".*;
+  Group by "Contracts"."id", "AdSize".*, "Color".*, "companyName";
     `;
+    
   pool
     .query(sqlText, [req.params.id])
     .then(dbRes => {

@@ -12,6 +12,7 @@ import ImageUploader from '../ImageUploader/ImageUploader';
 import './AdCard.css';
 import { MonthPicker, YearPicker } from "@mui/lab";
 import ActualSizes from "../SubComponents/ActualSizes";
+import SelectAdvertiser from "../SubComponents/SelectAdvertiser";
 
 export default function AdCard() {
     // testing data
@@ -51,6 +52,9 @@ export default function AdCard() {
         dispatch({
             type: 'FETCH_RATES'
         });
+        dispatch({
+            type: 'FETCH_ADVERTISERS'
+        })
     }, [])
 
     const handleChange = (event, property) => {
@@ -169,23 +173,9 @@ export default function AdCard() {
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={4}>
                             <Grid item xs={4}>
-                                {contractId !== 'undefined' ?
-                                    <Grid item xs={12}>
-                                        <Typography variant="h4">{advertiser.name}</Typography>
-                                    </Grid> :
-                                    <Grid item xs={12}>
-                                        <Typography variant="h4">Select Advertiser</Typography>
-                                        <Select
-                                            value={contractToEdit.companyName || ''}
-                                            onChange={(event) => handleChange(event, "userId")}
-                                        >
-                                            {/* map through advertisers */}
-                                            {advertisers.map((advertiser,i) => (
-                                                <MenuItem key={i} value={advertiser.id}>{advertiser.companyName}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </Grid>
-                                }
+                                <SelectAdvertiser 
+                                    contractId={contractId}
+                                />
                                 <div className="spacer">
                                 </div>
                                 {user.authLevel === "admin" || user.authLevel === "ad rep" ?
