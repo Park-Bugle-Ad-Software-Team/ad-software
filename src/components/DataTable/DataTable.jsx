@@ -76,6 +76,7 @@ export default function DataTable( { tableData }) {
 
     // columns for the DataGrid
     const columns = [
+        {field: 'companyName', headerName: 'Company', width: 180},
         {field: 'startMonth', headerName: 'Start Month', width: 180,
             valueFormatter: (params) => {
                 return formatStartMonthTimestamp(params.row.startMonth);

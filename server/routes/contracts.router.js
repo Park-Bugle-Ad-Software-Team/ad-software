@@ -55,14 +55,19 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
     SELECT
     "Contracts".*,
     "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType"
+    "Color"."colorType" as "colorType",
+    "Users"."companyName" as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
     JOIN "Color"
       ON "Color"."id" = "Contracts"."colorId"
-    WHERE "isApproved" = false
-    GROUP BY "Contracts"."id", "adType", "colorType"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "isApproved" = false AND "Users"."authLevel" = 'advertiser'
+    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -82,7 +87,8 @@ router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
     SELECT
     "Contracts".*,
     "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType"
+    "Color"."colorType" as "colorType",
+    "Users"."companyName" as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
@@ -92,8 +98,8 @@ router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "isApproved" = false AND "Users"."companyName" = '${companyName}'
-    GROUP BY "Contracts"."id", "adType", "colorType"
+    WHERE "isApproved" = false AND "Users"."companyName" = '${companyName}' AND "Users"."authLevel" = 'advertiser'
+    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -112,14 +118,19 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
     SELECT
     "Contracts".*,
     "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType"
+    "Color"."colorType" as "colorType",
+    "Users"."companyName" as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
     JOIN "Color"
       ON "Color"."id" = "Contracts"."colorId"
-    WHERE "startMonth" <= 'NOW'
-    GROUP BY "Contracts"."id", "adType", "colorType"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "startMonth" <= 'NOW' AND "Users"."authLevel" = 'advertiser'
+    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -139,7 +150,8 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
     SELECT
     "Contracts".*,
     "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType"
+    "Color"."colorType" as "colorType",
+    "Users"."companyName" as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
@@ -149,8 +161,8 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Users"."companyName" = '${companyName}'
-    GROUP BY "Contracts"."id", "adType", "colorType"
+    WHERE "startMonth" <= 'NOW' AND "Users"."companyName" = '${companyName}' AND "Users"."authLevel" = 'advertiser'
+    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -169,14 +181,19 @@ router.get('/closed', rejectUnauthenticated, (req, res) => {
     SELECT
     "Contracts".*,
     "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType"
+    "Color"."colorType" as "colorType",
+    "Users"."companyName" as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
     JOIN "Color"
       ON "Color"."id" = "Contracts"."colorId"
-    WHERE "startMonth" <= 'NOW'
-    GROUP BY "Contracts"."id", "adType", "colorType"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "startMonth" <= 'NOW' AND "Users"."authLevel" = 'advertiser'
+    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -196,7 +213,8 @@ router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
     SELECT
     "Contracts".*,
     "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType"
+    "Color"."colorType" as "colorType",
+    "Users"."companyName" as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
@@ -206,8 +224,8 @@ router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
         ON "Contracts_Users"."contractId" = "Contracts"."id"
       JOIN "Users"
         ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" >= 'NOW' AND "Users"."companyName" = '${companyName}'
-    GROUP BY "Contracts"."id", "adType", "colorType"
+    WHERE "startMonth" >= 'NOW' AND "Users"."companyName" = '${companyName}' AND "Users"."authLevel" = 'advertiser'
+    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -236,11 +254,11 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
       ON "Color"."id" = "Contracts"."colorId"
     JOIN "Images"
       ON "Images"."contractId" = "Contracts"."id"
-    WHERE "Contracts"."id" = $1
+    WHERE "Contracts"."id" = 4
   Group by "Contracts"."id", "AdSize".*, "Color".*;
     `;
   pool
-    .query(sqlText, [req.params.id])
+    .query(sqlText)
     .then(dbRes => {
       res.send(dbRes.rows[0]);
     })
