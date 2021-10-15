@@ -244,10 +244,10 @@ INSERT INTO "Contracts" (
    "months"
 )
 VALUES
-   (1, '8 month contract', '2021-10-01', 20, 1, 'Print', 270, 270, 2, true, 2, 3),
-   (2, '4 month contract', '2021-09-01', 25, 1, 'Print', 250, 270, 3, true, 1, 6),
-   (2, '8 month contract', '2021-11-01', 15, 2, 'Web', 200, 270, 1, true, 3, 9),
-   (1, '2 month contract', '2021-10-01', 20, 1, 'Print', 230, 270, 2, false, 2, 10),
+   (1, '8 month contract', '2021-10-01', 20, 1, 'Print', 270, 270, 2, true, 2, 1),
+   (2, '4 month contract', '2021-09-01', 25, 1, 'Print', 250, 270, 3, true, 1, 2),
+   (2, '8 month contract', '2021-11-01', 15, 2, 'Web', 200, 270, 1, true, 3, 4),
+   (1, '2 month contract', '2021-10-01', 20, 1, 'Print', 230, 270, 2, false, 2, 12),
    (1, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, 3, true, 1, 2),
    (2, '12 month contract', '2021-10-01', 25, 3, 'Print', 275, 270, 1, false, 2, 1);
 
