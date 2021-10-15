@@ -223,7 +223,9 @@ CREATE TABLE "Contracts" (
    -- "holidayGuide" DECIMAL, (stretch)
    "isApproved" BOOLEAN,
    "pricingSchemaId" INT REFERENCES "Rates",
-   "months" INT NOT NULL
+   "months" INT NOT NULL,
+   "actualInches" FLOAT DEFAULT NULL,
+   "actualColumns" FLOAT DEFAULT NULL
 );
 
 INSERT INTO "Contracts" (

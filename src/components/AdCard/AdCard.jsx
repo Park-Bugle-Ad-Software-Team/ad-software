@@ -13,11 +13,9 @@ import './AdCard.css';
 import { MonthPicker, YearPicker } from "@mui/lab";
 import ActualSizes from "../SubComponents/ActualSizes";
 import SelectAdvertiser from "../SubComponents/SelectAdvertiser";
+import SelectAdRep from "../SubComponents/SelectAdRep";
 
 export default function AdCard() {
-    // testing data
-    let advertiser = {name: 'Chroma Zone'};
-
     const dispatch = useDispatch();
     const history = useHistory();
     const params = useParams();
@@ -175,9 +173,16 @@ export default function AdCard() {
                             <Grid item xs={4}>
                                 <SelectAdvertiser 
                                     contractId={contractId}
+                                    handleChange={handleChange}
                                 />
                                 <div className="spacer">
                                 </div>
+                                <SelectAdRep
+                                    handleChange={handleChange}
+                                />
+                                <div className="spacer">
+                                </div>
+                                {/* placeholder for select ad rep and designers */}
                                 {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                     <Grid item xs={12}>
                                         <FormControl>
