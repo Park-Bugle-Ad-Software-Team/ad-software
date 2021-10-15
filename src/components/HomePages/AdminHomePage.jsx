@@ -60,7 +60,7 @@ export default function AdminHomePage() {
                     Create New Ad Contract
                 </Button>
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
                 <FormControl>
                     <InputLabel id="advertiser-select-label">Advertiser</InputLabel>
                     <Select
@@ -94,7 +94,7 @@ export default function AdminHomePage() {
                 >
                     Search
                 </Button>
-            </Grid>
+            </Grid> */}
 
             {/* Pending Contracts */}
             <Grid item xs={12}>

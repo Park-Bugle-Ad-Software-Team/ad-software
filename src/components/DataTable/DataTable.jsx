@@ -1,4 +1,4 @@
-import { Box, Button, Drawer, Grid, ListItemText, TextField } from '@material-ui/core';
+import { Box, Button, Drawer, Grid, ListItemText, TextField } from '@mui/material';
 import { DataGrid, GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -23,17 +23,17 @@ export default function DataTable( { tableData }) {
     const userId = user.id;
 
     // to format the time of chat messages
-    const formatChatTimestamp = (dateString) => {
-        let date = new Date(dateString);
-        return (`
-            ${(date.getMonth()+1)}/${date.getDay()}/${date.getFullYear()}
-            ${date.getHours() <= 12 ? 
-                date.getHours() : 
-                (date.getHours()-12)
-            }:${date.getMinutes()}
-            ${date.getHours() <= 12 ? `AM` : `PM`}
-        `);
-    }
+    // const formatChatTimestamp = (dateString) => {
+    //     let date = new Date(dateString);
+    //     return (`
+    //         ${(date.getMonth()+1)}/${date.getDay()}/${date.getFullYear()}
+    //         ${date.getHours() <= 12 ? 
+    //             date.getHours() : 
+    //             (date.getHours()-12)
+    //         }:${date.getMinutes()}
+    //         ${date.getHours() <= 12 ? `AM` : `PM`}
+    //     `);
+    // }
 
     // to format the time of a contract's start month
     const formatStartMonthTimestamp = (dateString) => {

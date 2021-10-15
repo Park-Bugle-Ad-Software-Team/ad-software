@@ -1,13 +1,10 @@
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid'
 import CardActionArea from '@mui/material/CardActionArea';
-import CardMedia from '@mui/material/CardMedia';
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -58,15 +55,6 @@ export default function AdSize() {
         })
     }, []);
 
-    // useEffect(() => {
-    //     for (const rate of rates) {
-    //         if (contractToEdit.pricingSchemaId === rate.id){
-    //             console.log('matching rate row is ', rate);
-    //         }
-            
-    //     }
-    // }, [rates])
-
     const handleChange = (index, property) => {
         dispatch({
             type: 'UPDATE_CONTRACT_TO_EDIT',
@@ -94,19 +82,9 @@ export default function AdSize() {
         }   
     }, [contractToEdit, rates, adSizes])
 
-    // const getRate = () => {
-    //     for (let rate of rates) {
-    //         if (currentLength <= rate.maxDuration && currentLength >= rate.minDuration) {
-    //             rateRow = rate;
-    //         }
-    //     }
-    //     return rateRow;
-    // }
-
     const round = (num) => {
         return num;
     }
-
 
     const checkSize = (size) => {
         if ((size.columns * size.inches) >= 20) {
@@ -119,7 +97,7 @@ export default function AdSize() {
                         4-11 month rate = ${round(rates[1].isTwentyPlus * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = ${rates[2].isTwentyPlus * (size.columns * size.inches)}/month
+                        12 month rate = ${round(rates[2].isTwentyPlus * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography> 
                 </>
             )
@@ -127,13 +105,13 @@ export default function AdSize() {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        1-3 month rate = ${rates[0].isTwelveToTwenty * (size.columns * size.inches)}/month
+                        1-3 month rate = ${round(rates[0].isTwelveToTwenty * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        4-11 month rate = ${rates[1].isTwelveToTwenty * (size.columns * size.inches)}/month
+                        4-11 month rate = ${round(rates[1].isTwelveToTwenty * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = ${rates[2].isTwelveToTwenty * (size.columns * size.inches)}/month
+                        12 month rate = ${round(rates[2].isTwelveToTwenty * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography> 
                 </>
             )
@@ -141,13 +119,13 @@ export default function AdSize() {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        1-3 month rate = ${rates[0].isEightToTwelve * (size.columns * size.inches)}/month
+                        1-3 month rate = ${round(rates[0].isEightToTwelve * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        4-11 month rate = ${rates[1].isEightToTwelve * (size.columns * size.inches)}/month
+                        4-11 month rate = ${round(rates[1].isEightToTwelve * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = ${rates[2].isEightToTwelve * (size.columns * size.inches)}/month
+                        12 month rate = ${round(rates[2].isEightToTwelve * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography> 
                 </>
             )
@@ -155,13 +133,13 @@ export default function AdSize() {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        1-3 month rate = ${rates[0].isLessThanEight * (size.columns * size.inches)}/month
+                        1-3 month rate = ${round(rates[0].isLessThanEight * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        4-11 month rate = ${rates[1].isLessThanEight * (size.columns * size.inches)}/month
+                        4-11 month rate = ${round(rates[1].isLessThanEight * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = ${rates[2].isLessThanEight * (size.columns * size.inches)}/month
+                        12 month rate = ${round(rates[2].isLessThanEight * (size.columns * size.inches)).toFixed(2)}/month
                     </Typography> 
                 </>
             )
@@ -169,7 +147,7 @@ export default function AdSize() {
             return (
                 <>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                        12 month rate = $275/month
+                        12 month rate = ${round(275).toFixed(2)}/month
                     </Typography> 
                 </>
             )
@@ -182,30 +160,31 @@ export default function AdSize() {
         <>
             <h1>Select Size</h1>
 
-            <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={{ xs: 1, md: 22 }} columns={{ xs: 3, sm: 6, md: 16}}>
+            <Box sx={{ flexGrow: 1, flexShrink: 1 }}>
+                <Grid container spacing={{ xs: 1, md: 0  }} columns={{ xs: 3, sm: 6, md: 16}} columnSpacing={22}>
                     {adSizes.map((size, index) => (
                         <>
                             {size.id === contractToEdit.adSizeId ?
-                                <Grid item xs={2} sm={4} md={4} key={index}>
-                                    <Card className="adSizeCardSelected" sx={{ minWidth: 220, maxWidth: 300}}>
+                                <Grid item xs={2} sm={4} md={4} key={index} className="adSizeGrid">
+                                    <Card className="adSizeCardSelected" sx={{ minWidth: 220, maxWidth: 300 }}>
                                         <>
-                                        {user.authLevel !== ("admin" || "ad rep") ?
-                                            <CardContent>
-                                                <div style={{textAlign: 'center', border: 5}}>
-                                                    <img src={displayImageSource[index]} style={{width: '100%'}}/>
-                                                    <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
-                                                        {size.adType}
-                                                    </Typography>
-                                                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                        {size.desc}
-                                                    </Typography>
-                                                    {rates.length !== 0 &&
-                                                        checkSize(size)
-                                                    }
-                                                </div>     
-                                            </CardContent> :
-                                        <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
+                                        {user.authLevel === "admin" || user.authLevel === "ad rep" ?
+                                            <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
+                                                <CardContent>
+                                                    <div style={{textAlign: 'center', border: 5}}>
+                                                        <img src={displayImageSource[index]} style={{width: '100%'}}/>
+                                                        <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
+                                                            {size.adType}
+                                                        </Typography>
+                                                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                            {size.desc}
+                                                        </Typography>
+                                                        {rates.length !== 0 &&
+                                                            checkSize(size)
+                                                        }
+                                                    </div>     
+                                                </CardContent> 
+                                            </CardActionArea>:
                                             <CardContent>
                                                 <div style={{textAlign: 'center', border: 5}}>
                                                     <img src={displayImageSource[index]} style={{width: '100%'}}/>
@@ -220,7 +199,6 @@ export default function AdSize() {
                                                     }
                                                 </div>     
                                             </CardContent>
-                                        </CardActionArea>
                                         }   
                                         </>
                                     </Card>
@@ -228,21 +206,7 @@ export default function AdSize() {
                                 <Grid item xs={2} sm={4} md={4} key={index}>
                                     <Card className="adSizeCard" sx={{ minWidth: 220, maxWidth: 300 }}>
                                         <>
-                                        {user.authLevel !== ("admin" || "ad rep") ?
-                                                <CardContent>
-                                                    <div style={{textAlign: 'center'}}>
-                                                        <img src={displayImageSource[index]} style={{width: '100%'}}/>
-                                                        <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
-                                                            {size.adType}
-                                                        </Typography>
-                                                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                            {size.desc}
-                                                        </Typography>
-                                                        {rates.length !== 0 &&
-                                                            checkSize(size)
-                                                        }
-                                                    </div>     
-                                                </CardContent> :
+                                        {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                             <CardActionArea onClick={() => handleChange(index, "adSizeId")}>
                                                 <CardContent>
                                                     <div style={{textAlign: 'center'}}>
@@ -257,8 +221,22 @@ export default function AdSize() {
                                                             checkSize(size)
                                                         }
                                                     </div>     
-                                                </CardContent>
-                                            </CardActionArea>
+                                                </CardContent> 
+                                            </CardActionArea>:    
+                                            <CardContent>
+                                                <div style={{textAlign: 'center'}}>
+                                                    <img src={displayImageSource[index]} style={{width: '100%'}}/>
+                                                    <Typography sx={{ fontSize: 12, color: '#7E0001', fontWeight: 900 }} color="text.secondary" gutterBottom>
+                                                        {size.adType}
+                                                    </Typography>
+                                                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                        {size.desc}
+                                                    </Typography>
+                                                    {rates.length !== 0 &&
+                                                        checkSize(size)
+                                                    }
+                                                </div>     
+                                            </CardContent>
                                         }
                                         </>
                                     </Card>
@@ -267,8 +245,7 @@ export default function AdSize() {
                         </>
                     ))}
                 </Grid>
-            </Box>
-            
+            </Box>         
         </>
     )
 }

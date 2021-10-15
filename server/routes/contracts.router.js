@@ -202,12 +202,14 @@ router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
 
 router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   // removing chat from this pull for testing
+  console.log('req.params', req.params.id);
   const sqlText = `
     SELECT
     "Contracts".*,
     to_json("AdSize".*) as "AdSize",
     to_json("Color".*) as "Color",
-     array_agg(to_json("Images".*)) as "image"
+    "Users"."companyName" as "companyName",
+    array_agg(to_json("Images".*)) as "image"
     --to_json("Chat".*) as "Chat"
   
   FROM "Contracts"
@@ -217,12 +219,18 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
       ON "Color"."id" = "Contracts"."colorId"
     JOIN "Images"
       ON "Images"."contractId" = "Contracts"."id"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
     WHERE "Contracts"."id" = $1
-  Group by "Contracts"."id", "AdSize".*, "Color".*;
+  Group by "Contracts"."id", "AdSize".*, "Color".*, "companyName";
     `;
+    
   pool
     .query(sqlText, [req.params.id])
     .then(dbRes => {
+      console.log(dbRes.rows);
       res.send(dbRes.rows[0]);
     })
     .catch(error => {
@@ -315,6 +323,7 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
  * POST route template
  */
  router.post('/:advertiserId', rejectUnauthenticated, async (req, res) => {
+   console.log('req.body is: ', req.body);
   const imageUrl  = req.body.imageUrl;
   delete req.body.imageUrl;
 
@@ -336,16 +345,16 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
     // all of the relevant queries listed here
     const contractsPostResults = await client.query(queryText, sqlParams);
     const contractsContractsUsersResults = await client.query(`INSERT INTO "Contracts_Users" ("contractId", "userId")
-    VALUES ($1, $2)`, [contractsPostResults.rows.id, imageUrl]);
-    // const contractsImageResults = await client.query();
+      VALUES ($1, $2)`, [contractsPostResults.rows[0].id, req.params.id]);
+    const contractsImageResults = await client.query(`INSERT INTO "Images" ("contractId", "imageUrl")
+      VALUES ($1, $2)`, [contractsPostResults.rows[0].id, imageUrl]);
     console.log(contractsPostResults)
-
-
     await client.query('COMMIT');
     res.sendStatus(200);
   } catch (error) {
     await client.query('ROLLBACK');
     console.log('Error POST /api/contracts: ', error)
+    res.sendStatus(500);
   } finally {
     client.release();
   }

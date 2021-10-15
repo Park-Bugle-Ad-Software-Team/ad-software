@@ -13,6 +13,7 @@ export default function HomePage() {
         dispatch({type: 'FETCH_ACTIVE_CONTRACTS', payload: user});
         dispatch({type: 'FETCH_CLOSED_CONTRACTS', payload: user});
         dispatch({type: 'FETCH_ALL_CONTRACTS'});
+        dispatch({type: 'FETCH_ALL_USERS'});
     }, []);
 
     // global state from redux
