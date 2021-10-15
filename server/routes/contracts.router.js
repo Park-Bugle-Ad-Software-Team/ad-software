@@ -226,11 +226,11 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     WHERE "Contracts"."id" = $1
   Group by "Contracts"."id", "AdSize".*, "Color".*, "companyName";
     `;
-    
+
   pool
     .query(sqlText, [req.params.id])
     .then(dbRes => {
-      console.log(dbRes.rows);
+      console.log('object to be edited: ', dbRes.rows[0]);
       res.send(dbRes.rows[0]);
     })
     .catch(error => {
@@ -323,11 +323,11 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
  * POST route template
  */
  router.post('/:advertiserId', rejectUnauthenticated, (req, res) => {
-  console.log('req.body is: ', req.body);
   const imageUrl  = req.body.imageUrl;
   delete req.body.userId;
   delete req.body.imageUrl;
   delete req.body.AdSize;
+  delete req.body.adRepId;
  
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
@@ -371,6 +371,49 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+
+/*
+router.delete('/:id', rejectUnauthenticated, async (req, res) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        // delete the info from the playersRankings table
+        const playersRankingsDeleteResults = await client.query(`
+                DELETE FROM "playersRankings"
+                WHERE "player_id" = $1
+            `, [req.params.id]
+        );
+        // then delete info from the playersTags table
+        const playersTagsDeleteResults = await client.query(`
+                DELETE FROM "playersTags"
+                WHERE "player_id" = $1
+            `, [req.params.id]
+        );
+        // then delete info from the players table
+        const playersDeleteResults = await client.query(`
+                DELETE FROM "players"
+                WHERE "id" = $1
+            `, [req.params.id]
+        );
+        await client.query('COMMIT');
+        res.sendStatus(200);
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.log('Error DELETE /api/player', error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+});
+
+
+
+
+*/
+
+
+
 
 router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const sqlQuery = `DELETE FROM "Contracts"

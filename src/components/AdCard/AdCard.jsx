@@ -14,6 +14,8 @@ import { MonthPicker, YearPicker } from "@mui/lab";
 import ActualSizes from "../SubComponents/ActualSizes";
 import SelectAdvertiser from "../SubComponents/SelectAdvertiser";
 import SelectAdRep from "../SubComponents/SelectAdRep";
+import * as React from 'react';
+import Checkbox from '@mui/material/Checkbox';
 
 export default function AdCard() {
     const dispatch = useDispatch();
@@ -62,6 +64,14 @@ export default function AdCard() {
                 payload: {
                     ...contractToEdit,
                     [property]: Number(event.target.value)
+                }
+            })
+        } else if (property === 'isApproved') {
+            dispatch({
+                type: 'UPDATE_CONTRACT_TO_EDIT',
+                payload: {
+                    ...contractToEdit,
+                    [property]: event.target.checked
                 }
             })
         } else if (property === "startMonth") {
@@ -168,6 +178,14 @@ export default function AdCard() {
     return(
         <>
                 <Container>
+                <Button 
+                id="backBtn" 
+                variant="contained" 
+                color="primary" 
+                onClick={returnToHome}
+            >
+                Back
+            </Button>
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={4}>
                             <Grid item xs={4}>
@@ -480,9 +498,13 @@ export default function AdCard() {
                                 </div>
                             </Grid>
                             <Grid item xs={6}>
-                                <div style={{textAlign: 'center'}}>
-                                    <Button variant="contained" color="primary" onClick={approveContract}>Approve</Button>
-                                </div>
+                                <FormControl>
+                                    <FormLabel>Approve: </FormLabel>
+                                    <Checkbox
+                                        checked={contractToEdit.isApproved}
+                                        onChange={(event) => handleChange(event, "isApproved")}
+                                    />
+                                </FormControl>
                             </Grid>
                         </Grid>
                     </Box>
