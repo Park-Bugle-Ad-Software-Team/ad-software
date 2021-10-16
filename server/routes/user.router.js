@@ -47,7 +47,7 @@ router.get('/advertisers', rejectUnauthenticated, (req, res) => {
                       "id",
                       "companyName"
                     FROM "Users"
-                    WHERE "companyName" IS NOT NULL AND "isActive" = TRUE
+                    WHERE "companyName" IS NOT NULL AND "companyName" != 'Park Bugle' AND "isActive" = TRUE
                     ORDER BY "companyName" ASC
                     `;
   pool
@@ -83,13 +83,15 @@ router.get('/adReps', rejectUnauthenticated, (req, res) => {
 
 //route to get all companies, but eliminating repeat instances of companies
 router.get('/designers', rejectUnauthenticated, (req, res) => {
-  const sqlQuery = `SELECT 
-                      "id",
-                      "name"
-                    FROM "Users"
-                    WHERE "authLevel" = 'print designer' AND "isActive" = TRUE
-                    ORDER BY "name" ASC
-                    `;
+  const sqlQuery = `
+    SELECT 
+    "id",
+    "name"
+  FROM "Users"
+  WHERE "authLevel" = 'print designer' OR "authLevel" = 'web designer' AND "isActive" = TRUE
+  ORDER BY "name" ASC
+  `;
+
   pool
     .query(sqlQuery)
     .then(dbRes => {

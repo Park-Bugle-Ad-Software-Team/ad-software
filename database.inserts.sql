@@ -126,6 +126,57 @@ VALUES
    'Primary ad rep in charge of the south side of St. Anthony Park',
    'inviteCode');
 
+INSERT INTO "Users" (
+	"email", "name", "password", "authLevel", "contactPreference", "acceptAchPayment", "companyName",
+	"doNotDisturb", "isActive", "advertiserUrl", "address", "primaryName", "primaryTitle", "primaryEmail",
+	"primaryDirectPhone", "primaryMobilePhone", "secondaryName", "secondaryEmail", "secondaryDirectPhone", 
+	"secondaryMobilePhone", "notes", "inviteCode"
+)
+VALUES (
+	'scott.hanson@excellentdesign.com', 'Scott Hanson', 'replace with encrypted password', 'print designer', null, false, 'Park Bugle', 
+	false, true, null, '6485 Island St., Brooklyn Park, Minneapolis, MN 55316', null, null, null, 
+	'672-383-4923', null, null, null, null,
+	null, 'Print designer for all Q4 ads. Prefers email invoicing. Works with black and white images only.', 'inviteCode'
+),
+(
+	'kbrooks@stylenova.com', 'Kelly Brooks', 'replace with encrypted password', 'web designer', null, false, 'Park Bugle', 
+	false, true, null, '2415 Carter Ave, Saint Paul, MN, 55108', null, null, null, 
+	'(651) 454-6752', null, null, null, null,
+	null, 'Print designer for all Q4 ads. Prefers email invoicing. Works with black and white images only.', 'inviteCode'
+),
+(
+	'cmfern24@gmail.com', 'Courtney Fern', 'replace with encrypted password', 'ad rep', null, false, 'Park Bugle', 
+	false, true, null, '1762 Canyon Ln, Saint Paul, Minnesota(MN), 55112', null, null, null, 
+	'(651) 631-1157', null, null, null, null,
+	null, 'Handles north side of St. Anthony Park.', 'inviteCode'
+),
+(
+	'mikehanover@gmail.com', 'Mike Hanover', 'replace with encrypted password', 'advertiser', null, false, 'Ace Hardware', 
+	false, true, null, '24465 50th Rd, Saint Paul, MN, 55112', null, null, null, 
+	'(651) 493-1512', null, 'Jim Kroning', 'jkroning@outlook.com', null,
+	'(651) 644-4223', 'Mike is very responsive but you may have to reach out to their on-site manager Jim', 'inviteCode'
+),
+(
+	'lorrainechell@madisonmarketing.net', 'Lorraine Chelle', 'replace with encrypted password', 'ad rep', null, false, 'Park Bugle', 
+	false, true, null, '1794 Taconite Trl, Saint Paul, Minnesota(MN), 55122', null, null, null, 
+	'(651) 454-6752', null, null, null, null,
+	null, 'Handles South side of St. Anthony Park.', 'inviteCode'
+),
+(
+	'waynefranklyn@outlook.com', 'Wayne Franklin', 'replace with encrypted password', 'advertiser', null, false, 'Parkway Pizza', 
+	false, true, null, '245 N Oxford St, Saint Paul, Minnesota(MN), 55104', null, null, null, 
+	'(651) 493-1512', null, 'Kent Daisy', 'kdaisy@outlook.com', null,
+	'(651) 528-7412', null, 'inviteCode'
+),
+(
+	'a.leigh@sunrisebanks.org', 'Angelina Leigh', 'replace with encrypted password', 'advertiser', null, false, 'Sunrise Banks', 
+	false, true, null, '2621 17th St NW, Saint Paul, Minnesota(MN), 55112', null, null, null, 
+	'(651) 493-1512', null, null, null, null,
+	null, null, 'inviteCode'
+)
+
+;
+
 CREATE TABLE "AdSize" (
    "id" SERIAL PRIMARY KEY,
    "adType" VARCHAR(255) NOT NULL,

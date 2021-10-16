@@ -275,7 +275,6 @@ export default function AdCard() {
                                 />
                                 <div className="spacer">
                                 </div>
-                                {/* placeholder for select ad rep and designers */}
                                 {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                     <Grid item xs={12}>
                                         <FormControl>
@@ -401,7 +400,7 @@ export default function AdCard() {
                                 </div>
                                 <Grid item xs={12}>
                                     <FormControl>
-                                        <FormLabel>Image Upload</FormLabel>
+                                        <FormLabel>Image Upload (Drag and Drop)</FormLabel>
                                         <div className="imageUploaderDiv">
                                             <ImageUploader 
                                                 uploadComplete={uploadComplete}
