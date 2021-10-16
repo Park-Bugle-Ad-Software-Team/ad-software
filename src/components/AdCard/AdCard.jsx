@@ -16,6 +16,8 @@ import ActualSizes from "../SubComponents/ActualSizes";
 import SelectAdvertiser from "../SubComponents/SelectAdvertiser";
 import SelectAdRep from "../SubComponents/SelectAdRep";
 import SelectDesigner from "../SubComponents/SelectDesigner";
+import SelectStartMonth from "../SubComponents/SelectStartMonth";
+import SelectContractLength from "../SubComponents/SelectContractLength";
 
 export default function AdCard() {
     const dispatch = useDispatch();
@@ -37,11 +39,6 @@ export default function AdCard() {
     const maxDate = new Date('2034-01-01T00:00:00.000');
 
     const [newImage, setNewImage] = useState({})
-
-    // this formats our month and year from contractToEdit.startMonth for use in the month picker component
-    let startDate = new Date(contractToEdit.startMonth);
-    let yyyy = startDate.getFullYear();
-    let mm = String(startDate.getUTCMonth() + 1).padStart(2, '0');
 
     useEffect(() => {
         if (contractId === 'undefined') {
@@ -275,68 +272,14 @@ export default function AdCard() {
                                 />
                                 <div className="spacer">
                                 </div>
-                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel id="startMonthLabel">Start Month:</FormLabel>
-                                            <Input
-                                                label="Start Month"
-                                                labelId="startMonthLabel"
-                                                type="month"
-                                                min="2021-09"
-                                                value={(yyyy + '-' + mm)}
-                                                onChange={(event) => handleChange(event, "startMonth")}
-                                            />
-                                        </FormControl>
-                                    </Grid> :
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel id="startMonthLabel">Start Month:</FormLabel>
-                                            <Input
-                                                label="Start Month"
-                                                labelId="startMonthLabel"
-                                                type="month"
-                                                disabled
-                                                min="2021-01"
-                                                value={(yyyy + '-' + mm)}
-                                                onChange={(event) => handleChange(event, "startMonth")}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                }
+                                <SelectStartMonth
+                                    handleChange={handleChange}
+                                />
                                 <div className="spacer">
                                 </div>
-                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel>Contract Length</FormLabel>
-                                            <Select
-                                                value={contractToEdit.months || ''}
-                                                onChange={(event) => handleChange(event, "months")}
-                                            >
-                                                <MenuItem value={1}>1 Month</MenuItem>
-                                                <MenuItem value={2}>2 Months</MenuItem>
-                                                <MenuItem value={4}>4 Months</MenuItem>
-                                                <MenuItem value={12}>12 Months</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Grid> :
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel>Contract Length</FormLabel>
-                                            <Select
-                                                value={contractToEdit.months || ''}
-                                                onChange={(event) => handleChange(event, "months")}
-                                                disabled
-                                            >
-                                                <MenuItem value={1}>1 Month</MenuItem>
-                                                <MenuItem value={2}>2 Months</MenuItem>
-                                                <MenuItem value={4}>4 Months</MenuItem>
-                                                <MenuItem value={12}>12 Months</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                }
+                                <SelectContractLength
+                                    handleChange={handleChange}
+                                />
                                 <div className="spacer">
                                 </div>
                                 {user.authLevel === "admin" || user.authLevel === "ad rep" ?
