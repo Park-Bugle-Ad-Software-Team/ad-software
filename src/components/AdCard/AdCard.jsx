@@ -12,12 +12,16 @@ import ImageUploader from '../ImageUploader/ImageUploader';
 import './AdCard.css';
 import * as React from 'react';
 import Checkbox from '@mui/material/Checkbox';
-import ActualSizes from "../SubComponents/ActualSizes";
+import ActualSizes from "../SubComponents/SelectActualSizes";
 import SelectAdvertiser from "../SubComponents/SelectAdvertiser";
 import SelectAdRep from "../SubComponents/SelectAdRep";
 import SelectDesigner from "../SubComponents/SelectDesigner";
 import SelectStartMonth from "../SubComponents/SelectStartMonth";
 import SelectContractLength from "../SubComponents/SelectContractLength";
+import SelectAdType from "../SubComponents/SelectAdType";
+import SelectColorType from "../SubComponents/SelectColorType";
+import ContractNotes from "../SubComponents/ContractNotes";
+import BillingCalculation from "../SubComponents/BillingCalculation";
 
 export default function AdCard() {
     const dispatch = useDispatch();
@@ -221,15 +225,19 @@ export default function AdCard() {
 
     const addColorTypePrice = () => {
         let additionalCost = 0;
-        switch (contractToEdit.colorId) {
-            case 1:
-                return additionalCost;
-            case 2:
-                return additionalCost += 100.00;
-            case 3:
-                return additionalCost += 250.00;
-            default:
-                throw new Error(`contractToEdit colorId has no value ${contractToEdit.colorId}`);
+        if (contractToEdit.colorId) {
+            switch (contractToEdit.colorId) {
+                case 1:
+                    return additionalCost;
+                case 2:
+                    return additionalCost += 100.00;
+                case 3:
+                    return additionalCost += 250.00;
+                default:
+                    return additionalCost;
+            }
+        } else {
+            return additionalCost;
         }
     }
 
@@ -282,58 +290,9 @@ export default function AdCard() {
                                 />
                                 <div className="spacer">
                                 </div>
-                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                    <Grid item xs={12}>
-                                        <FormControl component="fieldset">
-                                            <FormLabel>Ad Type</FormLabel>
-                                            <Select
-                                                value={contractToEdit.contractType || ''}
-                                                onChange={(event) => handleChange(event, "contractType")}
-                                            >
-                                                <MenuItem value="Print">Print</MenuItem>
-                                                <MenuItem value="Web">Web</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                        {contractToEdit.contractType === "Print" &&
-                                            <FormControl component="fieldset">
-                                                <FormLabel component="legend">Page Number</FormLabel>
-                                                <TextField
-                                                    variant="outlined"
-                                                    type="number"
-                                                    sx={{width: '70px'}}
-                                                    value={contractToEdit.page || ''}
-                                                    onChange={(event) => handleChange(event, "page")}
-                                                />
-                                            </FormControl>
-                                        }
-                                    </Grid> :
-                                    <Grid item xs={12}>
-                                        <FormControl component="fieldset">
-                                            <FormLabel>Ad Type</FormLabel>
-                                            <Select
-                                                disabled
-                                                value={contractToEdit.contractType || ''}
-                                                onChange={(event) => handleChange(event, "contractType")}
-                                            >
-                                                <MenuItem value="Print">Print</MenuItem>
-                                                <MenuItem value="Web">Web</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                        {contractToEdit.contractType === "Print" &&
-                                            <FormControl component="fieldset">
-                                                <FormLabel component="legend">Page Number</FormLabel>
-                                                <TextField
-                                                    disabled
-                                                    variant="outlined"
-                                                    type="number"
-                                                    sx={{width: '70px'}}
-                                                    value={contractToEdit.page || ''}
-                                                    onChange={(event) => handleChange(event, "page")}
-                                                />
-                                            </FormControl>
-                                        }
-                                    </Grid>
-                                }
+                                <SelectAdType
+                                    handleChange={handleChange}
+                                />
                                 <div className="spacer">
                                 </div>
                                 <ActualSizes
@@ -376,66 +335,14 @@ export default function AdCard() {
                                 </Grid>
                                 <div className="spacer">
                                 </div>
-                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel>Color Type</FormLabel>
-                                            <Select
-                                                value={contractToEdit.colorId || ''}
-                                                onChange={(event) => handleChange(event, "colorId")}
-                                            >
-                                                <MenuItem value={1}>Black and White</MenuItem>
-                                                <MenuItem value={2}>Spot</MenuItem>
-                                                <MenuItem value={3}>Full Color</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Grid> :
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel>Color Type</FormLabel>
-                                            <Select
-                                                disabled
-                                                value={contractToEdit.colorId || ''}
-                                                onChange={(event) => handleChange(event, "colorId")}
-                                            >
-                                                <MenuItem value={1}>Black and White</MenuItem>
-                                                <MenuItem value={2}>Spot</MenuItem>
-                                                <MenuItem value={3}>Full Color</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                }
+                                <SelectColorType
+                                    handleChange={handleChange}
+                                />
                                 <div className="spacer">
                                 </div>
-                                {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel>Notes</FormLabel>
-                                            <TextField
-                                                multiline
-                                                rows={6}
-                                                variant="outlined"
-                                                sx={{width: 300}}
-                                                value={contractToEdit.notes || ''}
-                                                onChange={(event) => handleChange(event, "notes")}
-                                            />
-                                        </FormControl>
-                                    </Grid> :
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel>Notes</FormLabel>
-                                            <TextField
-                                                multiline
-                                                disabled
-                                                rows={6}
-                                                variant="outlined"
-                                                sx={{width: 300}}
-                                                value={contractToEdit.notes || ''}
-                                                onChange={(event) => handleChange(event, "notes")}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                }
+                                <ContractNotes
+                                    handleChange={handleChange}
+                                />
                                 <div className="spacer">
                                 </div>
                                 {user.authLevel === "admin" || user.authLevel === "ad rep" &&
@@ -454,52 +361,9 @@ export default function AdCard() {
                                 }
                                 <div className="spacer">
                                 </div>
-                                <Grid item xs={12}>
-                                    {/* {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
-                                        <>
-                                            <FormLabel>Commission Percentage</FormLabel>
-                                            <Typography>${calculateBill().toFixed(2)}</Typography>
-                                        </>
-                                    }
-                                    <div className="spacer">
-                                    </div> */}
-                                    {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
-                                        <>
-                                            <FormLabel>Calculated Monthly Bill</FormLabel>
-                                            <Typography variant="h6"><strong>${calculateBill().toFixed(2)}</strong></Typography>
-                                        </>
-                                    }
-                                    <div className="spacer">
-                                    </div>
-                                    <FormControl>
-                                        {user.authLevel === "admin" || user.authLevel === "ad rep" ?
-                                            <>
-                                                <FormLabel>
-                                                    Final Adjusted Bill
-                                                </FormLabel>
-                                                <TextField
-                                                    // label="Final Bill"
-                                                    sx={{width: 100}}
-                                                    variant="outlined"
-                                                    value={contractToEdit.actualBill || ''}
-                                                    onChange={(event) => handleChange(event, "actualBill")}
-                                                />
-                                            </>:
-                                            <>
-                                                <FormLabel>
-                                                    Final Adjusted Bill
-                                                </FormLabel>
-                                                <Input
-                                                    type="number"
-                                                    disabled
-                                                    value={contractToEdit.actualBill || ''}
-                                                    onChange={(event) => handleChange(event, "actualBill")}
-                                                >
-                                                </Input>
-                                            </>
-                                        }   
-                                    </FormControl> 
-                                </Grid>
+                                <BillingCalculation
+                                    handleChange={handleChange}
+                                />
                             </Grid>
                             <div className="spacer">
                             </div>
