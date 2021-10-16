@@ -51,6 +51,7 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an employee or admin
 router.get('/pending', rejectUnauthenticated, (req, res) => {
+  let userId = req.user.id;
   const sqlText = `
     SELECT
     "Contracts".*,
@@ -66,10 +67,10 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "isApproved" = false AND "Users"."authLevel" = 'advertiser'
+    WHERE "isApproved" = false AND "Users"."authLevel" = 'advertiser' AND "Contracts_Users"."userId" = $1
     GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
-  pool.query(sqlText)
+  pool.query(sqlText, [userId])
   .then((dbRes) => {
       res.send(dbRes.rows);
   })
@@ -114,6 +115,20 @@ router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
 
 // GET request that happens upon FETCH_ACTIVE_CONTRACTS
 router.get('/active', rejectUnauthenticated, (req, res) => {
+  let userId = req.user.id;
+  /*
+    active contracts are those that have been approved
+    AND
+    the current date(i.e. today, right now. this second(this location))
+      is between startMonth and startMonth + months(or length of the contract)
+    -find out how the values, current, start, and start+length are stored
+    - find out how to get them all into the same format
+    - do the comparison start < current < start+length
+    - startmonth is a sql "date" type
+    - current - how get?
+    - how do math w/ sql date types?
+  */
+
   const sqlText = `
     SELECT
     "Contracts".*,
@@ -129,10 +144,10 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "Users"."authLevel" = 'advertiser'
+    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "Users"."authLevel" = 'advertiser' AND "Contracts_Users"."userId" = $1
     GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
-  pool.query(sqlText)
+  pool.query(sqlText, [userId])
   .then((dbRes) => {
       res.send(dbRes.rows);
   })
@@ -177,6 +192,7 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
 
 // GET request that happens upon FETCH_CLOSED_CONTRACTS
 router.get('/closed', rejectUnauthenticated, (req, res) => {
+  let userId = req.user.id;
   const sqlText = `
     SELECT
     "Contracts".*,
@@ -192,10 +208,10 @@ router.get('/closed', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Users"."authLevel" = 'advertiser'
+    WHERE "startMonth" <= 'NOW' AND "Users"."authLevel" = 'advertiser' AND "Contracts_Users"."userId" = $1
     GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
-  pool.query(sqlText)
+  pool.query(sqlText, [userId])
   .then((dbRes) => {
       res.send(dbRes.rows);
   })
