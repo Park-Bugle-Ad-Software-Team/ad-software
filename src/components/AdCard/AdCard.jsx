@@ -66,6 +66,7 @@ export default function AdCard() {
         })
     }, [])
 
+    // We break up this 
     const handleChange = (event, property) => {
         if (property === "colorId") {
             dispatch({
@@ -145,9 +146,7 @@ export default function AdCard() {
                     designerName: event.target.value
                 }
             })
-        }
-        
-        else {
+        } else {
             dispatch({
                 type: 'UPDATE_CONTRACT_TO_EDIT',
                 payload: {
@@ -162,7 +161,7 @@ export default function AdCard() {
         dispatch({
             type: 'UPDATE_CONTRACT_FOR_APPROVAL'
         })
-    };
+    }
 
     const submitContract = () => {
         console.log('saving contract changes');
@@ -189,60 +188,10 @@ export default function AdCard() {
         dispatch({
             type: 'UNSET_CONTRACT_TO_EDIT'
         });
-    };
+    }
 
     const returnToHome = () => {
         history.goBack();
-    }
-
-    
-
-    const grabRate = (size, row) => {
-        if (size < 8) {
-            return rates[row].isLessThanEight * size;
-        } else if (size >= 8 && size < 12) {
-            return rates[row].isEightToTwelve * grabSize();
-        } else if (size >= 12 && size < 20) {
-            return rates[row].isTwelveToTwenty * grabSize();
-        } else {
-            return rates[row].isTwentyPlus * grabSize();
-        }
-    }
-
-    const calculateBill = () => {
-        switch (contractToEdit.months) {
-            case 1:
-            case 2:
-                return grabRate(grabSize(), 0) + addColorTypePrice();
-            case 4:
-                return grabRate(grabSize(), 1) + addColorTypePrice();
-            case 12:
-                return grabRate(grabSize(), 2) + addColorTypePrice();
-            default:
-                throw new Error(`contractToEdit months has no value ${contractToEdit.months}`);
-        }
-    }
-
-    const addColorTypePrice = () => {
-        let additionalCost = 0;
-        if (contractToEdit.colorId) {
-            switch (contractToEdit.colorId) {
-                case 1:
-                    return additionalCost;
-                case 2:
-                    return additionalCost += 100.00;
-                case 3:
-                    return additionalCost += 250.00;
-                default:
-                    return additionalCost;
-            }
-        } else {
-            return additionalCost;
-        }
-    }
-
-    const grabSize = () => {
-        return contractToEdit.actualColumns * contractToEdit.actualInches;
     }
 
     const uploadComplete = (fileUrl) => {
@@ -252,145 +201,141 @@ export default function AdCard() {
 
     return(
         <>
-                <Container>
+            <Container>
                 <Button 
-                id="backBtn" 
-                variant="contained" 
-                color="primary" 
-                onClick={returnToHome}
-            >
-                Back
-            </Button>
-                    <Box sx={{ flexGrow: 1 }}>
-                        <Grid container spacing={4}>
-                            <Grid item xs={4}>
-                                <SelectAdvertiser 
-                                    contractId={contractId}
-                                    handleChange={handleChange}
-                                />
-                                <div className="spacer">
-                                </div>
-                                <SelectAdRep
-                                    handleChange={handleChange}
-                                />
-                                <div className="spacer">
-                                </div>
-                                <SelectDesigner
-                                    handleChange={handleChange}
-                                />
-                                <div className="spacer">
-                                </div>
-                                <SelectStartMonth
-                                    handleChange={handleChange}
-                                />
-                                <div className="spacer">
-                                </div>
-                                <SelectContractLength
-                                    handleChange={handleChange}
-                                />
-                                <div className="spacer">
-                                </div>
-                                <SelectAdType
-                                    handleChange={handleChange}
-                                />
-                                <div className="spacer">
-                                </div>
-                                <ActualSizes
-                                    handleChange={handleChange}
-                                />
-                                <div className="spacer">
-                                </div>
-                                <Grid item xs={12}>
-                                    <FormControl>
-                                        <FormLabel>Image Upload (Drag and Drop)</FormLabel>
-                                        <div className="imageUploaderDiv">
-                                            <ImageUploader 
-                                                uploadComplete={uploadComplete}
-                                            />
-                                        </div>
-                                    </FormControl>
-                                </Grid>
-                                <div className="spacer">
-                                </div>
-                                <Grid item xs={12}>
-                                    <FormLabel>Image Bank</FormLabel>
-                                    <div className="imageBank">
-                                        {contractToEdit.image &&
-                                            <>
-                                                {contractToEdit.image.map((image, i) => (
-                                                    <>
-                                                        {image.imageUrl !== '{}' ? 
-                                                            <div key={i} className="imageDiv">
-                                                                <a href={image.imageUrl} target="_blank">
-                                                                    <img src={image.imageUrl}/>
-                                                                </a>
-                                                            </div> :
-                                                            null
-                                                        }
-                                                    </>
-                                                ))}
-                                            </>
-                                        }
-                                    </div>      
-                                </Grid>
-                                <div className="spacer">
-                                </div>
-                                <SelectColorType
-                                    handleChange={handleChange}
-                                />
-                                <div className="spacer">
-                                </div>
-                                <ContractNotes
-                                    handleChange={handleChange}
-                                />
-                                <div className="spacer">
-                                </div>
-                                {user.authLevel === "admin" || user.authLevel === "ad rep" &&
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel>Commission Percentage</FormLabel>
-                                            <TextField
-                                                variant="outlined"
-                                                type="number"
-                                                sx={{width: '70px'}}
-                                                value={contractToEdit.commissionPercentage || ''} 
-                                                onChange={(event) => handleChange(event, "commissionPercentage")}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                }
-                                <div className="spacer">
-                                </div>
-                                <BillingCalculation
-                                    handleChange={handleChange}
-                                />
-                            </Grid>
+                    id="backBtn" 
+                    variant="contained" 
+                    color="primary" 
+                    onClick={returnToHome}
+                >
+                    Back
+                </Button>
+                <Box sx={{ flexGrow: 1 }}>
+                    <Grid container spacing={4}>
+                        <Grid item xs={4}>
+                            <SelectAdvertiser 
+                                contractId={contractId}
+                                handleChange={handleChange}
+                            />
                             <div className="spacer">
                             </div>
-                            {/* sectioning out a new container for the ad size selection since it will be quite large*/}
-                            <Grid item xs={8}>
-                                <AdSize />
-                            </Grid>
+                            <SelectAdRep
+                                handleChange={handleChange}
+                            />
                             <div className="spacer">
                             </div>
-                            <Grid item xs={6}>
-                                <div style={{textAlign: 'center'}}>
-                                    <Button variant="contained" color="primary" onClick={submitContract}>Save</Button>
-                                </div>
-                            </Grid>
-                            <Grid item xs={6}>
+                            <SelectDesigner
+                                handleChange={handleChange}
+                            />
+                            <div className="spacer">
+                            </div>
+                            <SelectStartMonth
+                                handleChange={handleChange}
+                            />
+                            <div className="spacer">
+                            </div>
+                            <SelectContractLength
+                                handleChange={handleChange}
+                            />
+                            <div className="spacer">
+                            </div>
+                            <SelectAdType
+                                handleChange={handleChange}
+                            />
+                            <div className="spacer">
+                            </div>
+                            <ActualSizes
+                                handleChange={handleChange}
+                            />
+                            <div className="spacer">
+                            </div>
+                            <Grid item xs={12}>
                                 <FormControl>
-                                    <FormLabel>Approve: </FormLabel>
-                                    <Checkbox
-                                        checked={contractToEdit.isApproved}
-                                        onChange={(event) => handleChange(event, "isApproved")}
-                                    />
+                                    <FormLabel>Image Upload (Drag and Drop)</FormLabel>
+                                    <div className="imageUploaderDiv">
+                                        <ImageUploader 
+                                            uploadComplete={uploadComplete}
+                                        />
+                                    </div>
                                 </FormControl>
                             </Grid>
+                            <div className="spacer">
+                            </div>
+                            <Grid item xs={12}>
+                                <FormLabel>Image Bank</FormLabel>
+                                <div className="imageBank">
+                                    {contractToEdit.image &&
+                                        <>
+                                            {contractToEdit.image.map((image, i) => (
+                                                <>
+                                                    {image.imageUrl !== '{}' ? 
+                                                        <div key={i} className="imageDiv">
+                                                            <a href={image.imageUrl} target="_blank">
+                                                                <img src={image.imageUrl}/>
+                                                            </a>
+                                                        </div> :
+                                                        null
+                                                    }
+                                                </>
+                                            ))}
+                                        </>
+                                    }
+                                </div>      
+                            </Grid>
+                            <div className="spacer">
+                            </div>
+                            <SelectColorType
+                                handleChange={handleChange}
+                            />
+                            <div className="spacer">
+                            </div>
+                            <ContractNotes
+                                handleChange={handleChange}
+                            />
+                            <div className="spacer">
+                            </div>
+                            {user.authLevel === "admin" || user.authLevel === "ad rep" &&
+                                <Grid item xs={12}>
+                                    <FormControl>
+                                        <FormLabel>Commission Percentage</FormLabel>
+                                        <TextField
+                                            variant="outlined"
+                                            type="number"
+                                            sx={{width: '70px'}}
+                                            value={contractToEdit.commissionPercentage || ''} 
+                                            onChange={(event) => handleChange(event, "commissionPercentage")}
+                                        />
+                                    </FormControl>
+                                </Grid>
+                            }
+                            <div className="spacer">
+                            </div>
+                            <BillingCalculation
+                                handleChange={handleChange}
+                            />
                         </Grid>
-                    </Box>
-                </Container>
-        
+                        <Grid item xs={8}>
+                            <AdSize />
+                        </Grid>
+                        <div className="spacer">
+                        </div>
+                        <Grid item xs={6}>
+                            <div style={{textAlign: 'center'}}>
+                                <Button variant="contained" color="primary" onClick={submitContract}>Save</Button>
+                            </div>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControl>
+                                <FormLabel>Approve: </FormLabel>
+                                <Checkbox
+                                    checked={contractToEdit.isApproved || false}
+                                    onChange={(event) => handleChange(event, "isApproved")}
+                                />
+                            </FormControl>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Container>
         </> 
     );
 }
