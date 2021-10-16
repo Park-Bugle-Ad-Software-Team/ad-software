@@ -212,13 +212,27 @@ export default function AdCard() {
         switch (contractToEdit.months) {
             case 1:
             case 2:
-                return grabRate(grabSize(), 0);
+                return grabRate(grabSize(), 0) + addColorTypePrice();
             case 4:
-                return grabRate(grabSize(), 1);
+                return grabRate(grabSize(), 1) + addColorTypePrice();
             case 12:
-                return grabRate(grabSize(), 2);
+                return grabRate(grabSize(), 2) + addColorTypePrice();
             default:
                 throw new Error(`contractToEdit months has no value ${contractToEdit.months}`);
+        }
+    }
+
+    const addColorTypePrice = () => {
+        let additionalCost = 0;
+        switch (contractToEdit.colorId) {
+            case 1:
+                return additionalCost;
+            case 2:
+                return additionalCost += 100.00;
+            case 3:
+                return additionalCost += 250.00;
+            default:
+                throw new Error(`contractToEdit colorId has no value ${contractToEdit.colorId}`);
         }
     }
 
@@ -405,7 +419,7 @@ export default function AdCard() {
                                                 {contractToEdit.image.map((image, i) => (
                                                     <>
                                                         {image.imageUrl !== '{}' ? 
-                                                            <div className="imageDiv">
+                                                            <div key={i} className="imageDiv">
                                                                 <a href={image.imageUrl} target="_blank">
                                                                     <img src={image.imageUrl}/>
                                                                 </a>
@@ -510,7 +524,7 @@ export default function AdCard() {
                                     {contractToEdit.AdSize && contractToEdit.months && rates.length > 0 &&
                                         <>
                                             <FormLabel>Calculated Monthly Bill</FormLabel>
-                                            <Typography>${calculateBill().toFixed(2)}</Typography>
+                                            <Typography variant="h6"><strong>${calculateBill().toFixed(2)}</strong></Typography>
                                         </>
                                     }
                                     <div className="spacer">
@@ -519,7 +533,7 @@ export default function AdCard() {
                                         {user.authLevel === "admin" || user.authLevel === "ad rep" ?
                                             <>
                                                 <FormLabel>
-                                                    Final Bill
+                                                    Final Adjusted Bill
                                                 </FormLabel>
                                                 <TextField
                                                     // label="Final Bill"
@@ -530,8 +544,8 @@ export default function AdCard() {
                                                 />
                                             </>:
                                             <>
-                                                <FormLabel sx={{fontWeight: 1000}}>
-                                                    Final Bill
+                                                <FormLabel>
+                                                    Final Adjusted Bill
                                                 </FormLabel>
                                                 <Input
                                                     type="number"

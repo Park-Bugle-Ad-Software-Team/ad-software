@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
 import ProgressBar from './ProgressBar';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const dropStyles = {
   width: "300px",
@@ -18,12 +20,28 @@ const Uploader = ({uploadComplete}) => {
     const [progress, setProgress] = useState(0);
     const [progressTitle, setProgressTitle] = useState('')
 
+    const store = useSelector(store => store);
+    const contractToEdit = store.contractToEdit;
+    const dispatch = useDispatch();
+
     const handleFinishedUpload = info => {
       
       console.log(info);
       console.log('Access at', info.fileUrl);
       uploadComplete(info.fileUrl);
-
+      dispatch({
+        type: 'UPDATE_CONTRACT_TO_EDIT',
+        payload: {
+          ...contractToEdit,
+          image: [
+            ...contractToEdit.image,
+            {
+              imageUrl: info.fileUrl,
+              contractId: contractToEdit.id
+            },
+          ] 
+        }
+      })
   }
 
 

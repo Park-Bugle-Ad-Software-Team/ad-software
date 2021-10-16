@@ -271,19 +271,19 @@ INSERT INTO "Images" (
    "contractId"
 )
 VALUES 
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 1)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 2)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 3)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 4)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 5)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 6)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 7)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 8)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 9)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 10)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 11)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 12)
-   ('https://image.flaticon.com/icons/png/512/126/126249.png', 13)
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 1),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 2),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 3),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 4),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 5),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 6),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 7),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 8),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 9),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 10),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 11),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 12),
+   ('https://image.flaticon.com/icons/png/512/126/126249.png', 13),
    ('https://image.flaticon.com/icons/png/512/126/126249.png', 14);
 
 -- CREATE TABLE "Invites" (
