@@ -10,13 +10,11 @@ export default function SelectAdRep({ handleChange }) {
     const user = store.user;
     const adReps = store.adReps;
 
-    useEffect(() => {
-        dispatch({type: 'FETCH_AD_REPS'})
-    }, [])
-
     return (
         <>
             <Grid item xs={12}>
+                {adReps &&
+                <>
                 {adReps.length > 0 &&
                     <>
                         {user.authLevel === "admin" || user.authLevel === "ad rep" ?
@@ -45,6 +43,8 @@ export default function SelectAdRep({ handleChange }) {
                             </FormControl>
                         }
                     </>
+                }
+                </>
                 }
             </Grid>
         </>

@@ -32,13 +32,13 @@ export default function SelectDesigner({ handleChange }) {
                                 </Select>
                             </FormControl> :
                             <FormControl>
-                                <FormLabel>Select Ad Rep</FormLabel>
+                                <FormLabel>Select Designer</FormLabel>
                                 <Select
                                     value={contractToEdit.designerName || ''}
                                     onChange={(event) => handleChange(event, "designerId")}
                                     disabled
                                 >
-                                    {adReps.map((adRep, i) => (
+                                    {designers.map((designer, i) => (
                                         <MenuItem key={i} value={designer.name}>{designer.name}</MenuItem>
                                     ))}
                                 </Select>
