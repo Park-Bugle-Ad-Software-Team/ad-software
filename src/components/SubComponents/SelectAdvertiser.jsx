@@ -10,23 +10,23 @@ export default function SelectAdvertiser({ contractId, handleChange }) {
     return (
         <>
             {contractToEdit.id ?
-            <Grid item xs={12}>
-                <Typography variant="h4">{contractToEdit.companyName || ''}</Typography>
-            </Grid> :
-            <Grid item xs={12}>
-                <FormControl>
-                    <FormLabel>Select Advertiser</FormLabel>
-                    <Select
-                        value={contractToEdit.companyName || ''}
-                        onChange={(event) => handleChange(event, "advertiserId")}
-                    >
-                        {/* map through advertisers */}
-                        {advertisers.map((advertiser,i) => (
-                            <MenuItem key={i} value={advertiser.companyName}>{advertiser.companyName}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="h4">{contractToEdit.companyName || ''}</Typography>
+                </Grid> :
+                <Grid item xs={12}>
+                    <FormControl>
+                        <FormLabel>Select Advertiser</FormLabel>
+                        <Select
+                            value={contractToEdit.companyName || ''}
+                            onChange={(event) => handleChange(event, "advertiserId")}
+                        >
+                            {/* map through advertisers */}
+                            {advertisers.map((advertiser,i) => (
+                                <MenuItem key={i} value={advertiser.companyName}>{advertiser.companyName} ({advertiser.name})</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
             }
         </>
     )

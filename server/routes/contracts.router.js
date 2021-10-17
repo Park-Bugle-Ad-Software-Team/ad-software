@@ -51,7 +51,7 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an employee or admin
 router.get('/pending', rejectUnauthenticated, (req, res) => {
-  let userId = req.user.id;
+  // let userId = req.user.id;
   const sqlText = `
     SELECT
     "Contracts".*,
@@ -67,10 +67,10 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "isApproved" = false AND "Users"."authLevel" = 'advertiser' AND "Contracts_Users"."userId" = $1
+    WHERE "isApproved" = false AND "Users"."authLevel" = 'advertiser'
     GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  `;
-  pool.query(sqlText, [userId])
+  `; // add "Contracts_Users"."userId" to WHERE
+  pool.query(sqlText)
   .then((dbRes) => {
       res.send(dbRes.rows);
   })
@@ -115,7 +115,7 @@ router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
 
 // GET request that happens upon FETCH_ACTIVE_CONTRACTS
 router.get('/active', rejectUnauthenticated, (req, res) => {
-  let userId = req.user.id;
+  // let userId = req.user.id;
   /*
     active contracts are those that have been approved
     AND
@@ -130,24 +130,24 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
   */
 
   const sqlText = `
-    SELECT
+  SELECT
     "Contracts".*,
     "AdSize"."adType" as "adType",
     "Color"."colorType" as "colorType",
     "Users"."companyName" as "companyName"
-    FROM "Contracts"
-    JOIN "AdSize"
-      ON "AdSize"."id" = "Contracts"."adSizeId"
-    JOIN "Color"
-      ON "Color"."id" = "Contracts"."colorId"
-    JOIN "Contracts_Users"
-      ON "Contracts_Users"."contractId" = "Contracts"."id"
-    JOIN "Users"
-      ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "Users"."authLevel" = 'advertiser' AND "Contracts_Users"."userId" = $1
-    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  `;
-  pool.query(sqlText, [userId])
+  FROM "Contracts"
+  JOIN "AdSize"
+  ON "AdSize"."id" = "Contracts"."adSizeId"
+  JOIN "Color"
+  ON "Color"."id" = "Contracts"."colorId"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."contractId" = "Contracts"."id"
+  JOIN "Users"
+  ON "Users"."id" = "Contracts_Users"."userId"
+  WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" >= 'NOW' AND "Users"."authLevel" = 'advertiser'
+  GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
+  `; // add "Contracts_Users"."userId" to WHERE
+  pool.query(sqlText)
   .then((dbRes) => {
       res.send(dbRes.rows);
   })
@@ -192,7 +192,7 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
 
 // GET request that happens upon FETCH_CLOSED_CONTRACTS
 router.get('/closed', rejectUnauthenticated, (req, res) => {
-  let userId = req.user.id;
+  // let userId = req.user.id;
   const sqlText = `
     SELECT
     "Contracts".*,
@@ -208,10 +208,10 @@ router.get('/closed', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Users"."authLevel" = 'advertiser' AND "Contracts_Users"."userId" = $1
+    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" <= 'NOW'
     GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  `;
-  pool.query(sqlText, [userId])
+  `; // add "Contracts_Users"."userId" to WHERE
+  pool.query(sqlText)
   .then((dbRes) => {
       res.send(dbRes.rows);
   })
@@ -380,6 +380,7 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
    console.log('req.body is: ', req.body);
   const imageUrl  = req.body.imageUrl;
   delete req.body.imageUrl;
+  delete req.body.image;
 
   const advertiserId = req.params.advertiserId; // or should we grab it from the body
   delete req.body.advertiserId;
