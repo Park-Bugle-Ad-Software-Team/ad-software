@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
 import ProgressBar from './ProgressBar';
+import { useSelector } from 'react';
 
 const dropStyles = {
   width: "300px",
-  height: "200px",
-  
+  border: "1px hover #d8d8d8",
+  borderRadius: "3px",
+  height: "150px",
+   
 }
 
 
@@ -14,7 +17,7 @@ const dropStyles = {
 
 const Uploader = ({uploadComplete}) => {
 
-
+    //const contractToEdit = useSelector(store => store.contractToEdit);
     const [progress, setProgress] = useState(0);
     const [progressTitle, setProgressTitle] = useState('')
 
@@ -43,10 +46,11 @@ const Uploader = ({uploadComplete}) => {
     const innerElement = (
         <div
             style={{
-
-                    paddingTop: '4em', 
+                    fontSize: 10,
+                    paddingTop: '1.5em', 
                     paddingLeft: '1.5em', 
                     paddingRight: '1.5em'
+
 
                   }}
           
@@ -54,7 +58,7 @@ const Uploader = ({uploadComplete}) => {
             <Button variant="outlined" 
                     style={{
 
-                      color: '#EBEBEB', 
+                      color: 'maroon', 
                       paddingLeft: '3em', 
                       paddingRight: '3em', 
                       border: '1px dashed'
@@ -65,9 +69,9 @@ const Uploader = ({uploadComplete}) => {
     )
   return (
     <div style={{ paddingTop: '2em'}}>
-      
-    <ProgressBar progress={progress} progressTitle={progressTitle} />
-
+    {/*{contractToEdit.image &&  */}
+    <ProgressBar progress={progress} /*setProgress={setProgress}*/ progressTitle={progressTitle} />
+     
     <DropzoneS3Uploader
 
       onError={(error) => console.log('upload failed', error)}

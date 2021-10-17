@@ -1,9 +1,17 @@
 import React from 'react';
-import { CircularProgress } from '@mui/material';
-import Typography from "@mui/material/Typography";
+import { makeStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Typography from "@material-ui/core/Typography";
 // import { black } from '@material-ui/core/colors';
-import { createTheme } from '@mui/material/styles';
-import { ThemeProvider } from '@mui/material/styles';
+import { createTheme} from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+
+const useStyles = makeStyles({
+    root: {
+        width: '100%',
+        marginBottom: '2em'
+    },
+});
 
 const theme = createTheme({
     palette: {
@@ -13,13 +21,13 @@ const theme = createTheme({
         },
           secondary: {
             //lighter grey
-            main: '#b2b3b7',
+            main: '#858585',
           },
     },
 });
 
 const ProgressBar = ({ progress, progressTitle }) => {
-    //const { root } = useStyles();
+    const { root } = useStyles();
 
     return (
         <>
@@ -29,8 +37,8 @@ const ProgressBar = ({ progress, progressTitle }) => {
                         <Typography>
                             {progressTitle}
                         </Typography>
-                        <div >
-                            <CircularProgress variant="determinate" value={progress} color="primary" />
+                        <div className={root}>
+                            <LinearProgress variant="determinate" value={progress} color="primary" />
                         </div>
                     </>
                 }
