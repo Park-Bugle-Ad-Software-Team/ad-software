@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
 import ProgressBar from './ProgressBar';
@@ -29,27 +29,34 @@ const Uploader = ({uploadComplete}) => {
       console.log(info);
       console.log('Access at', info.fileUrl);
       uploadComplete(info.fileUrl);
-      dispatch({
-        type: 'UPDATE_CONTRACT_TO_EDIT',
-        payload: {
-          ...contractToEdit,
-          image: [
-            ...contractToEdit.image,
-            {
-              imageUrl: info.fileUrl,
-              contractId: contractToEdit.id
-            },
-          ] 
-        }
-      })
-  }
-
-
-    const onProgress = (percent, event) => {
-      setProgress(percent);
-      setProgressTitle(event);
+      setTimeout(() => {
+        dispatch({
+          type: 'UPDATE_CONTRACT_TO_EDIT',
+          payload: {
+            ...contractToEdit,
+            image: [
+              ...contractToEdit.image,
+              {
+                imageUrl: info.fileUrl,
+                contractId: contractToEdit.id
+              },
+            ] 
+          }
+        })
+      }, 4000);
     }
 
+    const onProgress = () => {
+      const timer = setInterval(() => {
+        setProgress((oldProgress) => {
+          const diff = Math.random() * 10;
+          return Math.min(oldProgress + diff, 100);
+        });
+      }, 500);
+      return () => {
+        clearInterval(timer);
+      };
+    }
     
     const uploadOptions = {
     server: 'http://localhost:5000'
