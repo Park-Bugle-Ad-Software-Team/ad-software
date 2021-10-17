@@ -257,14 +257,43 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   // removing chat from this pull for testing
   console.log('req.params', req.params.id);
   const sqlText = `
-    SELECT
-    "Contracts".*,
-    to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color",
-    "Users"."companyName" as "companyName",
-    array_agg(to_json("Images".*)) as "image"
-    --to_json("Chat".*) as "Chat"
-  
+  SELECT
+  "Contracts".*,
+  to_json("AdSize".*) as "AdSize",
+  to_json("Color".*) as "Color",
+  --"Users"."companyName" as "companyName",
+  --array_agg(to_json("Images".*)) as "image",
+  (
+  SELECT "companyName"
+  FROM "Users"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."userId" = "Users"."id"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Contracts_Users"."contractId"
+  WHERE "Users"."authLevel" = 'advertiser' AND "Contracts"."id" = $1
+  ) as "companyName",
+  (SELECT
+  array_agg(to_json("Images".*)) as "image"
+  FROM "Images"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Images"."contractId"
+  WHERE "Contracts"."id" = $1
+  ) as "image",
+  (SELECT "name"
+  FROM "Users"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."userId" = "Users"."id"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Contracts_Users"."contractId"
+  WHERE "Users"."authLevel" = 'ad rep') as "adRepName",
+  (SELECT "name"
+  FROM "Users"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."userId" = "Users"."id"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Contracts_Users"."contractId"
+  WHERE "Users"."authLevel" LIKE '%design%') as "designerName"
+
   FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
@@ -277,7 +306,7 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
     WHERE "Contracts"."id" = $1
-  Group by "Contracts"."id", "AdSize".*, "Color".*, "companyName";
+  Group by "Contracts"."id", "AdSize".*, "Color".*;
     `;
     
   pool
