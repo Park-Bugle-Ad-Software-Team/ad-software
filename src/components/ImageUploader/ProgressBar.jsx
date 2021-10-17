@@ -30,7 +30,7 @@ const ProgressBar = ({ progress, progressTitle }) => {
                             {progressTitle}
                         </Typography>
                         <div >
-                            <LinearProgress variant="determinate" value={progress} color="primary" />
+                            <CircularProgress variant="determinate" value={progress} color="primary" />
                         </div>
                     </>
                 }

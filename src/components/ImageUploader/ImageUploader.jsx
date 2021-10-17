@@ -46,16 +46,9 @@ const Uploader = ({uploadComplete}) => {
       }, 4000);
     }
 
-    const onProgress = () => {
-      const timer = setInterval(() => {
-        setProgress((oldProgress) => {
-          const diff = Math.random() * 10;
-          return Math.min(oldProgress + diff, 100);
-        });
-      }, 500);
-      return () => {
-        clearInterval(timer);
-      };
+    const onProgress = (event, percent) => {
+      setProgress(percent);
+      setProgressTitle(event);
     }
     
     const uploadOptions = {
