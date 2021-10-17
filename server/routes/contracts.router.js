@@ -115,22 +115,22 @@ router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_ACTIVE_CONTRACTS
 router.get('/active', rejectUnauthenticated, (req, res) => {
   const sqlText = `
-    SELECT
+  SELECT
     "Contracts".*,
     "AdSize"."adType" as "adType",
     "Color"."colorType" as "colorType",
     "Users"."companyName" as "companyName"
-    FROM "Contracts"
-    JOIN "AdSize"
-      ON "AdSize"."id" = "Contracts"."adSizeId"
-    JOIN "Color"
-      ON "Color"."id" = "Contracts"."colorId"
-    JOIN "Contracts_Users"
-      ON "Contracts_Users"."contractId" = "Contracts"."id"
-    JOIN "Users"
-      ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "Users"."authLevel" = 'advertiser'
-    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
+  FROM "Contracts"
+  JOIN "AdSize"
+  ON "AdSize"."id" = "Contracts"."adSizeId"
+  JOIN "Color"
+  ON "Color"."id" = "Contracts"."colorId"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."contractId" = "Contracts"."id"
+  JOIN "Users"
+  ON "Users"."id" = "Contracts_Users"."userId"
+  WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" >= 'NOW'
+  GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
