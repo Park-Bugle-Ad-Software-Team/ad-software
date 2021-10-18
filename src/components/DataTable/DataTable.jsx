@@ -20,7 +20,6 @@ export default function DataTable( { tableData }) {
     const chat = store.chat;
     const contractChatId = store.contractChatId;
     const user = store.user;
-    console.log('user is', user);
     const userId = user.id;
 
     // to format the time of chat messages
@@ -157,24 +156,37 @@ export default function DataTable( { tableData }) {
         <>
             <div className="dataTable">
                 <div>
-                    <DataGrid
-                        autoHeight
-                        rows={rows}
-                        columns={columns}
-                        pageSize={5}
-                        checkboxSelection={false}
-                        components={{
-                            Toolbar: customToolbar,
-                        }}
-                        // start with filtered for user
-                        filterModel={{
-                            items: [{
-                                columnField: 'assignedPeople',
-                                operatorValue: 'contains',
-                                value: `${user.name}`
-                            }]
-                        }}
-                    />
+                    {user.authLevel !== 'admin' ?
+                        <DataGrid
+                            autoHeight
+                            rows={rows}
+                            columns={columns}
+                            pageSize={5}
+                            checkboxSelection={false}
+                            components={{
+                                Toolbar: customToolbar,
+                            }}
+                            // start filtered by user if NOT an admin
+                            filterModel={{
+                                items: [{
+                                    columnField: 'assignedPeople',
+                                    operatorValue: 'contains',
+                                    value: `${user.name}`
+                                }]
+                            }}
+                        />
+                        :
+                        <DataGrid
+                            autoHeight
+                            rows={rows}
+                            columns={columns}
+                            pageSize={10}
+                            checkboxSelection={false}
+                            components={{
+                                Toolbar: customToolbar,
+                            }}
+                        />
+                    }
                 </div>
             </div>
 

@@ -111,24 +111,43 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
 // IF the logged in user is an advertiser
 router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
   const companyName = req.query.companyName;
+  // const sqlText = `
+  //   SELECT
+  //   "Contracts".*,
+  //   "AdSize"."adType" as "adType",
+  //   "Color"."colorType" as "colorType",
+  //   "Users"."companyName" as "companyName"
+  //   FROM "Contracts"
+  //   JOIN "AdSize"
+  //     ON "AdSize"."id" = "Contracts"."adSizeId"
+  //   JOIN "Color"
+  //     ON "Color"."id" = "Contracts"."colorId"
+  //   JOIN "Contracts_Users"
+  //     ON "Contracts_Users"."contractId" = "Contracts"."id"
+  //   JOIN "Users"
+  //     ON "Users"."id" = "Contracts_Users"."userId"
+  //   WHERE "isApproved" = false AND "Users"."companyName" = '${companyName}'
+  //   GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
+  // `;
   const sqlText = `
-    SELECT
-    "Contracts".*,
-    "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType",
-    "Users"."companyName" as "companyName"
-    FROM "Contracts"
-    JOIN "AdSize"
-      ON "AdSize"."id" = "Contracts"."adSizeId"
-    JOIN "Color"
-      ON "Color"."id" = "Contracts"."colorId"
-    JOIN "Contracts_Users"
-      ON "Contracts_Users"."contractId" = "Contracts"."id"
-    JOIN "Users"
-      ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "isApproved" = false AND "Users"."companyName" = '${companyName}'
-    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  `;
+  SELECT
+  "Contracts".*,
+  "AdSize"."adType" as "adType",
+  "Color"."colorType" as "colorType",
+  ARRAY_AGG("Users"."name") as "assignedPeople",
+  STRING_AGG("Users"."companyName", ',') as "companyName"
+FROM "Contracts"
+JOIN "AdSize"
+  ON "AdSize"."id" = "Contracts"."adSizeId"
+JOIN "Color"
+  ON "Color"."id" = "Contracts"."colorId"
+JOIN "Contracts_Users"
+  ON "Contracts_Users"."contractId" = "Contracts"."id"
+JOIN "Users"
+  ON "Users"."id" = "Contracts_Users"."userId"
+WHERE "isApproved" = false
+GROUP BY "Contracts"."id", "adType", "colorType"
+  `
   pool.query(sqlText)
   .then((dbRes) => {
       // console.log('dbRes is', dbRes);

@@ -81,14 +81,6 @@ export default function DataTable( { tableData }) {
                         components={{
                             Toolbar: GridToolbar,
                         }}
-                        // start with filtered for current month
-                        // filterModel={{
-                        //     items: [{
-                        //         columnField: 'startMonth',
-                        //         operatorValue: 'contains',
-                        //         value: `${formatStartMonthTimestamp(Date.now())}`
-                        //     }]
-                        // }}
                     />
                 </div>
             </div>
