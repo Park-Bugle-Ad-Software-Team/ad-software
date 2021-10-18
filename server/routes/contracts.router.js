@@ -99,7 +99,7 @@ router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "isApproved" = false AND "Users"."companyName" = '${companyName}' AND "Users"."authLevel" = 'advertiser'
+    WHERE "isApproved" = false AND "Users"."companyName" = '${companyName}'
     GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   `;
   pool.query(sqlText)
@@ -322,11 +322,14 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 
 router.put('/edit/:id', (req, res) => {
   console.log('req.body is: ', req.body);
-  let image = req.body.imageUrl
-  delete req.body.imageUrl
-  delete req.body.image
+  let image = req.body.imageUrl;
+  
+  delete req.body.imageUrl;
+  delete req.body.image;
   delete req.body.id;
   delete req.body.companyName;
+  delete req.body.designerName;
+  delete req.body.adRepName;
   // const adRepId = req.body.adRepId
   // delete req.body.adRepId
   delete req.body.AdSize;
@@ -419,15 +422,27 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
 
   const adRepId = req.body.adRepId;
   delete req.body.adRepId;
-  // delete req.body.userId;
+  delete req.body.userId;
   delete req.body.AdSize;
   delete req.body.companyName;
   delete req.body.adRepName;
   delete req.body.designerName;
 
-
+  // let tempObject = {
+  //   ...req.body,
+  //   imageUrl,
+  //   advertiserId,
+  //   designerId,
+  //   adRepId
+  // }
+  console.log('req.body after deletes', req.body);
+  // properties = strFromObj(req.body, ', ', element => `"${element}"`)
+  // values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
+
+  console.log('properties', properties);
+  console.log('values', values);
 
   const queryText = `INSERT INTO "Contracts" (${properties})
                       VALUES (${values}) 

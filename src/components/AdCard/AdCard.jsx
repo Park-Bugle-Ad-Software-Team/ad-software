@@ -164,23 +164,29 @@ export default function AdCard() {
     }
 
     const submitContract = () => {
-        console.log('saving contract changes');
-        contractToEdit.imageUrl = newImage
-        if (contractToEdit.id === undefined) {
-            // submit post new contract
-            dispatch({
-                type: 'CREATE_NEW_CONTRACT',
-                payload: contractToEdit
-            });
+
+        if (!contractToEdit.colorId || !contractToEdit.companyName) {
+            alert('Please make sure the following fields are selected: Color Type, Company Name');
+            return;
         } else {
-            // put an existing contract
-            dispatch({
-                type: 'UPDATE_CONTRACT',
-                payload: contractToEdit // update once we have a the user passed via a prop
-            });
+            console.log('saving contract changes');
+            contractToEdit.imageUrl = newImage
+            if (contractToEdit.id === undefined) {
+                // submit post new contract
+                dispatch({
+                    type: 'CREATE_NEW_CONTRACT',
+                    payload: contractToEdit
+                });
+            } else {
+                // put an existing contract
+                dispatch({
+                    type: 'UPDATE_CONTRACT',
+                    payload: contractToEdit // update once we have a the user passed via a prop
+                });
+            }
+            clearContractFields();
+            history.push('/home');
         }
-        clearContractFields();
-        history.push('/home');
     }
 
 
