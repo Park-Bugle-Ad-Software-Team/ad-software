@@ -69,6 +69,7 @@ function* fetchRates() {
 }
 
 function* fetchContractToEdit(action) {
+    console.log('params in contracts saga edit are', action.payload);
     try { 
         const response = yield axios.get(`/api/contracts/edit/${action.payload}`);
         yield put({

@@ -163,7 +163,7 @@ export default function AdCard() {
 
     const submitContract = () => {
 
-        if (!contractToEdit.colorId || !contractToEdit.companyName) {
+        if (!contractToEdit.colorId || !contractToEdit.companyName || !contractToEdit.adSizeId) {
             alert('Please make sure the following fields are selected: Color Type, Company Name');
             return;
         } else {
@@ -298,7 +298,7 @@ export default function AdCard() {
                             />
                             <div className="spacer">
                             </div>
-                            {user.authLevel === "admin" || user.authLevel === "ad rep" &&
+                            {user.authLevel === "admin" &&
                                 <Grid item xs={12}>
                                     <FormControl>
                                         <FormLabel>Commission Percentage</FormLabel>

@@ -19,6 +19,7 @@ export default function HomePage() {
         dispatch({type: 'FETCH_ADVERTISERS'});
         dispatch({type: 'FETCH_AD_REPS'});
         dispatch({type: 'FETCH_DESIGNERS'});
+        // dispatch({type: 'FETCH_CONTRACT_TO_EDIT', payload: {contractId: undefined}})
     }, []);
 
     // global state from redux
