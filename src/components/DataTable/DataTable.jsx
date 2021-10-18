@@ -20,6 +20,7 @@ export default function DataTable( { tableData }) {
     const chat = store.chat;
     const contractChatId = store.contractChatId;
     const user = store.user;
+    console.log('user is', user);
     const userId = user.id;
 
     // to format the time of chat messages
@@ -125,7 +126,8 @@ export default function DataTable( { tableData }) {
             headerName: 'Chat',
             width: 180,
             renderCell: renderChatButton
-        }
+        },
+        {field: 'assignedPeople', headerName: 'Users', width: 400}
     ];
 
     function customToolbar() {
@@ -163,6 +165,14 @@ export default function DataTable( { tableData }) {
                         checkboxSelection={false}
                         components={{
                             Toolbar: customToolbar,
+                        }}
+                        // start with filtered for user
+                        filterModel={{
+                            items: [{
+                                columnField: 'assignedPeople',
+                                operatorValue: 'contains',
+                                value: `${user.name}`
+                            }]
                         }}
                     />
                 </div>

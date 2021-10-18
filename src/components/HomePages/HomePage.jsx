@@ -16,9 +16,9 @@ export default function HomePage() {
         if (user.authLevel === 'admin') {
             dispatch({type: 'FETCH_ALL_USERS'});
         }
-        dispatch({type: 'FETCH_ADVERTISERS'});
-        dispatch({type: 'FETCH_AD_REPS'});
-        dispatch({type: 'FETCH_DESIGNERS'});
+        // dispatch({type: 'FETCH_ADVERTISERS'});
+        // dispatch({type: 'FETCH_AD_REPS'});
+        // dispatch({type: 'FETCH_DESIGNERS'});
         // dispatch({type: 'FETCH_CONTRACT_TO_EDIT', payload: {contractId: undefined}})
     }, []);
 

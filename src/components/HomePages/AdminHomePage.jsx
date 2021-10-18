@@ -91,6 +91,11 @@ export default function EmployeeHomePage() {
                 <>
                     {/* All Contracts */}
                     <Grid item xs={12}>
+                        <div className="contractHeader">
+                            <Typography variant="h3">Current Month's Contracts</Typography> 
+                        </div> 
+                    </Grid>
+                    <Grid item xs={12}>
                         <DataTableExport tableData={allContracts}/>
                     </Grid>
                 </>

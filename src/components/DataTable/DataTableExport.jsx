@@ -13,7 +13,6 @@ export default function DataTable( { tableData }) {
     // columns for the DataGrid
     const columns = [
         {field: 'companyName', headerName: 'Company', width: 180},
-        {field: 'name', headerName: 'Advertiser', width: 180},
         {field: 'startMonth', headerName: 'Start Month', width: 180,
             valueFormatter: (params) => {
                 return formatStartMonthTimestamp(params.row.startMonth);
@@ -65,7 +64,8 @@ export default function DataTable( { tableData }) {
                 }
             }
         },
-        {field: 'notes', headerName: 'Notes', width: 360}
+        {field: 'notes', headerName: 'Notes', width: 300},
+        {field: 'assignedPeople', headerName: 'Users', width: 300}
     ];
 
     return (

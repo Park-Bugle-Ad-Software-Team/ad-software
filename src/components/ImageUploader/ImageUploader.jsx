@@ -11,9 +11,6 @@ const dropStyles = {
   
 }
 
-
-
-
 const Uploader = ({uploadComplete}) => {
 
 

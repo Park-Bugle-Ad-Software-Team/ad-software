@@ -7,6 +7,37 @@ const router = express.Router();
 const strFromObj = require('../modules/strFromObj')
 
 router.get('/all', rejectUnauthenticated, (req, res) => {
+  // const sqlText = `
+  //   SELECT
+  //     "Contracts".*,
+  //     "AdSize"."adType" as "adType",
+  //     "AdSize"."desc" as "desc",
+  //     "AdSize"."columns" as "columns",
+  //     "AdSize"."inches" as "inches",
+  //     "Color"."colorType" as "colorType",
+  //     "Color"."colorPrice" as "colorPrice",
+  //     "Rates"."rateName" as "rateName",
+  //     "Users"."name" as "name",
+  //     "Users"."email" as "email",
+  //     "Users"."contactPreference" as "contactPreference",
+  //     "Users"."companyName" as "companyName"
+  //   FROM "Contracts"
+  //   JOIN "AdSize"
+  //     ON "AdSize"."id" = "Contracts"."adSizeId"
+  //   JOIN "Color"
+  //     ON "Color"."id" = "Contracts"."colorId"
+  //   JOIN "Rates"
+  //     ON "Rates"."id" = "Contracts"."pricingSchemaId"
+  //   JOIN "Contracts_Users"
+  //     ON "Contracts_Users"."contractId" = "Contracts"."id"
+  //   JOIN "Users"
+  //     ON "Users"."id" = "Contracts_Users"."userId"
+  //   WHERE 
+  //   GROUP BY "Contracts"."id", "adType", "desc", "columns",
+  //     "inches", "colorType", "colorPrice", "rateName", "name",
+  //     "email", "contactPreference", "companyName"
+  //   ORDER BY "startMonth" ASC
+  // `;
   const sqlText = `
     SELECT
       "Contracts".*,
@@ -17,10 +48,8 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
       "Color"."colorType" as "colorType",
       "Color"."colorPrice" as "colorPrice",
       "Rates"."rateName" as "rateName",
-      "Users"."name" as "name",
-      "Users"."email" as "email",
-      "Users"."contactPreference" as "contactPreference",
-      "Users"."companyName" as "companyName"
+    ARRAY_AGG("Users"."name") as "assignedPeople",
+    STRING_AGG("Users"."companyName", ',') as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
@@ -32,12 +61,10 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "Users"."authLevel" = 'advertiser'
+    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" >= 'NOW'
     GROUP BY "Contracts"."id", "adType", "desc", "columns",
-      "inches", "colorType", "colorPrice", "rateName", "name",
-      "email", "contactPreference", "companyName"
-    ORDER BY "startMonth" ASC
-  `;
+    "inches", "colorType", "colorPrice", "rateName"
+  `
   pool.query(sqlText)
   .then((dbRes) => {
       res.send(dbRes.rows);
@@ -51,13 +78,13 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an employee or admin
 router.get('/pending', rejectUnauthenticated, (req, res) => {
-  // let userId = req.user.id;
   const sqlText = `
     SELECT
-    "Contracts".*,
-    "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType",
-    "Users"."companyName" as "companyName"
+      "Contracts".*,
+      "AdSize"."adType" as "adType",
+      "Color"."colorType" as "colorType",
+      ARRAY_AGG("Users"."name") as "assignedPeople",
+      STRING_AGG("Users"."companyName", ',') as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
@@ -67,9 +94,9 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "isApproved" = false AND "Users"."authLevel" = 'advertiser'
-    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  `; // add "Contracts_Users"."userId" to WHERE
+    WHERE "isApproved" = false
+    GROUP BY "Contracts"."id", "adType", "colorType"
+  `;
   pool.query(sqlText)
   .then((dbRes) => {
       res.send(dbRes.rows);
@@ -129,24 +156,43 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
     - how do math w/ sql date types?
   */
 
+  // const sqlText = `
+  // SELECT
+  //   "Contracts".*,
+  //   "AdSize"."adType" as "adType",
+  //   "Color"."colorType" as "colorType",
+  //   "Users"."companyName" as "companyName"
+  // FROM "Contracts"
+  // JOIN "AdSize"
+  // ON "AdSize"."id" = "Contracts"."adSizeId"
+  // JOIN "Color"
+  // ON "Color"."id" = "Contracts"."colorId"
+  // JOIN "Contracts_Users"
+  // ON "Contracts_Users"."contractId" = "Contracts"."id"
+  // JOIN "Users"
+  // ON "Users"."id" = "Contracts_Users"."userId"
+  // WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" >= 'NOW' AND "Users"."authLevel" = 'advertiser'
+  // GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
+  // `; // add "Contracts_Users"."userId" to WHERE
   const sqlText = `
-  SELECT
-    "Contracts".*,
-    "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType",
-    "Users"."companyName" as "companyName"
-  FROM "Contracts"
-  JOIN "AdSize"
-  ON "AdSize"."id" = "Contracts"."adSizeId"
-  JOIN "Color"
-  ON "Color"."id" = "Contracts"."colorId"
-  JOIN "Contracts_Users"
-  ON "Contracts_Users"."contractId" = "Contracts"."id"
-  JOIN "Users"
-  ON "Users"."id" = "Contracts_Users"."userId"
-  WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" >= 'NOW' AND "Users"."authLevel" = 'advertiser'
-  GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  `; // add "Contracts_Users"."userId" to WHERE
+    SELECT
+      "Contracts".*,
+      "AdSize"."adType" as "adType",
+      "Color"."colorType" as "colorType",
+      ARRAY_AGG("Users"."name") as "assignedPeople",
+      STRING_AGG("Users"."companyName", ',') as "companyName"
+    FROM "Contracts"
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" >= 'NOW'
+    GROUP BY "Contracts"."id", "adType", "colorType"
+  `;
   pool.query(sqlText)
   .then((dbRes) => {
       res.send(dbRes.rows);
@@ -193,12 +239,31 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_CLOSED_CONTRACTS
 router.get('/closed', rejectUnauthenticated, (req, res) => {
   // let userId = req.user.id;
+  // const sqlText = `
+  //   SELECT
+  //   "Contracts".*,
+  //   "AdSize"."adType" as "adType",
+  //   "Color"."colorType" as "colorType",
+  //   "Users"."companyName" as "companyName"
+  //   FROM "Contracts"
+  //   JOIN "AdSize"
+  //     ON "AdSize"."id" = "Contracts"."adSizeId"
+  //   JOIN "Color"
+  //     ON "Color"."id" = "Contracts"."colorId"
+  //   JOIN "Contracts_Users"
+  //     ON "Contracts_Users"."contractId" = "Contracts"."id"
+  //   JOIN "Users"
+  //     ON "Users"."id" = "Contracts_Users"."userId"
+  //   WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" <= 'NOW'
+  //   GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
+  // `; // add "Contracts_Users"."userId" to WHERE
   const sqlText = `
     SELECT
-    "Contracts".*,
-    "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType",
-    "Users"."companyName" as "companyName"
+      "Contracts".*,
+      "AdSize"."adType" as "adType",
+      "Color"."colorType" as "colorType",
+      ARRAY_AGG("Users"."name") as "assignedPeople",
+      STRING_AGG("Users"."companyName", ',') as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
@@ -209,8 +274,8 @@ router.get('/closed', rejectUnauthenticated, (req, res) => {
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
     WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" <= 'NOW'
-    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  `; // add "Contracts_Users"."userId" to WHERE
+    GROUP BY "Contracts"."id", "adType", "colorType"
+  `;
   pool.query(sqlText)
   .then((dbRes) => {
       res.send(dbRes.rows);
@@ -256,29 +321,83 @@ router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
 router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   // removing chat from this pull for testing
   console.log('req.params', req.params.id);
-  const sqlText = `
-    SELECT
-    "Contracts".*,
-    to_json("AdSize".*) as "AdSize",
-    to_json("Color".*) as "Color",
-    "Users"."companyName" as "companyName",
-    array_agg(to_json("Images".*)) as "image"
-    --to_json("Chat".*) as "Chat"
+  // const sqlText = `
+  //   SELECT
+  //   "Contracts".*,
+  //   to_json("AdSize".*) as "AdSize",
+  //   to_json("Color".*) as "Color",
+  //   "Users"."companyName" as "companyName",
+  //   array_agg(to_json("Images".*)) as "image"
+  //   --to_json("Chat".*) as "Chat"
   
+  // FROM "Contracts"
+  //   JOIN "AdSize"
+  //     ON "AdSize"."id" = "Contracts"."adSizeId"
+  //   JOIN "Color"
+  //     ON "Color"."id" = "Contracts"."colorId"
+  //   JOIN "Images"
+  //     ON "Images"."contractId" = "Contracts"."id"
+  //   JOIN "Contracts_Users"
+  //     ON "Contracts_Users"."contractId" = "Contracts"."id"
+  //   JOIN "Users"
+  //     ON "Users"."id" = "Contracts_Users"."userId"
+  //   WHERE "Contracts"."id" = $1
+  // Group by "Contracts"."id", "AdSize".*, "Color".*, "companyName";
+  //   `;
+  const sqlText = `
+  SELECT
+  "Contracts".*,
+  to_json("AdSize".*) as "AdSize",
+  to_json("Color".*) as "Color",
+  --"Users"."companyName" as "companyName",
+  --array_agg(to_json("Images".*)) as "image",
+  (
+  SELECT "companyName"
+  FROM "Users"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."userId" = "Users"."id"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Contracts_Users"."contractId"
+  WHERE "Users"."authLevel" = 'advertiser' AND "Contracts"."id" = $1
+  ) as "companyName",
+  (SELECT
+  array_agg(to_json("Images".*)) as "image"
+  FROM "Images"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Images"."contractId"
+  WHERE "Contracts"."id" = $1
+  ) as "image",
+
+  (SELECT "name"
+  FROM "Users"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."userId" = "Users"."id"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Contracts_Users"."contractId"
+  WHERE "Users"."authLevel" = 'ad rep' AND "Contracts"."id" = $1) as "adRepName",
+
+  (SELECT "name"
+  FROM "Users"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."userId" = "Users"."id"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Contracts_Users"."contractId"
+  WHERE "Users"."authLevel" LIKE '%design%' AND "Contracts"."id" = $1) as "designerName"
+
   FROM "Contracts"
-    JOIN "AdSize"
-      ON "AdSize"."id" = "Contracts"."adSizeId"
-    JOIN "Color"
-      ON "Color"."id" = "Contracts"."colorId"
-    JOIN "Images"
-      ON "Images"."contractId" = "Contracts"."id"
-    JOIN "Contracts_Users"
-      ON "Contracts_Users"."contractId" = "Contracts"."id"
-    JOIN "Users"
-      ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "Contracts"."id" = $1
-  Group by "Contracts"."id", "AdSize".*, "Color".*, "companyName";
-    `;
+  JOIN "AdSize"
+    ON "AdSize"."id" = "Contracts"."adSizeId"
+  JOIN "Color"
+    ON "Color"."id" = "Contracts"."colorId"
+  JOIN "Images"
+    ON "Images"."contractId" = "Contracts"."id"
+  JOIN "Contracts_Users"
+    ON "Contracts_Users"."contractId" = "Contracts"."id"
+  JOIN "Users"
+    ON "Users"."id" = "Contracts_Users"."userId"
+  WHERE "Contracts"."id" = $1
+  Group by "Contracts"."id", "AdSize".*, "Color".*;
+`;
     
   pool
     .query(sqlText, [req.params.id])

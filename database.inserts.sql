@@ -110,9 +110,9 @@ VALUES
    'Primary ad rep in charge of the south side of St. Anthony Park', -- notes
    'inviteCode'), -- inviteCode
    ----------- Print Designer
-   ('amy@parkbugle.com', -- email
+   ('kelly@parkbugle.com', -- email
    '612-524-0924', -- phone
-   'Bobby Joe', -- name
+   'Kelly Brooks', -- name
    'Replace with a salted/hashed password', -- password
    'designer', -- authLevel
    'phone', -- contactPreference
@@ -135,7 +135,7 @@ VALUES
    'Primary print ad designer', -- notes
    'inviteCode'), -- inviteCode
    ----------- Web Designer
-   ('arnold@parkbugle.com', -- email
+   ('mark@parkbugle.com', -- email
    '952-596-2835', -- phone
    'Mark Peter', -- name
    'Replace with a salted/hashed password', -- password
@@ -160,9 +160,9 @@ VALUES
    'Primary web ad designer', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 1
-   ('info@creativeenterprisezone.org', -- email
+   ('scotthanson@gmail.com', -- email
    NULL, -- phone
-   'Angela Casselton', -- name
+   'Scott Hanson', -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', --authLevel
    'phone', -- contactPreference
@@ -185,9 +185,9 @@ VALUES
    'Please contact us when 2 months remain on any contract.', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 2: Print
-   ('parkwaypizza@gmail.com', -- email
+   ('courtneyfern@gmail.com', -- email
    NULL, -- phone
-   'Sam Janson',  -- name
+   'Courtney Fern',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -210,9 +210,9 @@ VALUES
    'Thinking about doing a web ad next.', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 3: Web
-   ('manager@teambole.com', -- email
+   ('mikehanover@gmail.com', -- email
    NULL, -- phone
-   'Solomon Haile',  -- name
+   'Mike Hanover',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -235,9 +235,9 @@ VALUES
    'Thinking about doing a print ad next.', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 4: Web
-   ('shaheensinc@gmail.com', -- email
+   ('lorrainechelle@gmail.com', -- email
    NULL, -- phone
-   'Yousef Shaheen',  -- name
+   'Lorraine Chelle',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -260,9 +260,9 @@ VALUES
    'Thanks for the exposure.', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 5
-   ('info@mbscleaning.com', -- email
+   ('waynefranklin@gmail.com', -- email
    '651-225-1960', -- phone
-   'Mary Beth Stevens',  -- name
+   'Wayne Franklin',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -285,9 +285,9 @@ VALUES
    'Thanks for the exposure.', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 6
-   ('ryan@exbike.com', -- email
+   ('angelinleigh@gmail.com', -- email
    '651-644-9660', -- phone
-   'Ryan Sheehan',  -- name
+   'Angelina Leigh',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -310,9 +310,9 @@ VALUES
    'Thanks for the easy process, folks.', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 7
-   ('info@osdistilling.com', -- email
+   ('adamberg@gmail.com', -- email
    '651-644-9660', -- phone
-   'Brian Nation',  -- name
+   'Adam Berg',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -335,59 +335,59 @@ VALUES
    'Thanks for the easy process, folks.', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 8
-   ('info@nextchapterbooksellers.com', -- email
-   '651-225-8989', -- phone
-   'Milan Washington',  -- name
+   ('dwyatt@nextchapter.com', -- email
+   '651-282-5874', -- phone
+   'Darleen Wyatt',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
    true, -- acceptAchPayment
-   'O’Shaughnessy Distilling Company', -- companyName
+   'Next Chapter Book Sellers', -- companyName
    false, -- doNotDisturb
    true, -- isActive
    'nextchapterbooksellers.com', -- advertiserUrl
    '38 Snelling Ave S, St. Paul, Minnesota, 55105', -- address
-   'Milan Washington', -- primaryName
+   'Darleen Wyatt', -- primaryName
    'Lead Sales Clerk', -- primaryTitle
-   'milan@nextchapterbooksellers.com', -- primaryEmail
+   'dwyatt@nextchapter.com', -- primaryEmail
    '651-225-8989', -- primaryDirectPhone
    '651-745-3298', -- primaryMobilePhone
-   'David Mueller', -- secondaryName
+   'Evan Deeann', -- secondaryName
    'Lead Sales Clerk', -- SecondaryTitle
-   'david@nextchapterbooksellers.com', -- secondaryEmail
+   'evan@nextchapter.com', -- secondaryEmail
    '651-225-8989', -- secondaryDirectPhone
    '651-988-2917', -- secondaryMobilePhone
    'Love reading your paper, cant wait to see our ad :)', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 9
-   ('info@kartathai.com', -- email
+   ('drobin@outlook.com', -- email
    '651-225-8989', -- phone
-   'J.P. Johnson',  -- name
+   'Duncan Robin',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
    true, -- acceptAchPayment
-   'O’Shaughnessy Distilling Company', -- companyName
+   'Karta Thai', -- companyName
    false, -- doNotDisturb
    true, -- isActive
    'kartathai.com', -- advertiserUrl
    '2295 Como. Avenue ST Paul. Minnesota 55108', -- address
-   'J.P. Johnson', -- primaryName
+   'Kenton Marigold', -- primaryName
    'St. Paul Location Manager', -- primaryTitle
-   'milan@nextchapterbooksellers.com', -- primaryEmail
+   'kenton.marigold@gmail.com', -- primaryEmail
    '651-330-6281', -- primaryDirectPhone
    '651-444-9675', -- primaryMobilePhone
-   'Pennapa Johnson', -- secondaryName
+   'Arthit Sunan', -- secondaryName
    'Minneapolis Location Manager', -- SecondaryTitle
-   'pennapa@kartathai.com', -- secondaryEmail
+   'SunanArthit@outlook.com', -- secondaryEmail
    '651-756-7173', -- secondaryDirectPhone
    '651-988-2917', -- secondaryMobilePhone
    'Thanks for the help setting up an ad. So easy!', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 10
-   ('dan@danbanecpa.com', -- email
+   ('aaronbergmeier@gmail.com', -- email
    '651-999-0123', -- phone
-   'Dan Bane',  -- name
+   'Aaron Bergmeier',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -410,9 +410,9 @@ VALUES
    'Thanks for making everything so easy for me!', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 11
-   ('info@sunrisebanks.com', -- email
+   ('bertahoffman@yahoo.com', -- email
    '651-265-5600', -- phone
-   'Becca Hoeft',  -- name
+   'Berta Hoffman',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -435,7 +435,7 @@ VALUES
    'The ad looks better than I could have ever imagined, thanks again!', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 12
-   ('annette@shop.boreal.life', -- email
+   ('annettekujawa@outlook.com', -- email
    '651-560-9900', -- phone
    'Annette Kujawa',  -- name
    'Replace with a salted/hashed password', -- password
@@ -460,9 +460,9 @@ VALUES
    'I am so happy you made this so easy for me!', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 13
-   ('info@sapdentalcare.com', -- email
+   ('paulmiller@gmail.com', -- email
    '651-644-3685', -- phone
-   'Paul Kling',  -- name
+   'Paul Miller',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -485,9 +485,9 @@ VALUES
    'I cannot believe how little I had to do, your process is amazing!', -- notes
    'inviteCode'), -- inviteCode
    ----------- Advertiser 14
-   ('info@thelabmn.com', -- email
+   ('janeanderson@gmail.com', -- email
    '651-313-6888', -- phone
-   'Janet Johanson',  -- name
+   'Jane Anderson',  -- name
    'Replace with a salted/hashed password', -- password
    'advertiser', -- authLevel
    'email', -- contactPreference
@@ -536,56 +536,54 @@ VALUES
    'inviteCode'); -- inviteCode
 ; -- end insert
 
-INSERT INTO "Users" (
-	"email", "name", "password", "authLevel", "contactPreference", "acceptAchPayment", "companyName",
-	"doNotDisturb", "isActive", "advertiserUrl", "address", "primaryName", "primaryTitle", "primaryEmail",
-	"primaryDirectPhone", "primaryMobilePhone", "secondaryName", "secondaryEmail", "secondaryDirectPhone", 
-	"secondaryMobilePhone", "notes", "inviteCode"
-)
-VALUES (
-	'scott.hanson@excellentdesign.com', 'Scott Hanson', 'replace with encrypted password', 'print designer', null, false, 'Park Bugle', 
-	false, true, null, '6485 Island St., Brooklyn Park, Minneapolis, MN 55316', null, null, null, 
-	'672-383-4923', null, null, null, null,
-	null, 'Print designer for all Q4 ads. Prefers email invoicing. Works with black and white images only.', 'inviteCode'
-),
-(
-	'kbrooks@stylenova.com', 'Kelly Brooks', 'replace with encrypted password', 'web designer', null, false, 'Park Bugle', 
-	false, true, null, '2415 Carter Ave, Saint Paul, MN, 55108', null, null, null, 
-	'(651) 454-6752', null, null, null, null,
-	null, 'Print designer for all Q4 ads. Prefers email invoicing. Works with black and white images only.', 'inviteCode'
-),
-(
-	'cmfern24@gmail.com', 'Courtney Fern', 'replace with encrypted password', 'ad rep', null, false, 'Park Bugle', 
-	false, true, null, '1762 Canyon Ln, Saint Paul, Minnesota(MN), 55112', null, null, null, 
-	'(651) 631-1157', null, null, null, null,
-	null, 'Handles north side of St. Anthony Park.', 'inviteCode'
-),
-(
-	'mikehanover@gmail.com', 'Mike Hanover', 'replace with encrypted password', 'advertiser', null, false, 'Ace Hardware', 
-	false, true, null, '24465 50th Rd, Saint Paul, MN, 55112', null, null, null, 
-	'(651) 493-1512', null, 'Jim Kroning', 'jkroning@outlook.com', null,
-	'(651) 644-4223', 'Mike is very responsive but you may have to reach out to their on-site manager Jim', 'inviteCode'
-),
-(
-	'lorrainechell@madisonmarketing.net', 'Lorraine Chelle', 'replace with encrypted password', 'ad rep', null, false, 'Park Bugle', 
-	false, true, null, '1794 Taconite Trl, Saint Paul, Minnesota(MN), 55122', null, null, null, 
-	'(651) 454-6752', null, null, null, null,
-	null, 'Handles South side of St. Anthony Park.', 'inviteCode'
-),
-(
-	'waynefranklyn@outlook.com', 'Wayne Franklin', 'replace with encrypted password', 'advertiser', null, false, 'Parkway Pizza', 
-	false, true, null, '245 N Oxford St, Saint Paul, Minnesota(MN), 55104', null, null, null, 
-	'(651) 493-1512', null, 'Kent Daisy', 'kdaisy@outlook.com', null,
-	'(651) 528-7412', null, 'inviteCode'
-),
-(
-	'a.leigh@sunrisebanks.org', 'Angelina Leigh', 'replace with encrypted password', 'advertiser', null, false, 'Sunrise Banks', 
-	false, true, null, '2621 17th St NW, Saint Paul, Minnesota(MN), 55112', null, null, null, 
-	'(651) 493-1512', null, null, null, null,
-	null, null, 'inviteCode'
-)
-
-;
+-- INSERT INTO "Users" (
+-- 	"email", "name", "password", "authLevel", "contactPreference", "acceptAchPayment", "companyName",
+-- 	"doNotDisturb", "isActive", "advertiserUrl", "address", "primaryName", "primaryTitle", "primaryEmail",
+-- 	"primaryDirectPhone", "primaryMobilePhone", "secondaryName", "secondaryEmail", "secondaryDirectPhone", 
+-- 	"secondaryMobilePhone", "notes", "inviteCode"
+-- )
+-- VALUES (
+-- 	'scott.hanson@excellentdesign.com', 'Scott Hanson', 'replace with encrypted password', 'print designer', null, false, 'Park Bugle', 
+-- 	false, true, null, '6485 Island St., Brooklyn Park, Minneapolis, MN 55316', null, null, null, 
+-- 	'672-383-4923', null, null, null, null,
+-- 	null, 'Print designer for all Q4 ads. Prefers email invoicing. Works with black and white images only.', 'inviteCode'
+-- ),
+-- (
+-- 	'kbrooks@stylenova.com', 'Kelly Brooks', 'replace with encrypted password', 'web designer', null, false, 'Park Bugle', 
+-- 	false, true, null, '2415 Carter Ave, Saint Paul, MN, 55108', null, null, null, 
+-- 	'(651) 454-6752', null, null, null, null,
+-- 	null, 'Print designer for all Q4 ads. Prefers email invoicing. Works with black and white images only.', 'inviteCode'
+-- ),
+-- (
+-- 	'cmfern24@gmail.com', 'Courtney Fern', 'replace with encrypted password', 'ad rep', null, false, 'Park Bugle', 
+-- 	false, true, null, '1762 Canyon Ln, Saint Paul, Minnesota(MN), 55112', null, null, null, 
+-- 	'(651) 631-1157', null, null, null, null,
+-- 	null, 'Handles north side of St. Anthony Park.', 'inviteCode'
+-- ),
+-- (
+-- 	'mikehanover@gmail.com', 'Mike Hanover', 'replace with encrypted password', 'advertiser', null, false, 'Ace Hardware', 
+-- 	false, true, null, '24465 50th Rd, Saint Paul, MN, 55112', null, null, null, 
+-- 	'(651) 493-1512', null, 'Jim Kroning', 'jkroning@outlook.com', null,
+-- 	'(651) 644-4223', 'Mike is very responsive but you may have to reach out to their on-site manager Jim', 'inviteCode'
+-- ),
+-- (
+-- 	'lorrainechell@madisonmarketing.net', 'Lorraine Chelle', 'replace with encrypted password', 'ad rep', null, false, 'Park Bugle', 
+-- 	false, true, null, '1794 Taconite Trl, Saint Paul, Minnesota(MN), 55122', null, null, null, 
+-- 	'(651) 454-6752', null, null, null, null,
+-- 	null, 'Handles South side of St. Anthony Park.', 'inviteCode'
+-- ),
+-- (
+-- 	'waynefranklyn@outlook.com', 'Wayne Franklin', 'replace with encrypted password', 'advertiser', null, false, 'Parkway Pizza', 
+-- 	false, true, null, '245 N Oxford St, Saint Paul, Minnesota(MN), 55104', null, null, null, 
+-- 	'(651) 493-1512', null, 'Kent Daisy', 'kdaisy@outlook.com', null,
+-- 	'(651) 528-7412', null, 'inviteCode'
+-- ),
+-- (
+-- 	'a.leigh@sunrisebanks.org', 'Angelina Leigh', 'replace with encrypted password', 'advertiser', null, false, 'Sunrise Banks', 
+-- 	false, true, null, '2621 17th St NW, Saint Paul, Minnesota(MN), 55112', null, null, null, 
+-- 	'(651) 493-1512', null, null, null, null,
+-- 	null, null, 'inviteCode'
+-- );
 
 CREATE TABLE "AdSize" (
    "id" SERIAL PRIMARY KEY,
@@ -665,7 +663,7 @@ CREATE TABLE "Contracts" (
    -- "adInstructions" VARCHAR(255),
    -- "sponsorshipId" INT REFERENCES "Sponsorship",
    "notes" VARCHAR(512),
-   "startMonth" DATE,
+   "startMonth" DATE DEFAULT 'NOW',
    "commissionPercentage" INT,
    "colorId" INT REFERENCES "Color",
    "contractType" VARCHAR(255),
@@ -697,20 +695,20 @@ INSERT INTO "Contracts" (
    "actualInches"
 )
 VALUES
-   (1, '2 month contract', '2021-10-01', 20, 1, 'Print', 270, 270, 2, true, 2, 2, 5, 15.66),
-   (2, '4 month contract', '2021-09-01', 25, 1, 'Print', 250, 270, 3, true, 1, 4, 3, 12.5),
-   (3, '12 month contract', '2021-11-01', 15, 2, 'Print', 200, 270, 1, true, 3, 12, 5, 7.5),
-   (4, '2 month contract', '2021-10-01', 20, 1, 'Print', 230, 270, 2, false, 2, 2, 2, 10),
-   (5, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, NULL, true, 1, 1, 2, 5),
-   (1, '12 month contract', '2021-10-01', 25, 3, 'Print', 275, 270, 1, false, 2, 12, 5, 15.66),
-   (2, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, NULL, true, 1, 1, 3, 12.5),
-   (3, '2 month contract', '2021-08-01', 20, 2, 'Print', 300, 270, 1, false, 1, 2, 5, 7.5),
-   (4, '1 month contract', '2021-08-01', 15, 3, 'Print', 300, 270, 3, false, 1, 1, 2, 10),
-   (5, '4 month contract', '2021-08-01', 15, 2, 'Print', 300, 270, 3, false, 1, 4, 2, 5),
-   (6, '12 month contract', '2021-08-01', 15, 3, 'Print', 300, 270, 4, true, 1, 12, 1, 8),
-   (1, '12 month contract', '2021-08-01', 15, 2, 'Web', 300, 270, NULL, true, 1, 12, 5, 15.66),
-   (2, '4 month contract', '2021-08-01', 15, 1, 'Print', 300, 270, 5, true, 1, 4, 3, 12.5),
-   (3, '4 month contract', '2021-08-01', 15, 2, 'Print', 300, 270, 1, true, 1, 4, 5, 7.5)
+   (1, '2 month contract', '2021-10-01', 20, 1, 'Print', 270, 240, 2, true, 2, 2, 5, 15.66),
+   (2, '4 month contract', '2021-09-01', 25, 1, 'Print', 250, 300, 3, true, 1, 4, 3, 12.5),
+   (3, '12 month contract', '2021-11-01', 15, 2, 'Print', 200, 320, 1, true, 3, 12, 5, 7.5),
+   (4, '2 month contract', '2021-10-01', 20, 1, 'Print', 230, 400, 2, false, 2, 2, 2, 10),
+   (5, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 250, NULL, true, 1, 1, 2, 5),
+   (1, '12 month contract', '2021-10-01', 25, 3, 'Print', 275, 400, 1, false, 2, 12, 5, 15.66),
+   (2, '1 month contract', '2021-08-01', 15, 2, 'Web', 300, 210, NULL, true, 1, 1, 3, 12.5),
+   (3, '2 month contract', '2021-08-01', 20, 2, 'Print', 300, 180, 1, false, 1, 2, 5, 7.5),
+   (4, '1 month contract', '2021-08-01', 15, 3, 'Print', 300, 220, 3, false, 1, 1, 2, 10),
+   (5, '4 month contract', '2021-08-01', 15, 2, 'Print', 300, 250, 3, false, 1, 4, 2, 5),
+   (6, '12 month contract', '2021-08-01', 15, 3, 'Print', 300, 510, 4, true, 1, 12, 1, 8),
+   (1, '12 month contract', '2021-08-01', 15, 2, 'Web', 300, 610, NULL, true, 1, 12, 5, 15.66),
+   (2, '4 month contract', '2021-08-01', 15, 1, 'Print', 300, 330, 5, true, 1, 4, 3, 12.5),
+   (3, '4 month contract', '2021-08-01', 15, 2, 'Print', 300, 390, 1, true, 1, 4, 5, 7.5)
 ; -- end insert
 
 ----------- IMAGES -----------

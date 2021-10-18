@@ -63,7 +63,13 @@ export default function AdCard() {
         });
         dispatch({
             type: 'FETCH_ADVERTISERS'
-        })
+        });
+        dispatch({
+            type: 'FETCH_AD_REPS'
+        });
+        dispatch({
+            type: 'FETCH_DESIGNERS'
+        });
     }, [])
 
     // We break up this 
