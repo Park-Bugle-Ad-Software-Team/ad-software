@@ -27,7 +27,7 @@ export default function DataTable( { tableData }) {
                 return `${params.row.months} months`
             },
             valueGetter: (params) => {
-                return `${params.row.months} months`;
+                return `${params.row.months} months`
             }
         },
         {field: 'contractType', headerName: 'Type', width: 120},

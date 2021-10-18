@@ -110,7 +110,6 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an advertiser
 router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
-  const companyName = req.query.companyName;
   // const sqlText = `
   //   SELECT
   //   "Contracts".*,
@@ -130,23 +129,23 @@ router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
   //   GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
   // `;
   const sqlText = `
-  SELECT
-  "Contracts".*,
-  "AdSize"."adType" as "adType",
-  "Color"."colorType" as "colorType",
-  ARRAY_AGG("Users"."name") as "assignedPeople",
-  STRING_AGG("Users"."companyName", ',') as "companyName"
-FROM "Contracts"
-JOIN "AdSize"
-  ON "AdSize"."id" = "Contracts"."adSizeId"
-JOIN "Color"
-  ON "Color"."id" = "Contracts"."colorId"
-JOIN "Contracts_Users"
-  ON "Contracts_Users"."contractId" = "Contracts"."id"
-JOIN "Users"
-  ON "Users"."id" = "Contracts_Users"."userId"
-WHERE "isApproved" = false
-GROUP BY "Contracts"."id", "adType", "colorType"
+    SELECT
+      "Contracts".*,
+      "AdSize"."adType" as "adType",
+      "Color"."colorType" as "colorType",
+      ARRAY_AGG("Users"."name") as "assignedPeople",
+      STRING_AGG("Users"."companyName", ',') as "companyName"
+    FROM "Contracts"
+    JOIN "AdSize"
+      ON "AdSize"."id" = "Contracts"."adSizeId"
+    JOIN "Color"
+      ON "Color"."id" = "Contracts"."colorId"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "isApproved" = false
+    GROUP BY "Contracts"."id", "adType", "colorType"
   `
   pool.query(sqlText)
   .then((dbRes) => {
@@ -225,13 +224,13 @@ router.get('/active', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_ACTIVE_CONTRACTS
 // IF the logged in user is an advertiser
 router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
-  const companyName = req.query.companyName;
   const sqlText = `
     SELECT
-    "Contracts".*,
-    "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType",
-    "Users"."companyName" as "companyName"
+      "Contracts".*,
+      "AdSize"."adType" as "adType",
+      "Color"."colorType" as "colorType",
+      ARRAY_AGG("Users"."name") as "assignedPeople",
+      STRING_AGG("Users"."companyName", ',') as "companyName"
     FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
@@ -241,8 +240,8 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
       ON "Contracts_Users"."contractId" = "Contracts"."id"
     JOIN "Users"
       ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "Users"."companyName" = '${companyName}' AND "Users"."authLevel" = 'advertiser'
-    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
+    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" >= 'NOW'
+    GROUP BY "Contracts"."id", "adType", "colorType"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -308,24 +307,24 @@ router.get('/closed', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_CLOSED_CONTRACTS
 // IF the logged in user is an advertiser
 router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
-  const companyName = req.query.companyName;
   const sqlText = `
     SELECT
-    "Contracts".*,
-    "AdSize"."adType" as "adType",
-    "Color"."colorType" as "colorType",
-    "Users"."companyName" as "companyName"
-    FROM "Contracts"
+      "Contracts".*,
+      "AdSize"."adType" as "adType",
+      "Color"."colorType" as "colorType",
+      ARRAY_AGG("Users"."name") as "assignedPeople",
+      STRING_AGG("Users"."companyName", ',') as "companyName"
+      FROM "Contracts"
     JOIN "AdSize"
       ON "AdSize"."id" = "Contracts"."adSizeId"
     JOIN "Color"
       ON "Color"."id" = "Contracts"."colorId"
-      JOIN "Contracts_Users"
-        ON "Contracts_Users"."contractId" = "Contracts"."id"
-      JOIN "Users"
-        ON "Users"."id" = "Contracts_Users"."userId"
-    WHERE "startMonth" >= 'NOW' AND "Users"."companyName" = '${companyName}' AND "Users"."authLevel" = 'advertiser'
-    GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
+    JOIN "Contracts_Users"
+      ON "Contracts_Users"."contractId" = "Contracts"."id"
+    JOIN "Users"
+      ON "Users"."id" = "Contracts_Users"."userId"
+    WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" <= 'NOW'
+    GROUP BY "Contracts"."id", "adType", "colorType"
   `;
   pool.query(sqlText)
   .then((dbRes) => {
@@ -379,6 +378,7 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   ON "Contracts"."id" = "Contracts_Users"."contractId"
   WHERE "Users"."authLevel" = 'advertiser' AND "Contracts"."id" = $1
   ) as "companyName",
+  
   (SELECT
   array_agg(to_json("Images".*)) as "image"
   FROM "Images"
@@ -395,13 +395,37 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   ON "Contracts"."id" = "Contracts_Users"."contractId"
   WHERE "Users"."authLevel" = 'ad rep' AND "Contracts"."id" = $1) as "adRepName",
 
+  (SELECT "Users"."id"
+  FROM "Users"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."userId" = "Users"."id"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Contracts_Users"."contractId"
+  WHERE "Users"."authLevel" = 'ad rep' AND "Contracts"."id" = $1) as "adRepId",
+
+  (SELECT "Users"."id"
+  FROM "Users"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."userId" = "Users"."id"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Contracts_Users"."contractId"
+  WHERE "Users"."authLevel" = 'advertiser' AND "Contracts"."id" = $1) as "advertiserId",
+
   (SELECT "name"
   FROM "Users"
   JOIN "Contracts_Users"
   ON "Contracts_Users"."userId" = "Users"."id"
   JOIN "Contracts"
   ON "Contracts"."id" = "Contracts_Users"."contractId"
-  WHERE "Users"."authLevel" LIKE '%design%' AND "Contracts"."id" = $1) as "designerName"
+  WHERE "Users"."authLevel" LIKE '%design%' AND "Contracts"."id" = $1) as "designerName",
+
+  (SELECT "Users"."id"
+  FROM "Users"
+  JOIN "Contracts_Users"
+  ON "Contracts_Users"."userId" = "Users"."id"
+  JOIN "Contracts"
+  ON "Contracts"."id" = "Contracts_Users"."contractId"
+  WHERE "Users"."authLevel" LIKE '%design%' AND "Contracts"."id" = $1) as "designerId"
 
   FROM "Contracts"
   JOIN "AdSize"
@@ -432,6 +456,9 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 router.put('/edit/:id', (req, res) => {
   console.log('req.body is: ', req.body);
   let image = req.body.imageUrl;
+  let advertiserId = req.body.advertiserId;
+  let designerId = req.body.designerId;
+  let adRepId = req.body.adRepId;
   
   delete req.body.imageUrl;
   delete req.body.image;
@@ -441,6 +468,7 @@ router.put('/edit/:id', (req, res) => {
   delete req.body.adRepName;
   delete req.body.designerId;
   delete req.body.adRepId;
+  delete req.body.advertiserId; 
   // const adRepId = req.body.adRepId
   // delete req.body.adRepId
   delete req.body.AdSize;
@@ -472,7 +500,35 @@ router.put('/edit/:id', (req, res) => {
       pool
         .query(imageQuery, imageParams)
         .then(dbRes => {
-          res.sendStatus(200);
+          let sqlText = `
+          DELETE FROM "Contracts_Users"
+          WHERE "contractId" = $1
+          `
+          let sqlParams = [req.params.id];
+          pool  
+            .query(sqlText, sqlParams)
+            .then(dbRes => {
+              const sqlQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")
+                VALUES ($1, $2),
+                      ($1, $3),
+                      ($1, $4)`;
+                const sqlParams = 
+                [req.params.id, 
+                advertiserId, 
+                designerId, 
+                adRepId];
+                pool
+                  .query(sqlQuery, sqlParams)
+                  .then(dbRes => {
+                    res.sendStatus(200);
+                  })
+                  .catch(error => {
+                    console.error('Failed to update the Contracts_Users table', error);
+                  });
+            })
+            .catch(error => {
+              console.log('Failed to clear old users from contracts_users', error);
+            })
         })
         .catch(error => {
           console.log('Failed to update the contract with an image relationship: ', error);

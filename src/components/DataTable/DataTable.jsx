@@ -88,15 +88,53 @@ export default function DataTable( { tableData }) {
         },
         {field: 'months', headerName: 'Length', width: 120,
             valueFormatter: (params) => {
-                return `${params.row.months} months`
+                if (params.row.months === null) {
+                    return `-pending-`
+                }else {
+                    return `${params.row.months} months`
+                }
             },
             valueGetter: (params) => {
-                return `${params.row.months} months`
+                if (params.row.months === null) {
+                    return `0 months`
+                }else {
+                    return `${params.row.months} months`
+                }
             }
         },
-        {field: 'contractType', headerName: 'Type', width: 120},
+        {field: 'contractType', headerName: 'Type', width: 120,
+            valueFormatter: (params) => {
+                if (params.row.months === null) {
+                    return `-pending-`
+                }else {
+                    return params.row.contractType
+                }
+            },
+            valueGetter: (params) => {
+                if (params.row.months === null) {
+                    return `-pending-`
+                }else {
+                    return params.row.contractType
+                }
+            }
+        },
         {field: 'adType', headerName: 'Size', width: 180},
-        {field: 'page', headerName: 'Page', width: 120},
+        {field: 'page', headerName: 'Page', width: 120,
+            valueFormatter: (params) => {
+                if (params.row.contractType === 'Web') {
+                    return `N/A`
+                }else {
+                    return params.row.page
+                }
+            },
+            valueGetter: (params) => {
+                if (params.row.contractType === 'Web') {
+                    return `N/A`
+                }else {
+                    return params.row.page
+                }
+            }
+        },
         {field: 'colorType', headerName: 'Color', width: 180},
         {field: 'actualBill', headerName: 'Cost', width: 120,
             valueFormatter: (params) => {
@@ -124,6 +162,7 @@ export default function DataTable( { tableData }) {
             field: 'contractChat',
             headerName: 'Chat',
             width: 180,
+            align: 'left',
             renderCell: renderChatButton
         },
         {field: 'assignedPeople', headerName: 'Users', width: 400}
