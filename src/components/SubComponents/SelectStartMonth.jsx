@@ -13,6 +13,8 @@ export default function SelectStartMonth({ handleChange }) {
     let startDate = new Date(contractToEdit.startMonth);
     let yyyy = startDate.getFullYear();
     let mm = String(startDate.getUTCMonth() + 1).padStart(2, '0');
+    const minDate = new Date('2021-01-01T00:00:00.000');
+    const maxDate = new Date('2034-01-01T00:00:00.000');
 
     return (
         <>

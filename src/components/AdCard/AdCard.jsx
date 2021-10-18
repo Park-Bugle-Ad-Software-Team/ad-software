@@ -39,8 +39,6 @@ export default function AdCard() {
     const designers = store.designers;
     const adSize = contractToEdit.AdSize;
     const color = contractToEdit.Color;
-    const minDate = new Date('2021-01-01T00:00:00.000');
-    const maxDate = new Date('2034-01-01T00:00:00.000');
 
     const [newImage, setNewImage] = useState({})
 
