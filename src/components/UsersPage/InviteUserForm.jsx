@@ -102,6 +102,21 @@ export default function InviteUserForm() {
         clearUserFields();
         history.goBack();
     }
+
+    const fillInfo = () => {
+        dispatch({
+            type: 'UPDATE_USER_TO_EDIT',
+            payload: {
+                ...userToEdit,
+                advertiserUrl: 'www.wellington.com',
+                primaryDirectPhone: '651-484-5872',
+                primaryEmail: 'ebenstine01@gmail.com',
+                primaryName: 'Eben Stine',
+                primaryTitle: 'Marketing Director',
+                notes: 'Previously has run ads with us but is new to the portal. Long time friend to the paper.'
+            }
+        })
+    }
     
 
     return (
@@ -167,7 +182,9 @@ export default function InviteUserForm() {
                     }
                 </Grid>
                 <Grid item xs={12}>
-                    <h1>Additional Info Field</h1>
+                    <Typography onClick={fillInfo}>
+                        <h1>Additional Info Field</h1>
+                    </Typography>
                 </Grid>
                 <Grid item xs={6}>
                     {userToEdit && userToEdit.authLevel === "advertiser" &&
