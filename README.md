@@ -23,8 +23,6 @@ Include one or two screen shots of your project here (optional). Remove if unuse
 
 ### Prerequisites
 
-Link to software that is required to install the app (e.g. node).
-
 - [Node.js](https://nodejs.org/en/)
 - [AWS Account](https://aws.amazon.com/)
 - [Heroku Account](https://signup.heroku.com/)
