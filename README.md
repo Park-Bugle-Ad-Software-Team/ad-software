@@ -17,10 +17,6 @@ Park Bugle wanted an application that would house all of the information about t
 
 To see the fully functional site, please visit: [DEPLOYED VERSION OF APP](www.heroku.com)
 
-## Screen Shot
-
-Include one or two screen shots of your project here (optional). Remove if unused.
-
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/en/)
@@ -52,10 +48,83 @@ Include one or two screen shots of your project here (optional). Remove if unuse
 8. Run `npm run client` in your terminal
 9. The `npm run client` command will open up a new browser tab for you!
 
-## Usage
-How does someone use this application? Tell a user story here.
+# Usage
 
-1. 
+The Park Bugle Ad Portal application consists of the following page-views:
+
+User Creation
+Set Password
+Login
+Contracts 
+Export
+Ad Card
+Pricing 
+List of Users
+
+## User Creation
+<a href="https://imgur.com/0R7jIW7"><img src="https://i.imgur.com/0R7jIW7.png" title="source: imgur.com" /></a>
+
+Admins are the only user types that have access to this screen. They will get here by clicking on the Users button in the Nav Bar. From the Users Page, they will click on the Invite User button to be brought to this screen.
+When creating users that are Park Bugle employees, only the top three (Name, Email, and Privilege) should be inputted. When contracts are displayed, the company information comes from the advertiser linked to that contract, so only the advertiser users should have an associated company.
+When the Send Invite button is pressed, the special link will automatically be sent to that email entered at the top.
+
+## Set Password
+
+<a href="https://imgur.com/jzEPl4T"><img src="https://i.imgur.com/jzEPl4T.png" title="source: imgur.com" /></a>
+<a href="https://imgur.com/mdMNehM"><img src="https://i.imgur.com/mdMNehM.png" title="source: imgur.com" /></a>
+
+The user is directed to the set password page with fields to establish the password and confirm it. They will be brought to the login page after successfully creating a password.
+
+## Login Page
+
+<a href="https://imgur.com/mESTRai"><img src="https://i.imgur.com/mESTRai.png" title="source: imgur.com" /></a>
+
+After the user is created and password is set, the user will be taken to the Login page. That user can enter their email address and password, and submit by clicking the Log In button.
+If the email address and password are correct, the user will be taken to their respective profile page.
+If the user tries to submit without completing a required field, an error message pop-up will appear with instructions to complete all fields.
+If the user enters the incorrect email address or password, an error message pop-up will appear informing them to try again.
+
+If the user is not registered, they will need to have an account created for them by a Park Bugle admin, and use the email link they receive to create their password. That user will then be able to log in.
+
+## Contracts Page
+
+<a href="https://imgur.com/s8I8QDo"><img src="https://i.imgur.com/s8I8QDo.png" title="source: imgur.com" /></a>
+
+Once the user is logged in they will see a table list of pending contracts, a table list of active contracts, and table list of closed contracts.  Pending contracts are those which have been submitted but are not yet approved; active contracts are those which have received approval and where the current month falls between the starting month and end of contract, and closed contracts are those which have expired.
+
+## Export Page
+
+<a href="https://imgur.com/i5Bx2Xe"><img src="https://i.imgur.com/i5Bx2Xe.png" title="source: imgur.com" /></a>
+<a href="https://imgur.com/kh2Yxf2"><img src="https://i.imgur.com/kh2Yxf2.png" title="source: imgur.com" /></a>
+
+In the export view, an admin can filter contracts according to the header categories.  The export button creates and downloads a CSV file with the formatted information.
+
+## Ad Card
+
+<a href="https://imgur.com/ewYLzd1"><img src="https://i.imgur.com/ewYLzd1.png" title="source: imgur.com" /></a>
+
+Clicking the view button on a contract brings the user to a form with input fields for the different components of the contract.
+Select Advertiser 
+Select Ad Rep 
+Select Designer
+Start Month
+Contract Length
+Ad Type
+Columns/Inches
+Image Upload
+Image Bank
+Color Type
+Notes
+Commission Percentage
+Final Adjusted Bill
+
+The Select Size cards detail the available sizing options for ads.  An admin or ad representative may edit any of the available fields, then click the Save button to save the changes.   Clicking the approve box removes the contract from the “pending” table on the contracts page and re-routes it into the “active” table.  An advertiser may only upload an image to the image uploader. 
+
+## Users Page
+
+<a href="https://imgur.com/0gXxFya"><img src="https://i.imgur.com/0gXxFya.png" title="source: imgur.com" /></a>
+
+This page shows a list view of all users and is updated when a new user is created.  Admins can edit the user’s type.  The Invite New User button leads to the account creation page.
 
 ## Admin Home Page
 
@@ -64,13 +133,14 @@ Users logged in with the authLevel of Admin will have a slightly different navig
 <a href="https://imgur.com/s8I8QDo"><img src="https://i.imgur.com/s8I8QDo.png" title="source: imgur.com" /></a>
 
 ## Pending Contracts
-Explanation
+Once the user is logged in they will see a table list of pending contracts, a table list of active contracts, and table list of closed contracts.  Pending contracts are those which have been submitted but are not yet approved; active contracts are those which have received approval and where the current month falls between the starting month and end of contract, and closed contracts are those which have expired.
 
-## Active Contracts
-Explanation
-
-## Closed Contracts
-Explanation
+For all non-admin users, the tables will be pre-filtered to show only contracts the logged in user is associated with.
+Clicking any of the column headers will sort the information by that
+The View button will bring the user to the Ad Card for that specific contract.
+The Chat button will open a side panel to the right where all the prior messages will be shown. Users can type a new message into the chat and hit enter to send it.
+The Export button will be available for all non-advertiser users. Clicking on it will bring the user to the Export view page.
+The Create Contract button will be available for all non-advertiser users. Clicking on it will bring the user to the Ad Card page with no pre-filled information in it.
 
 ## Create Contract View
 
@@ -87,7 +157,7 @@ An Admin will be able to alter the rates for each contract length. Once these up
 ## Users View
 A list of all active users will be shown displaying their email and name Fields. Clicking the edit button or clicking on the list component will bring you to the Edit User Page.
 
-<a href="https://imgur.com/0gXxFya"><img src="https://i.imgur.com/0gXxFya.png" title="source: imgur.com" /></a>
+
 
 ## Invite User View
 All fields are editable on this view. When the privelege level is selcted as advertiser, two switches will populate for assigning whether they accept Ach Payments and their communication preferences.
