@@ -5,6 +5,7 @@ const {
 const pool = require('../modules/pool');
 const router = express.Router();
 
+// allows us to retrieve info about a particular adSize
 router.get('/:id', rejectUnauthenticated, (req, res) => {
     const sqlQuery = `SELECT * FROM "AdSize"
                       WHERE "id" = $1`;
