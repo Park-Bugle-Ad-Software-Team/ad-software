@@ -6,6 +6,7 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const strFromObj = require('../modules/strFromObj')
 
+// get rates that the user will edit
 router.get('/edit', rejectUnauthenticated, (req, res) => {
     const sqlText = `
     SELECT * FROM "Rates"
@@ -22,6 +23,7 @@ router.get('/edit', rejectUnauthenticated, (req, res) => {
         });
 });
 
+// save edits to the rates
 router.put('/', (req, res) => {
     console.log('req.body is', req.body);
     let reqBody = req.body;
