@@ -6,38 +6,8 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const strFromObj = require('../modules/strFromObj')
 
+// retrieve a list of all contracts
 router.get('/all', rejectUnauthenticated, (req, res) => {
-  // const sqlText = `
-  //   SELECT
-  //     "Contracts".*,
-  //     "AdSize"."adType" as "adType",
-  //     "AdSize"."desc" as "desc",
-  //     "AdSize"."columns" as "columns",
-  //     "AdSize"."inches" as "inches",
-  //     "Color"."colorType" as "colorType",
-  //     "Color"."colorPrice" as "colorPrice",
-  //     "Rates"."rateName" as "rateName",
-  //     "Users"."name" as "name",
-  //     "Users"."email" as "email",
-  //     "Users"."contactPreference" as "contactPreference",
-  //     "Users"."companyName" as "companyName"
-  //   FROM "Contracts"
-  //   JOIN "AdSize"
-  //     ON "AdSize"."id" = "Contracts"."adSizeId"
-  //   JOIN "Color"
-  //     ON "Color"."id" = "Contracts"."colorId"
-  //   JOIN "Rates"
-  //     ON "Rates"."id" = "Contracts"."pricingSchemaId"
-  //   JOIN "Contracts_Users"
-  //     ON "Contracts_Users"."contractId" = "Contracts"."id"
-  //   JOIN "Users"
-  //     ON "Users"."id" = "Contracts_Users"."userId"
-  //   WHERE 
-  //   GROUP BY "Contracts"."id", "adType", "desc", "columns",
-  //     "inches", "colorType", "colorPrice", "rateName", "name",
-  //     "email", "contactPreference", "companyName"
-  //   ORDER BY "startMonth" ASC
-  // `;
   const sqlText = `
     SELECT
       "Contracts".*,
@@ -110,24 +80,6 @@ router.get('/pending', rejectUnauthenticated, (req, res) => {
 // GET request that happens upon FETCH_PENDING_CONTRACTS
 // IF the logged in user is an advertiser
 router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
-  // const sqlText = `
-  //   SELECT
-  //   "Contracts".*,
-  //   "AdSize"."adType" as "adType",
-  //   "Color"."colorType" as "colorType",
-  //   "Users"."companyName" as "companyName"
-  //   FROM "Contracts"
-  //   JOIN "AdSize"
-  //     ON "AdSize"."id" = "Contracts"."adSizeId"
-  //   JOIN "Color"
-  //     ON "Color"."id" = "Contracts"."colorId"
-  //   JOIN "Contracts_Users"
-  //     ON "Contracts_Users"."contractId" = "Contracts"."id"
-  //   JOIN "Users"
-  //     ON "Users"."id" = "Contracts_Users"."userId"
-  //   WHERE "isApproved" = false AND "Users"."companyName" = '${companyName}'
-  //   GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  // `;
   const sqlText = `
     SELECT
       "Contracts".*,
@@ -159,39 +111,8 @@ router.get('/pending/advertiser', rejectUnauthenticated, (req, res) => {
 });
 
 // GET request that happens upon FETCH_ACTIVE_CONTRACTS
+// retrieves all active contracts
 router.get('/active', rejectUnauthenticated, (req, res) => {
-  // let userId = req.user.id;
-  /*
-    active contracts are those that have been approved
-    AND
-    the current date(i.e. today, right now. this second(this location))
-      is between startMonth and startMonth + months(or length of the contract)
-    -find out how the values, current, start, and start+length are stored
-    - find out how to get them all into the same format
-    - do the comparison start < current < start+length
-    - startmonth is a sql "date" type
-    - current - how get?
-    - how do math w/ sql date types?
-  */
-
-  // const sqlText = `
-  // SELECT
-  //   "Contracts".*,
-  //   "AdSize"."adType" as "adType",
-  //   "Color"."colorType" as "colorType",
-  //   "Users"."companyName" as "companyName"
-  // FROM "Contracts"
-  // JOIN "AdSize"
-  // ON "AdSize"."id" = "Contracts"."adSizeId"
-  // JOIN "Color"
-  // ON "Color"."id" = "Contracts"."colorId"
-  // JOIN "Contracts_Users"
-  // ON "Contracts_Users"."contractId" = "Contracts"."id"
-  // JOIN "Users"
-  // ON "Users"."id" = "Contracts_Users"."userId"
-  // WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" >= 'NOW' AND "Users"."authLevel" = 'advertiser'
-  // GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  // `; // add "Contracts_Users"."userId" to WHERE
   const sqlText = `
     SELECT
       "Contracts".*,
@@ -255,26 +176,8 @@ router.get('/active/advertiser', rejectUnauthenticated, (req, res) => {
 });
 
 // GET request that happens upon FETCH_CLOSED_CONTRACTS
+// retrieves all closed contracts
 router.get('/closed', rejectUnauthenticated, (req, res) => {
-  // let userId = req.user.id;
-  // const sqlText = `
-  //   SELECT
-  //   "Contracts".*,
-  //   "AdSize"."adType" as "adType",
-  //   "Color"."colorType" as "colorType",
-  //   "Users"."companyName" as "companyName"
-  //   FROM "Contracts"
-  //   JOIN "AdSize"
-  //     ON "AdSize"."id" = "Contracts"."adSizeId"
-  //   JOIN "Color"
-  //     ON "Color"."id" = "Contracts"."colorId"
-  //   JOIN "Contracts_Users"
-  //     ON "Contracts_Users"."contractId" = "Contracts"."id"
-  //   JOIN "Users"
-  //     ON "Users"."id" = "Contracts_Users"."userId"
-  //   WHERE "startMonth" <= 'NOW' AND "Contracts"."isApproved" = true AND "startMonth" + interval '1 month' * "months" <= 'NOW'
-  //   GROUP BY "Contracts"."id", "adType", "colorType", "companyName"
-  // `; // add "Contracts_Users"."userId" to WHERE
   const sqlText = `
     SELECT
       "Contracts".*,
@@ -336,32 +239,8 @@ router.get('/closed/advertiser', rejectUnauthenticated, (req, res) => {
   });
 });
 
+// retrieves info about a specific contract for editing
 router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
-  // removing chat from this pull for testing
-  console.log('req.params', req.params.id);
-  // const sqlText = `
-  //   SELECT
-  //   "Contracts".*,
-  //   to_json("AdSize".*) as "AdSize",
-  //   to_json("Color".*) as "Color",
-  //   "Users"."companyName" as "companyName",
-  //   array_agg(to_json("Images".*)) as "image"
-  //   --to_json("Chat".*) as "Chat"
-  
-  // FROM "Contracts"
-  //   JOIN "AdSize"
-  //     ON "AdSize"."id" = "Contracts"."adSizeId"
-  //   JOIN "Color"
-  //     ON "Color"."id" = "Contracts"."colorId"
-  //   JOIN "Images"
-  //     ON "Images"."contractId" = "Contracts"."id"
-  //   JOIN "Contracts_Users"
-  //     ON "Contracts_Users"."contractId" = "Contracts"."id"
-  //   JOIN "Users"
-  //     ON "Users"."id" = "Contracts_Users"."userId"
-  //   WHERE "Contracts"."id" = $1
-  // Group by "Contracts"."id", "AdSize".*, "Color".*, "companyName";
-  //   `;
   const sqlText = `
   SELECT
   "Contracts".*,
@@ -453,6 +332,7 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
     })
 })
 
+// for saving changes to an existing contract
 router.put('/edit/:id', (req, res) => {
   console.log('req.body is: ', req.body);
   let image = req.body.imageUrl;
@@ -469,14 +349,11 @@ router.put('/edit/:id', (req, res) => {
   delete req.body.designerId;
   delete req.body.adRepId;
   delete req.body.advertiserId; 
-  // const adRepId = req.body.adRepId
-  // delete req.body.adRepId
   delete req.body.AdSize;
   delete req.body.Color;
 
   properties = strFromObj(req.body, ', ', (element, i) => `"${element}" = $${i + 2}`)
 
-  // console.log('req.body is: ', req.body)
   const sqlText = `
   UPDATE "Contracts"
   SET 
@@ -491,7 +368,6 @@ router.put('/edit/:id', (req, res) => {
 
   pool.query(sqlText, sqlParams)
     .then(dbRes => {
-      // res.sendStatus(200);
       imageQuery = `INSERT INTO "Images" ("imageUrl", "contractId")
                     VALUES ($1, $2)
                     `;
@@ -540,8 +416,7 @@ router.put('/edit/:id', (req, res) => {
     });
 })
 
-
-
+// retrieves the rates from the database
 router.get('/rates', rejectUnauthenticated, (req, res) => {
   let sqlText = `
   SELECT * FROM "Rates"
@@ -572,9 +447,7 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
     })
 })
 
-/**
- * POST route template
- */
+ // posts new contracts to a particular advertiser
  router.post('/:advertiserId', rejectUnauthenticated, async (req, res) => {
    console.log('req.body is: ', req.body);
   const imageUrl  = req.body.imageUrl;
@@ -595,21 +468,8 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
   delete req.body.adRepName;
   delete req.body.designerName;
 
-  // let tempObject = {
-  //   ...req.body,
-  //   imageUrl,
-  //   advertiserId,
-  //   designerId,
-  //   adRepId
-  // }
-  console.log('req.body after deletes', req.body);
-  // properties = strFromObj(req.body, ', ', element => `"${element}"`)
-  // values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
   properties = strFromObj(req.body, ', ', element => `"${element}"`)
   values = strFromObj(req.body, ', ', (element, i) => `$${i + 1}`)
-
-  console.log('properties', properties);
-  console.log('values', values);
 
   const queryText = `INSERT INTO "Contracts" (${properties})
                       VALUES (${values}) 
@@ -620,7 +480,6 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
 
   try {
     await client.query('BEGIN');
-    // all of the relevant queries listed here
     const contractsPostResults = await client.query(queryText, sqlParams);
     const contractsContractsUsersResults = await client.query(
       `INSERT INTO "Contracts_Users" ("contractId", "userId")
@@ -645,87 +504,9 @@ router.get('/ad-sizes', rejectUnauthenticated, (req, res) => {
   } finally {
     client.release();
   }
-
-
-  // pool
-  //   .query(queryText, sqlParams)
-  //   .then((dbRes) => {
-  //     // res.sendStatus(201)
-  //     // also need to insert:
-  //       const contractsUsersQuery = `INSERT INTO "Contracts_Users" ("contractId", "userId")
-  //                         VALUES ($1, $2)`;
-  //       // users_contracts - which use
-  //       const contractsUsersParams = [dbRes.rows[0].id, req.params.advertiserId]
-  //       pool
-  //         .query(contractsUsersQuery, contractsUsersParams)
-  //         .then(innerDbResponse => {
-  //           const imagesQuery = `INSERT INTO "Images" ("contractId", "imageUrl")
-  //                                VALUES ($1, $2)`;
-  //           const imagesParams = [dbRes.rows[0].id, imageUrl];
-  //           pool
-  //             .query(imagesQuery, imagesParams)
-  //             .then(() => {
-  //               res.sendStatus(200)
-  //             })
-  //             .catch(error => {
-  //               console.log('Failed to POST to "Images" while posting a new contract: ', error)
-  //               res.sendStatus(500);
-  //             })
-  //         })
-  //         .catch(error => {
-  //           console.log('Failed to POST to contracts_user while posting new contract: ', error);
-  //           res.sendStatus(500);
-  //         })
-  //   })
-  //   .catch((err) => {
-  //     console.log('New contract creation failed: ', err);
-  //     res.sendStatus(500);
-  //   });
 });
 
-
-/*
-router.delete('/:id', rejectUnauthenticated, async (req, res) => {
-    const client = await pool.connect();
-    try {
-        await client.query('BEGIN');
-        // delete the info from the playersRankings table
-        const playersRankingsDeleteResults = await client.query(`
-                DELETE FROM "playersRankings"
-                WHERE "player_id" = $1
-            `, [req.params.id]
-        );
-        // then delete info from the playersTags table
-        const playersTagsDeleteResults = await client.query(`
-                DELETE FROM "playersTags"
-                WHERE "player_id" = $1
-            `, [req.params.id]
-        );
-        // then delete info from the players table
-        const playersDeleteResults = await client.query(`
-                DELETE FROM "players"
-                WHERE "id" = $1
-            `, [req.params.id]
-        );
-        await client.query('COMMIT');
-        res.sendStatus(200);
-    } catch (error) {
-        await client.query('ROLLBACK');
-        console.log('Error DELETE /api/player', error);
-        res.sendStatus(500);
-    } finally {
-        client.release();
-    }
-});
-
-
-
-
-*/
-
-
-
-
+// delete a specific contract
 router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const sqlQuery = `DELETE FROM "Contracts"
                     WHERE "id" = $1`;
