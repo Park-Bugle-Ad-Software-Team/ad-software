@@ -83,21 +83,21 @@ Clicking on the "Create Contract" button brings the user to a page which allows 
 
 ## Built With
 
-*Javascript
-*React
-*Redux
-*Redux-Saga
-*Material UI
-*Html
-*CSS
-*Axios
-*dotenv
-*Passport-Auth
-*Node.js
-*Express
-*Nodemailer
-*AWS-S3
-*PostgreSQL
+* Javascript
+* React
+* Redux
+* Redux-Saga
+* Material UI
+* Html
+* CSS
+* Axios
+* dotenv
+* Passport-Auth
+* Node.js
+* Express
+* Nodemailer
+* AWS-S3
+* PostgreSQL
 
 ## Acknowledgement
 Thanks to [Prime Digital Academy](www.primeacademy.io) who equipped and helped us to make this application a reality. (Thank your people)
