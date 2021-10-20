@@ -55,7 +55,7 @@ Include one or two screen shots of your project here (optional). Remove if unuse
 ## Usage
 How does someone use this application? Tell a user story here.
 
-1. As with any app, a user will click buttons and type. 
+1. 
 
 ## Login
 
