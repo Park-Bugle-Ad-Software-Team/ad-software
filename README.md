@@ -61,6 +61,12 @@ Ad Card
 Pricing 
 List of Users
 
+## Users Page
+
+<a href="https://imgur.com/0gXxFya"><img src="https://i.imgur.com/0gXxFya.png" title="source: imgur.com" /></a>
+
+This page shows a list view of all users and is updated when a new user is created.  Admins can edit the user’s type.  The Invite New User button leads to the account creation page.
+
 ## User Creation
 <a href="https://imgur.com/0R7jIW7"><img src="https://i.imgur.com/0R7jIW7.png" title="source: imgur.com" /></a>
 
@@ -119,12 +125,6 @@ Commission Percentage
 Final Adjusted Bill
 
 The Select Size cards detail the available sizing options for ads.  An admin or ad representative may edit any of the available fields, then click the Save button to save the changes.   Clicking the approve box removes the contract from the “pending” table on the contracts page and re-routes it into the “active” table.  An advertiser may only upload an image to the image uploader. 
-
-## Users Page
-
-<a href="https://imgur.com/0gXxFya"><img src="https://i.imgur.com/0gXxFya.png" title="source: imgur.com" /></a>
-
-This page shows a list view of all users and is updated when a new user is created.  Admins can edit the user’s type.  The Invite New User button leads to the account creation page.
 
 ## Edit Pricing View
 
