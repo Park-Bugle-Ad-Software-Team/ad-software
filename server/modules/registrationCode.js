@@ -1,3 +1,5 @@
+// generates a random string of the given length
+// used to generate invite tokens
 function generateCode(length) {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
