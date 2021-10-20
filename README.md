@@ -126,13 +126,13 @@ The Select Size cards detail the available sizing options for ads.  An admin or 
 
 This page shows a list view of all users and is updated when a new user is created.  Admins can edit the user’s type.  The Invite New User button leads to the account creation page.
 
-## Admin Home Page
+## Edit Pricing View
 
-Users logged in with the authLevel of Admin will have a slightly different navigation bar. They have access to add new users and update the pricing schema. They are able to see all contracts that exist in the system on their home page as well sectioned out into Pending, Active, and Closed  contracts.
+An Admin will be able to alter the rates for each contract length. Once these updates are saved, all future contract rates will be auto-calculated in the contract view. 
 
-<a href="https://imgur.com/s8I8QDo"><img src="https://i.imgur.com/s8I8QDo.png" title="source: imgur.com" /></a>
+<a href="https://imgur.com/DaHAzaw"><img src="https://i.imgur.com/DaHAzaw.png" title="source: imgur.com" /></a>
 
-## Pending Contracts
+### Pending Contracts
 Once the user is logged in they will see a table list of pending contracts, a table list of active contracts, and table list of closed contracts.  Pending contracts are those which have been submitted but are not yet approved; active contracts are those which have received approval and where the current month falls between the starting month and end of contract, and closed contracts are those which have expired.
 
 For all non-admin users, the tables will be pre-filtered to show only contracts the logged in user is associated with.
@@ -142,51 +142,22 @@ The Chat button will open a side panel to the right where all the prior messages
 The Export button will be available for all non-advertiser users. Clicking on it will bring the user to the Export view page.
 The Create Contract button will be available for all non-advertiser users. Clicking on it will bring the user to the Ad Card page with no pre-filled information in it.
 
-## Create Contract View
+### Create Contract View
 
 Clicking on the "Create Contract" button brings the user to a page which allows them to fill out necessary information for a contract. Not all the fields need to be filled out immediately, but in order for advertisers or other employees to view the contract their names must be selected from the dropdowns on the top left side of the form. 
 
 <a href="https://imgur.com/ewYLzd1"><img src="https://i.imgur.com/ewYLzd1.png" title="source: imgur.com" /></a>
 
-## Edit Pricing View
-
-An Admin will be able to alter the rates for each contract length. Once these updates are saved, all future contract rates will be auto-calculated in the contract view. 
-
-<a href="https://imgur.com/DaHAzaw"><img src="https://i.imgur.com/DaHAzaw.png" title="source: imgur.com" /></a>
-
-## Users View
-A list of all active users will be shown displaying their email and name Fields. Clicking the edit button or clicking on the list component will bring you to the Edit User Page.
-
-
-
-## Invite User View
-All fields are editable on this view. When the privelege level is selcted as advertiser, two switches will populate for assigning whether they accept Ach Payments and their communication preferences.
-
-<a href="https://imgur.com/0R7jIW7"><img src="https://i.imgur.com/0R7jIW7.png" title="source: imgur.com" /></a>
-
-<a href="https://imgur.com/6PzktmZ"><img src="https://i.imgur.com/6PzktmZ.png" title="source: imgur.com" /></a>
-
-## Edit User View
-See Invite user view.
-
-## Email Invite
-<a href="https://imgur.com/jzEPl4T"><img src="https://i.imgur.com/jzEPl4T.png" title="source: imgur.com" /></a>
-
-<a href="https://imgur.com/PKuifQk"><img src="https://i.imgur.com/PKuifQk.png" title="source: imgur.com" /></a>
-
-<a href="https://imgur.com/mdMNehM"><img src="https://i.imgur.com/mdMNehM.png" title="source: imgur.com" /></a>
-
-## Export CSV
-<a href="https://imgur.com/33w5jLp"><img src="https://i.imgur.com/33w5jLp.png" title="source: imgur.com" /></a>
-<a href="https://imgur.com/ChKOCuT"><img src="https://i.imgur.com/ChKOCuT.png" title="source: imgur.com" /></a>
-
-
 ## Image Upload and Image Bank
 
 <a href="https://imgur.com/fvvrDzP"><img src="https://i.imgur.com/fvvrDzP.png" title="source: imgur.com" /></a>
 
+Users can drag an image or upload it from their computer. Once uploaded it will be displayed in a small portion of the image bank. Clicking on the image will open that image in a new window or tab depending on the user's browser.
+
 ## Chat
 <a href="https://imgur.com/JDgkWaa"><img src="https://i.imgur.com/JDgkWaa.png" title="source: imgur.com" /></a>
+
+Clicking on the chat button on the home page view of a contract will open a drawer on the right side of the screen. A chat can be entered and will be saved. All users associated with a contract, and any admins can communicate via the chat feature.
 
 
 ## Built With
