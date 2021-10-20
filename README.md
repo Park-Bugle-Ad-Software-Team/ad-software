@@ -98,6 +98,16 @@ If the user is not registered, they will need to have an account created for the
 
 Once the user is logged in they will see a table list of pending contracts, a table list of active contracts, and table list of closed contracts.  Pending contracts are those which have been submitted but are not yet approved; active contracts are those which have received approval and where the current month falls between the starting month and end of contract, and closed contracts are those which have expired.
 
+### Pending Contracts
+Once the user is logged in they will see a table list of pending contracts, a table list of active contracts, and table list of closed contracts.  Pending contracts are those which have been submitted but are not yet approved; active contracts are those which have received approval and where the current month falls between the starting month and end of contract, and closed contracts are those which have expired.
+
+For all non-admin users, the tables will be pre-filtered to show only contracts the logged in user is associated with.
+Clicking any of the column headers will sort the information by that
+The View button will bring the user to the Ad Card for that specific contract.
+The Chat button will open a side panel to the right where all the prior messages will be shown. Users can type a new message into the chat and hit enter to send it.
+The Export button will be available for all non-advertiser users. Clicking on it will bring the user to the Export view page.
+The Create Contract button will be available for all non-advertiser users. Clicking on it will bring the user to the Ad Card page with no pre-filled information in it.
+
 ## Export Page
 
 <a href="https://imgur.com/i5Bx2Xe"><img src="https://i.imgur.com/i5Bx2Xe.png" title="source: imgur.com" /></a>
@@ -132,17 +142,7 @@ An Admin will be able to alter the rates for each contract length. Once these up
 
 <a href="https://imgur.com/DaHAzaw"><img src="https://i.imgur.com/DaHAzaw.png" title="source: imgur.com" /></a>
 
-### Pending Contracts
-Once the user is logged in they will see a table list of pending contracts, a table list of active contracts, and table list of closed contracts.  Pending contracts are those which have been submitted but are not yet approved; active contracts are those which have received approval and where the current month falls between the starting month and end of contract, and closed contracts are those which have expired.
-
-For all non-admin users, the tables will be pre-filtered to show only contracts the logged in user is associated with.
-Clicking any of the column headers will sort the information by that
-The View button will bring the user to the Ad Card for that specific contract.
-The Chat button will open a side panel to the right where all the prior messages will be shown. Users can type a new message into the chat and hit enter to send it.
-The Export button will be available for all non-advertiser users. Clicking on it will bring the user to the Export view page.
-The Create Contract button will be available for all non-advertiser users. Clicking on it will bring the user to the Ad Card page with no pre-filled information in it.
-
-### Create Contract View
+## Create Contract View
 
 Clicking on the "Create Contract" button brings the user to a page which allows them to fill out necessary information for a contract. Not all the fields need to be filled out immediately, but in order for advertisers or other employees to view the contract their names must be selected from the dropdowns on the top left side of the form. 
 
