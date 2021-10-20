@@ -179,7 +179,4 @@ Clicking on the chat button on the home page view of a contract will open a draw
 * PostgreSQL
 
 ## Acknowledgement
-Thanks to [Prime Digital Academy](www.primeacademy.io) who equipped and helped us to make this application a reality. (Thank your people)
-
-## Support
-If you have suggestions or issues, please email me at [youremail@whatever.com](www.google.com)
+Thanks to [Prime Digital Academy](www.primeacademy.io) who equipped and helped us to make this application a reality. 
