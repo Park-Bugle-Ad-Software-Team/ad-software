@@ -64,6 +64,22 @@ How does someone use this application? Tell a user story here.
 5. xxx
 6. xxx
 
+## Login
+
+All users will be brought to the same login screen after account creation. Users will be able to login using their email and password. 
+<a href="https://imgur.com/mESTRai"><img src="https://i.imgur.com/mESTRai.png" title="source: imgur.com" /></a>
+## Admin Home Page
+
+Users logged in with the authLevel of Admin will have a slightly different navigation bar. They have access to add new users and update the pricing schema. They are able to see all contracts that exist in the system on their home page as well sectioned out into Pending, Active, and Closed  contracts.
+
+<a href="https://imgur.com/s8I8QDo"><img src="https://i.imgur.com/s8I8QDo.png" title="source: imgur.com" /></a>
+
+## Create Contract View
+
+Clicking on the "Create Contract" button brings the user to a page which allows them to fill out necessary information for a contract. Not all the fields need to be filled out immediately, but in order for advertisers or other employees to view the contract their names must be selected from the dropdowns on the top left side of the form. 
+
+<a href="https://imgur.com/ewYLzd1"><img src="https://i.imgur.com/ewYLzd1.png" title="source: imgur.com" /></a>
+
 
 ## Built With
 
