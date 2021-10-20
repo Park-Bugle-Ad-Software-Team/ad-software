@@ -14,6 +14,8 @@ import rates from './rates.reducer';
 import adSize from './adSize.reducer';
 import contractChatId from './contractChatId.reducer';
 import ratesToEdit from './ratesToEdit.reducer';
+import adReps from './adReps.reducer';
+import designers from './designers.reducer';
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
@@ -36,6 +38,8 @@ const rootReducer = combineReducers({
   adSize,
   contractChatId, // id of the contract that someone wants to chat about
   ratesToEdit,
+  adReps,
+  designers,
 });
 
 export default rootReducer;

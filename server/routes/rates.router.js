@@ -9,6 +9,7 @@ const strFromObj = require('../modules/strFromObj')
 router.get('/edit', rejectUnauthenticated, (req, res) => {
     const sqlText = `
     SELECT * FROM "Rates"
+    ORDER BY "id"
     `;
 
     pool.query(sqlText)

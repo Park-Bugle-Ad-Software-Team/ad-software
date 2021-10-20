@@ -1,4 +1,4 @@
-import { Box, Button, Drawer, Grid, ListItemText, TextField } from '@material-ui/core';
+import { Box, Button, Drawer, Grid, ListItemText, TextField } from '@mui/material';
 import { DataGrid, GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -76,19 +76,80 @@ export default function DataTable( { tableData }) {
 
     // columns for the DataGrid
     const columns = [
+        {field: 'companyName', headerName: 'Company', width: 180},
         {field: 'startMonth', headerName: 'Start Month', width: 180,
             valueFormatter: (params) => {
                 return formatStartMonthTimestamp(params.row.startMonth);
+            },
+            // valueGetter is needed to filter properly
+            valueGetter: (params) => {
+                return formatStartMonthTimestamp(params.row.startMonth);
             }
         },
-        {field: 'months', headerName: 'Length', width: 120},
-        {field: 'contractType', headerName: 'Type', width: 120},
+        {field: 'months', headerName: 'Length', width: 120,
+            valueFormatter: (params) => {
+                if (params.row.months === null) {
+                    return `-pending-`
+                }else {
+                    return `${params.row.months} months`
+                }
+            },
+            valueGetter: (params) => {
+                if (params.row.months === null) {
+                    return `0 months`
+                }else {
+                    return `${params.row.months} months`
+                }
+            }
+        },
+        {field: 'contractType', headerName: 'Type', width: 120,
+            valueFormatter: (params) => {
+                if (params.row.months === null) {
+                    return `-pending-`
+                }else {
+                    return params.row.contractType
+                }
+            },
+            valueGetter: (params) => {
+                if (params.row.months === null) {
+                    return `-pending-`
+                }else {
+                    return params.row.contractType
+                }
+            }
+        },
         {field: 'adType', headerName: 'Size', width: 180},
-        {field: 'page', headerName: 'Page', width: 120},
+        {field: 'page', headerName: 'Page', width: 120,
+            valueFormatter: (params) => {
+                if (params.row.contractType === 'Web') {
+                    return `N/A`
+                }else {
+                    return params.row.page
+                }
+            },
+            valueGetter: (params) => {
+                if (params.row.contractType === 'Web') {
+                    return `N/A`
+                }else {
+                    return params.row.page
+                }
+            }
+        },
         {field: 'colorType', headerName: 'Color', width: 180},
         {field: 'actualBill', headerName: 'Cost', width: 120,
             valueFormatter: (params) => {
-                return generateDollarSign(params.row.actualBill);
+                if (params.row.actualBill === null) {
+                    return (`$0`);
+                } else {
+                    return (`$${params.row.actualBill}`);
+                }
+            },
+            valueGetter: (params) => {
+                if (params.row.actualBill === null) {
+                    return (`$0`);
+                } else {
+                    return (`$${params.row.actualBill}`);
+                }
             }
         },
         {
@@ -101,15 +162,11 @@ export default function DataTable( { tableData }) {
             field: 'contractChat',
             headerName: 'Chat',
             width: 180,
+            align: 'left',
             renderCell: renderChatButton
-        }
+        },
+        {field: 'assignedPeople', headerName: 'Users', width: 400}
     ];
-
-    function generateDollarSign(item) {
-        return (`
-            $${item}
-        `);
-    }
 
     function customToolbar() {
         return (
@@ -138,16 +195,37 @@ export default function DataTable( { tableData }) {
         <>
             <div className="dataTable">
                 <div>
-                    <DataGrid
-                        autoHeight
-                        rows={rows}
-                        columns={columns}
-                        pageSize={5}
-                        checkboxSelection={false}
-                        components={{
-                            Toolbar: customToolbar,
-                        }}
-                    />
+                    {user.authLevel !== 'admin' ?
+                        <DataGrid
+                            autoHeight
+                            rows={rows}
+                            columns={columns}
+                            pageSize={5}
+                            checkboxSelection={false}
+                            components={{
+                                Toolbar: customToolbar,
+                            }}
+                            // start filtered by user if NOT an admin
+                            filterModel={{
+                                items: [{
+                                    columnField: 'assignedPeople',
+                                    operatorValue: 'contains',
+                                    value: `${user.name}`
+                                }]
+                            }}
+                        />
+                        :
+                        <DataGrid
+                            autoHeight
+                            rows={rows}
+                            columns={columns}
+                            pageSize={10}
+                            checkboxSelection={false}
+                            components={{
+                                Toolbar: customToolbar,
+                            }}
+                        />
+                    }
                 </div>
             </div>
 

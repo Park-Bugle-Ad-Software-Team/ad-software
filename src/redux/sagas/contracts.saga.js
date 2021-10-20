@@ -13,6 +13,7 @@ export default function* contractsSaga() {
     yield takeLatest('CREATE_NEW_CONTRACT', createNewContract);
     yield takeLatest('UPDATE_RATES', updateRates);
     yield takeLatest('FETCH_AD_SIZE_OBJECT', fetchAdSizeObject);
+    yield takeLatest('UPDATE_CONTRACT_FOR_APPROVAL', updateContract)
 }
 
 function* fetchAdSizeObject(action) {
@@ -37,7 +38,7 @@ function* updateRates(action) {
 
 function* createNewContract(action) {
     try {
-        yield axios.post(`/api/contracts/${action.payload.userId}`, action.payload);
+        yield axios.post(`/api/contracts/${action.payload.advertiserId}`, action.payload);
     } catch (error) {
         console.log('Failed to create new contract', error);
     }
@@ -68,6 +69,7 @@ function* fetchRates() {
 }
 
 function* fetchContractToEdit(action) {
+    console.log('params in contracts saga edit are', action.payload);
     try { 
         const response = yield axios.get(`/api/contracts/edit/${action.payload}`);
         yield put({

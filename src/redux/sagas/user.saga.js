@@ -71,13 +71,22 @@ function* setUserPassword(action) {
   }
 }
 
+// function* assignAdRep(action) {
+//   try {
+//     const response = yield axios.post(`/api/contracts/${}`)
+//   } catch (error) {
+//     console.error('Failed to assign ad rep', error);
+//   }
+// }
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('CREATE_NEW_USER', createNewUser);
   yield takeLatest('FETCH_ALL_USERS', allUsers);
   yield takeLatest('FETCH_USER_TO_EDIT', fetchUserToEdit);
   yield takeLatest('UPDATE_USER', updateUser);
-  yield takeLatest('UPDATE_PASSWORD', setUserPassword)
+  yield takeLatest('UPDATE_PASSWORD', setUserPassword);
+  // yield takeLatest('ASSIGN_AD_REP', assignAdRep);
 }
 
 export default userSaga;

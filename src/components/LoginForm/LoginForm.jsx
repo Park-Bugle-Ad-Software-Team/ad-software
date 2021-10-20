@@ -40,7 +40,7 @@ function LoginForm() {
           <FormControl onSubmit={login} className="formPanel">
             <Typography variant="h2">Login</Typography>
             {errors.loginMessage && (
-              <Typography variant="h3" className="alert" role="alert">
+              <Typography variant="h6" className="alert" role="alert">
                 {errors.loginMessage}
               </Typography>
             )}

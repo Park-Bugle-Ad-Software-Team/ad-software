@@ -10,10 +10,15 @@ import App from './components/App/App';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './Theme/theme';
 
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-      <App />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <App />
+      </LocalizationProvider>
     </ThemeProvider>
   </Provider>,
   document.getElementById('react-root'),
