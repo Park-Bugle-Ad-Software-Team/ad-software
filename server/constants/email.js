@@ -7,6 +7,9 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD
   }
 });
+}
+
+// html template taken from online here: https://github.com/leemunroe/responsive-html-email-template/blob/master/email-inlined.html
 const htmlEmail = function(inviteCode) {
   return `<!doctype html>
   <html>
@@ -168,12 +171,16 @@ const htmlEmail = function(inviteCode) {
     </body>
   </html>`
 }
+
+// email options for the email
 const mailOptions = {
     from: process.env.EMAIL,
     subject: 'Welcome to the Park Bugle Ad Portal',
     text: 'http://localhost:3000/#/set-password/', // the /set-password needs to stay the same
     // email html found here: https://github.com/leemunroe/responsive-html-email-template/blob/master/email-inlined.html
 }
+
+// if there's an email, it reports it in the console
 const emailErrorCatcher = function(error, info) {
     if (error) {
       console.log(error);
@@ -181,6 +188,8 @@ const emailErrorCatcher = function(error, info) {
       console.log('Email sent: ' + info.response);
     }
 }
+
+// function to actually send the email
 function sendEmail(recipient, inviteCode) {
   mailOptions.to = recipient;
   mailOptions.html = htmlEmail(inviteCode)
