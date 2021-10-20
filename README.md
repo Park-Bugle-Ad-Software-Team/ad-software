@@ -1,3 +1,4 @@
+
 (View Raw will give you the markdown that you can copy to your repos!)
 
 
@@ -6,17 +7,13 @@
 ![TOP_LANGUAGE](https://img.shields.io/github/languages/top/scottbromander/the_marketplace.svg?style=flat-square)
 ![FORKS](https://img.shields.io/github/forks/scottbromander/the_marketplace.svg?style=social)
 
-# PROJECT NAME
+# Park Bugle Ad Portal
 
-## Description
+## Project
 
 _Duration: 2 Week Sprint_
 
-Directly above this is how long it took you to develop the project. Your project description goes here. What problem did you solve? How did you solve it? 
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquam at massa in faucibus. Etiam volutpat, risus non mollis convallis, velit nisi pulvinar mi, eu faucibus orci nisi eget nibh. Integer a velit pretium, volutpat arcu eleifend, fringilla elit. Cras erat sapien, convallis venenatis tellus vitae, feugiat dictum felis.
-
-Suspendisse euismod volutpat aliquet. Maecenas vulputate mauris in pellentesque facilisis. Phasellus varius malesuada semper. Cras sollicitudin diam mollis maximus aliquam.
+Park Bugle wanted an application that would house all of the information about their advertisement contracts, from the ad image to the discussion surrounding the details of the app. Our project allows Park Bugle to invite new users, create and update contracts via a form, chat about each contract, display relevant contracts to each employee, and export .csv reports. 
 
 To see the fully functional site, please visit: [DEPLOYED VERSION OF APP](www.heroku.com)
 
@@ -29,20 +26,33 @@ Include one or two screen shots of your project here (optional). Remove if unuse
 Link to software that is required to install the app (e.g. node).
 
 - [Node.js](https://nodejs.org/en/)
-- List other prerequisites here
+- [AWS Account](https://aws.amazon.com/)
+- [Heroku Account](https://signup.heroku.com/)
+- Email account
 
 ## Installation
-
-How do you get your application up and running? This is a step by step list for how another developer could get this project up and running. The good target audience in terms of knowledge, would be a fellow Primer from another cohort being able to spin up this project. Note that you do not need a paragraph here to intro Installation. It should be step-by-step.
-
-If your application has secret keys (for example --  Twilio), make sure you tell them how to set that up, both in getting the key and then what to call it in the `.env` file.
-
-1. Create a database named `your database name`,
-2. The queries in the `tables.sql` file are set up to create all the necessary tables and populate the needed data to allow the application to run correctly. The project is built on [Postgres](https://www.postgresql.org/download/), so you will need to make sure to have that installed. We recommend using Postico to run those queries as that was used to create the queries, 
-3. Open up your editor of choice and run an `npm install`
-4. Run `npm run server` in your terminal
-5. Run `npm run client` in your terminal
-6. The `npm run client` command will open up a new browser tab for you!
+1. Create a database named `park_bugle`,
+2. The queries in the `database.inserts.sql` file are set up to create all the necessary tables and populate the needed data to allow the application to run correctly. The project is built on [Postgres](https://www.postgresql.org/download/), so you will need to make sure to have that installed. We recommend using Postico to run those queries as that was used to create the queries, 
+3. Download and install [Node.js](https://nodejs.org/en/download/)
+4. Open up your editor of choice and run an `npm install`
+5. To run the project locally:
+	6. Create an .env file at the root of the project directory
+	7.  Set the following variables:
+		8. SERVER_SESSION_SECRET
+		9. EMAIL
+		10. EMAIL_PASSWORD
+		11. AWS_ACCESS_KEY_ID
+		12. AWS_SECRET_ACCESS_KEY
+		13. AWS_S3_BUCKET
+		14. AWS_S3_REGION 
+6. To run the project on Heroku
+	7. Set up a [node environment](https://devcenter.heroku.com/articles/deploying-nodejs)
+	8. Push the project to Heroku
+	9. In your project's settings click on Reveal Config Vars
+	10. Set the same variables as in step 5. 
+7. Run `npm run server` in your terminal
+8. Run `npm run client` in your terminal
+9. The `npm run client` command will open up a new browser tab for you!
 
 ## Usage
 How does someone use this application? Tell a user story here.
@@ -57,15 +67,24 @@ How does someone use this application? Tell a user story here.
 
 ## Built With
 
-List technologies and frameworks here
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
-
-_Note, include this only if you have a license file. GitHub will generate one for you if you want!_
+Javascript
+React
+Redux
+Redux-Saga
+Material UI
+Html
+CSS
+Axios
+dotenv
+Passport-Auth
+Node.js
+Express
+Nodemailer
+AWS-S3
+PostgreSQL
 
 ## Acknowledgement
-Thanks to [Prime Digital Academy](www.primeacademy.io) who equipped and helped me to make this application a reality. (Thank your people)
+Thanks to [Prime Digital Academy](www.primeacademy.io) who equipped and helped us to make this application a reality. (Thank your people)
 
 ## Support
 If you have suggestions or issues, please email me at [youremail@whatever.com](www.google.com)
