@@ -34,20 +34,20 @@ Include one or two screen shots of your project here (optional). Remove if unuse
 3. Download and install [Node.js](https://nodejs.org/en/download/)
 4. Open up your editor of choice and run an `npm install`
 5. To run the project locally:
-	6. Create an .env file at the root of the project directory
-	7.  Set the following variables:
-		8. SERVER_SESSION_SECRET
-		9. EMAIL
-		10. EMAIL_PASSWORD
-		11. AWS_ACCESS_KEY_ID
-		12. AWS_SECRET_ACCESS_KEY
-		13. AWS_S3_BUCKET
-		14. AWS_S3_REGION 
+	1. Create an .env file at the root of the project directory
+	2.  Set the following variables:
+		* SERVER_SESSION_SECRET
+		* EMAIL
+		* EMAIL_PASSWORD
+		* AWS_ACCESS_KEY_ID
+		* AWS_SECRET_ACCESS_KEY
+		* AWS_S3_BUCKET
+		* AWS_S3_REGION 
 6. To run the project on Heroku
-	7. Set up a [node environment](https://devcenter.heroku.com/articles/deploying-nodejs)
-	8. Push the project to Heroku
-	9. In your project's settings click on Reveal Config Vars
-	10. Set the same variables as in step 5. 
+	* Set up a [node environment](https://devcenter.heroku.com/articles/deploying-nodejs)
+	* Push the project to Heroku
+	* In your project's settings click on Reveal Config Vars
+	* Set the same variables as in step 5.2 
 7. Run `npm run server` in your terminal
 8. Run `npm run client` in your terminal
 9. The `npm run client` command will open up a new browser tab for you!
