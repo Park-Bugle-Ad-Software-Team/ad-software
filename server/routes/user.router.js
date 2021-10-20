@@ -18,6 +18,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
+// retrieve a list of all users
 router.get('/all', rejectUnauthenticated, (req, res) => {
   if (req.user.authLevel === 'admin' || req.user.authLevel === 'ad rep') {
     const sqlQuery = `SELECT "id", "email","name","authLevel",
@@ -41,7 +42,7 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
   }
 });
 
-//route to get all companies, but eliminating repeat instances of companies
+// route to get all companies, but eliminating repeat instances of companies
 router.get('/advertisers', rejectUnauthenticated, (req, res) => {
   const sqlQuery = `SELECT 
                       "id",
@@ -104,6 +105,7 @@ router.get('/designers', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// route to retrieve a particular user
 router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
   if (req.user.authLevel === 'admin') {
     const sqlQuery = `SELECT "id", "email","name","authLevel",
@@ -131,8 +133,7 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 })
 
 // Handles POST request with new user data
-// The only thing different from this and every other post we've seen
-// is that the password gets encrypted before being inserted
+// the password gets encrypted before being inserted
 router.post('/register', rejectUnauthenticated, (req, res) => {
   if (req.user.authLevel === 'admin') {
 
@@ -240,6 +241,7 @@ router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
   }
 });
 
+// delete a user
 router.put('delete/:id', (req, res) => {
   const sqlQuery = `UPDATE "Users"
                     SET "isActive" = FALSE
