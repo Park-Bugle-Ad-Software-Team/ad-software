@@ -1,6 +1,6 @@
+import { Grid, Typography, Select, MenuItem, FormLabel, FormControl } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, Typography, Select, MenuItem, FormLabel, FormControl } from '@mui/material';
 
 export default function SelectAdvertiser({ contractId, handleChange }) {
     const store = useSelector(store => store);

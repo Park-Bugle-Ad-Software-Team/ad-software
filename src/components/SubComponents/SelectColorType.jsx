@@ -1,14 +1,11 @@
-import { FormLabel, Select, FormControl, MenuItem, Grid, TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { FormLabel, Select, FormControl, MenuItem, Grid } from '@mui/material';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 export default function SelectColorType({ handleChange }) {
-    const dispatch = useDispatch();
     const store = useSelector(store => store);
     const contractToEdit = store.contractToEdit;
-    const allUsers = store.allUsers;
     const user = store.user;
-    const adReps = store.adReps;
 
     return (
         <>

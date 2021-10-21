@@ -86,6 +86,9 @@ export default function AdSize() {
         return num;
     }
 
+    // This handles our conditional rendering for the display of prices on the right side. Each row uses different sizes 
+    // and then each tier uses a different rate for calculation of the display price. This should adjust as the global
+    // pricing reducer is adjusted by admin users
     const checkSize = (size) => {
         if ((size.columns * size.inches) >= 20) {
             return (
@@ -203,6 +206,8 @@ export default function AdSize() {
                                         </>
                                     </Card>
                                 </Grid> :
+                                // This conditional rendering only removes the CardActionArea component to stop un-authorized users from
+                                // interacting with the component
                                 <Grid item xs={2} sm={4} md={4} key={index}>
                                     <Card className="adSizeCard" sx={{ minWidth: 220, maxWidth: 300 }}>
                                         <>

@@ -1,3 +1,4 @@
+// Component is deprecated
 import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid, Drawer, Box, ListItemText, TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
 import ProgressBar from './ProgressBar';

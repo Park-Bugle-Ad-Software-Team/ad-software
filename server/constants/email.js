@@ -7,7 +7,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD
   }
 });
-}
 
 // html template taken from online here: https://github.com/leemunroe/responsive-html-email-template/blob/master/email-inlined.html
 const htmlEmail = function(inviteCode) {
@@ -176,7 +175,7 @@ const htmlEmail = function(inviteCode) {
 const mailOptions = {
     from: process.env.EMAIL,
     subject: 'Welcome to the Park Bugle Ad Portal',
-    text: 'http://localhost:3000/#/set-password/', // the /set-password needs to stay the same
+    text: 'https://blooming-plateau-19142.herokuapp.com//#/set-password/', // the /set-password needs to stay the same
     // email html found here: https://github.com/leemunroe/responsive-html-email-template/blob/master/email-inlined.html
 }
 

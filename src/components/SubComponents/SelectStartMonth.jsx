@@ -1,20 +1,15 @@
-import { FormLabel, Select, FormControl, MenuItem, Grid, Input } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { FormLabel, FormControl, Grid, Input } from '@mui/material';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 export default function SelectStartMonth({ handleChange }) {
-    const dispatch = useDispatch();
     const store = useSelector(store => store);
     const contractToEdit = store.contractToEdit;
-    const allUsers = store.allUsers;
     const user = store.user;
-    const adReps = store.adReps;
 
     let startDate = new Date(contractToEdit.startMonth);
     let yyyy = startDate.getFullYear();
     let mm = String(startDate.getUTCMonth() + 1).padStart(2, '0');
-    const minDate = new Date('2021-01-01T00:00:00.000');
-    const maxDate = new Date('2034-01-01T00:00:00.000');
 
     return (
         <>

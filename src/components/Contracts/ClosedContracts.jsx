@@ -1,3 +1,4 @@
+// Component is deprecated
 import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 import formatDate from './formatDate';
 

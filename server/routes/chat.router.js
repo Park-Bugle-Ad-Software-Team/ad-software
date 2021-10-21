@@ -8,7 +8,6 @@ const router = express.Router();
 // retrieve the chat for a given contractId
 router.get('/', rejectUnauthenticated, (req, res) => {
     const contractId = req.query[0];
-    // console.log('payload is', payload);
     const sqlText = `
         SELECT
         "Chat".*,
@@ -21,7 +20,6 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     `;
     pool.query(sqlText)
     .then((dbRes) => {
-        // console.log('dbRes is', dbRes.rows);
         res.send(dbRes.rows);
     })
     .catch((error) => {
@@ -32,7 +30,6 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 
 // post a new chat message
 router.post('/', (req, res) => {
-    console.log('req.body is', req.body);
     const sqlText = `
         INSERT INTO "Chat"
             ("message", "userId", "contractId")

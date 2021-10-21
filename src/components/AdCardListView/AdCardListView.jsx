@@ -1,3 +1,5 @@
+// Component is deprecated
+
 import { ListItemButton } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 
