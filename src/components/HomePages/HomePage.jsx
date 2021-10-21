@@ -7,6 +7,8 @@ import EmployeeHomePage from './EmployeeHomePage';
 export default function HomePage() {
     const dispatch = useDispatch();
 
+    // we send the user as a payload so that only the contracts
+    // for that user are shown to them
     useEffect(() => {
         dispatch({type: 'UNSET_CONTRACT_TO_EDIT'});
         dispatch({type: 'FETCH_PENDING_CONTRACTS', payload: user});
@@ -16,10 +18,6 @@ export default function HomePage() {
         if (user.authLevel === 'admin') {
             dispatch({type: 'FETCH_ALL_USERS'});
         }
-        // dispatch({type: 'FETCH_ADVERTISERS'});
-        // dispatch({type: 'FETCH_AD_REPS'});
-        // dispatch({type: 'FETCH_DESIGNERS'});
-        // dispatch({type: 'FETCH_CONTRACT_TO_EDIT', payload: {contractId: undefined}})
     }, []);
 
     // global state from redux

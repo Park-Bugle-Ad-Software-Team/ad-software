@@ -1,12 +1,11 @@
 import { FormLabel, Select, FormControl, MenuItem, Grid } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function SelectDesigner({ handleChange }) {
     const dispatch = useDispatch();
     const store = useSelector(store => store);
     const contractToEdit = store.contractToEdit;
-    const allUsers = store.allUsers;
     const user = store.user;
     const designers = store.designers;
 

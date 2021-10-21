@@ -1,15 +1,12 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid,
-    Container, TableBody, TableHead, TableCell, TableContainer, TableRow, Input
-} from '@mui/material';
+import { Typography, Grid } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import DataTable from '../DataTable/DataTable';
 import DataTableExport from '../DataTable/DataTableExport';
 
 export default function EmployeeHomePage() {
-    const dispatch = useDispatch();
     const history = useHistory();
 
     // local state
@@ -55,6 +52,7 @@ export default function EmployeeHomePage() {
                 </button>
             </Grid>
             
+            {/* clicking the export view button will toggle the state of showingExportView */}
             {showingExportView === false ?
                 <>
                     {/* Pending Contracts */}

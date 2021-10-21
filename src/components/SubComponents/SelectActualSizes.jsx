@@ -1,6 +1,6 @@
+import { FormControl, FormLabel, Grid, TextField } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { FormControl, FormLabel, Grid, TextField } from '@mui/material';
 import './ActualSizes.css';
 
 export default function ActualSizes({ handleChange }) {

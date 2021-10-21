@@ -1,14 +1,10 @@
-import { FormLabel, Select, FormControl, MenuItem, Grid, TextField, Typography, Input } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { FormLabel, FormControl, Grid, TextField, Typography, Input } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function BillingCalculation({ handleChange }) {
-    const dispatch = useDispatch();
     const store = useSelector(store => store);
     const contractToEdit = store.contractToEdit;
-    const allUsers = store.allUsers;
     const user = store.user;
-    const adReps = store.adReps;
     const rates = store.rates;
 
     const grabRate = (size, row) => {

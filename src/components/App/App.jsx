@@ -37,19 +37,6 @@ function App() {
   return (
     <Router>
 
-      {/* components:
-      
-        home-page
-        advertiser-home-page
-          employee-home-page
-          admin-home-page
-        ad-card
-          print view
-          web view
-        list-view of ad cards
-
-      */}
-
       <div>
         <Nav />
         <Switch>
@@ -136,15 +123,6 @@ function App() {
           >
             <AdCard />
           </ProtectedRoute>
-
-          {/* WILL BE USED FOR VIEWING AND EDITING AD CARDS */}
-          {/* <ProtectedRoute
-            exact
-            path="/contracts/edit/:id"
-          >
-              <AdCard />
-          </ProtectedRoute> */}
-          {/* If none of the other routes matched, we will show a 404. */}
           
           <Route>
             <h1>404</h1>

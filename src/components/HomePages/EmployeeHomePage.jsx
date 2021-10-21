@@ -1,6 +1,4 @@
-import { Typography, Button, FormControl, InputLabel, Select, MenuItem, Grid,
-    Container, TableBody, TableHead, TableCell, TableContainer, TableRow, Input
-} from '@mui/material';
+import { Typography, Grid } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import React from 'react';
 import { useEffect, useState } from 'react';
@@ -63,6 +61,7 @@ export default function EmployeeHomePage() {
                 }
             </Grid>
             
+            {/* clicking the export view button will change the state of showingExportView */}
             {showingExportView === false ?
                 <>
                     {/* Pending Contracts */}

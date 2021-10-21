@@ -4,8 +4,6 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-
-
 export default function PricingPage() {
     const dispatch = useDispatch();
     const history = useHistory();

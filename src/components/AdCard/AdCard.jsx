@@ -1,17 +1,21 @@
-import PrintView from "./PrintView";
-import WebView from "./WebView";
-import { Typography, FormControl, FormLabel, FormControlLabel, Paper, Box, Grid, Select, InputLabel, MenuItem, TextField,
-    Card, CardActions, CardContent, Button, Radio, RadioGroup, Container, Input
-} from '@mui/material';
-import AdSize from "./AdSize";
-import { useDispatch } from "react-redux";
-import { useHistory, useParams } from "react-router";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import ImageUploader from '../ImageUploader/ImageUploader';
-import './AdCard.css';
 import * as React from 'react';
-import Checkbox from '@mui/material/Checkbox';
+import { useEffect, useState } from "react";
+
+// material-ui imports
+import { FormControl, FormLabel, Box, Grid, TextField, Button, Container, Checkbox } from '@mui/material';
+
+// react-redux imports
+import { useDispatch, useSelector } from "react-redux";
+
+// react-router imports
+import { useHistory, useParams } from "react-router";
+
+// import styling
+import './AdCard.css';
+
+// Import all our subcomponents
+import AdSize from "./AdSize";
+import ImageUploader from '../ImageUploader/ImageUploader';
 import ActualSizes from "../SubComponents/SelectActualSizes";
 import SelectAdvertiser from "../SubComponents/SelectAdvertiser";
 import SelectAdRep from "../SubComponents/SelectAdRep";
@@ -29,18 +33,13 @@ export default function AdCard() {
     const params = useParams();
 
     const contractId = params.id;
+    
     const store = useSelector(store => store);
     const contractToEdit = store.contractToEdit;
     const user = store.user;
     const advertisers = store.advertisers;
-    const rates = store.rates;
-    const allUsers = store.allUsers;
     const adReps = store.adReps;
     const designers = store.designers;
-    const adSize = contractToEdit.AdSize;
-    const color = contractToEdit.Color;
-    const minDate = new Date('2021-01-01T00:00:00.000');
-    const maxDate = new Date('2034-01-01T00:00:00.000');
 
     const [newImage, setNewImage] = useState({})
 
@@ -72,7 +71,8 @@ export default function AdCard() {
         });
     }, [])
 
-    // We break up this 
+    // We break this up into separate use cases in order to handle special properties that aren't as simple as 
+    // re-assigning a value
     const handleChange = (event, property) => {
         if (property === "colorId") {
             dispatch({
@@ -170,7 +170,6 @@ export default function AdCard() {
     }
 
     const submitContract = () => {
-
         if (!contractToEdit.colorId || !contractToEdit.companyName || !contractToEdit.adSizeId) {
             alert('Please make sure the following fields are selected: Color Type, Company Name');
             return;
@@ -194,7 +193,6 @@ export default function AdCard() {
             history.push('/home');
         }
     }
-
 
     const clearContractFields = () => {
         dispatch({
