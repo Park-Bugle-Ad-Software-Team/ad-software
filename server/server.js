@@ -33,8 +33,8 @@ app.use('/api/contracts', contractsRouter);
 app.use('/api/rates', ratesRouter);
 app.use('/api/ad-size', adSizeRouter)
 app.use('/s3', s3Uploader({
-  bucket: "snippetsbucket", // required
-  region: 'us-east-2',      // optional
+  bucket: process.env.REACT_APP_AWS_S3_BUCKET, // required
+  region: AWS_REGION,      // optional
   headers: {'Access-Control-Allow-Origin': '*'}, // optional
   ACL: 'private',   
   uniquePrefix: true        // this is the default - set to `public-read` to let anyone view uploads

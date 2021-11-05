@@ -37,8 +37,8 @@ To see the fully functional site, please visit: [DEPLOYED VERSION OF APP](www.he
 		* EMAIL_PASSWORD
 		* AWS_ACCESS_KEY_ID
 		* AWS_SECRET_ACCESS_KEY
-		* AWS_S3_BUCKET
-		* AWS_S3_REGION 
+		* REACT_APP_AWS_S3_BUCKET
+		* AWS_REGION 
 6. To run the project on Heroku
 	* Set up a [node environment](https://devcenter.heroku.com/articles/deploying-nodejs)
 	* Push the project to Heroku
