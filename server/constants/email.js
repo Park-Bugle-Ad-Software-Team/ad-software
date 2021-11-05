@@ -129,7 +129,7 @@ const htmlEmail = function(inviteCode) {
                                   <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
                                     <tbody>
                                       <tr>
-                                        <td style="font-family: sans-serif; font-size: 14px; vertical-align: top; background-color: #B22222; border-radius: 5px; text-align: center;"> <a href="http://localhost:3000/#/set-password/${inviteCode}" target="_blank" style="display: inline-block; color: #FFFFFF; background-color: #B22222; border: solid 1px #B22222; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-transform: capitalize; border-color: #B22222;">Join!</a> </td>
+                                        <td style="font-family: sans-serif; font-size: 14px; vertical-align: top; background-color: #B22222; border-radius: 5px; text-align: center;"> <a href="${process.env.INVITE_BASE_URL || 'http://localhost:3000'}/#/set-password/${inviteCode}" target="_blank" style="display: inline-block; color: #FFFFFF; background-color: #B22222; border: solid 1px #B22222; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-transform: capitalize; border-color: #B22222;">Join!</a> </td>
                                       </tr>
                                     </tbody>
                                   </table>
