@@ -74,7 +74,7 @@ const Uploader = ({uploadComplete}) => {
     
     const uploadOptions = {
     }
-    const s3Url = `https://${process.env.REACT_APP_AWS_S3_BUCKET}.s3.amazonaws.com`;
+    const s3Url = `https://${process.env.REACT_APP_AWS_S3_BUCKET}.s3.${process.env.REACT_APP_AWS_REGION}.amazonaws.com`;
     
     
     

@@ -34,7 +34,7 @@ app.use('/api/rates', ratesRouter);
 app.use('/api/ad-size', adSizeRouter)
 app.use('/s3', s3Uploader({
   bucket: process.env.REACT_APP_AWS_S3_BUCKET, // required
-  region: process.env.AWS_REGION,      // optional
+  region: process.env.REACT_APP_AWS_REGION,      // optional
   headers: {'Access-Control-Allow-Origin': '*'}, // optional
   ACL: 'private',   
   uniquePrefix: true        // this is the default - set to `public-read` to let anyone view uploads
