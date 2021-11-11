@@ -4,6 +4,7 @@ import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
 import ProgressBar from './ProgressBar';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 
 const dropStyles = {
   width: "300px",
@@ -15,7 +16,9 @@ const Uploader = ({uploadComplete}) => {
 
 
     const [progress, setProgress] = useState(0);
-    const [progressTitle, setProgressTitle] = useState('')
+    const [progressTitle, setProgressTitle] = useState('');
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const store = useSelector(store => store);
     const contractToEdit = store.contractToEdit;
@@ -71,10 +74,33 @@ const Uploader = ({uploadComplete}) => {
         clearInterval(timer);
       };
     }
+
+    const onFileSelect = (evt) => {
+      setIsLoading(true);
+
+      // Grab file from <input type="file" /> element
+      let file = evt.target.files[0];
+
+      const formData = new FormData();
+      formData.append('file', file, file.name);
+
+      axios.post('/api/file', formData)
+        .then((res) => {
+          setIsLoading(false)
+          uploadComplete(res.data.location)
+        })
+        .catch(err => {
+          setIsLoading(false);
+          alert('File upload failed. Try again later.')
+          console.error(err);
+        })
+    }
     
     const uploadOptions = {
+      server: 'http://localhost:5000',
     }
-    const s3Url = `https://${process.env.REACT_APP_AWS_S3_BUCKET}.s3.${process.env.REACT_APP_AWS_REGION}.amazonaws.com`;
+    //const s3Url = `https://${process.env.REACT_APP_AWS_S3_BUCKET}.s3.${process.env.REACT_APP_AWS_REGION}.amazonaws.com`;
+    const s3Url = `https://${process.env.REACT_APP_AWS_S3_BUCKET}.s3.amazonaws.com`;
     
     
     
@@ -103,22 +129,10 @@ const Uploader = ({uploadComplete}) => {
     )
   return (
     <div style={{ paddingTop: '2em'}}>
-      
-    <ProgressBar progress={progress} progressTitle={progressTitle} />
 
-    <DropzoneS3Uploader
-
-      onError={(error) => console.log('upload failed', error)}
-      onProgress={onProgress}
-      onFinish={handleFinishedUpload}
-      s3Url={s3Url}
-      style={dropStyles}
-      maxSize={1024 * 1024 * 100}
-      upload={uploadOptions}
-      accept="image/*"
-      children={innerElement} 
+      {isLoading && <ProgressBar />}
       
-    />
+      <input type="file" onChange={onFileSelect} />
     </div>
   );
 }

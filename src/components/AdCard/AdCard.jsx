@@ -41,7 +41,7 @@ export default function AdCard() {
     const adReps = store.adReps;
     const designers = store.designers;
 
-    const [newImage, setNewImage] = useState({})
+    const [newImage, setNewImage] = useState(null)
 
     useEffect(() => {
         if (contractId === 'undefined') {
@@ -290,6 +290,13 @@ export default function AdCard() {
                                             ))}
                                         </>
                                     }
+                                    {newImage && (
+                                        <div key="newImage" className="imageDiv">
+                                            <a href={newImage} target="_blank">
+                                                <img src={newImage}/>
+                                            </a>
+                                        </div>
+                                    )}
                                 </div>      
                             </Grid>
                             <div className="spacer">
