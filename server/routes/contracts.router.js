@@ -335,7 +335,10 @@ router.get('/edit/:id', rejectUnauthenticated, (req, res) => {
 // for saving changes to an existing contract
 router.put('/edit/:id', (req, res) => {
   console.log('req.body is: ', req.body);
-  let image = req.body.imageUrl;
+  let image = '';
+  if (req.body.imageUrl) {
+    image = req.body.imageUrl;
+  }
   let advertiserId = req.body.advertiserId;
   let designerId = req.body.designerId;
   let adRepId = req.body.adRepId;
@@ -368,9 +371,14 @@ router.put('/edit/:id', (req, res) => {
 
   pool.query(sqlText, sqlParams)
     .then(dbRes => {
-      imageQuery = `INSERT INTO "Images" ("imageUrl", "contractId")
-                    VALUES ($1, $2)
-                    `;
+      if (image === '') {
+        imageQuery = '';
+      } else {
+        imageQuery = `INSERT INTO "Images" ("imageUrl", "contractId")
+        VALUES ($1, $2)
+        `;
+      }
+      
 
       imageParams = [image, req.params.id];
       pool
